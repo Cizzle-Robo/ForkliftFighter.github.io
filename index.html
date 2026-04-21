@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forklift Fencing: 4-Player FFA</title>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <style>
+        body { background-color: #222; color: #fff; font-family: 'Segoe UI', sans-serif; text-align: center; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        h2 { margin: 10px 0; font-size: 24px; color: #FFF; }
+        #gameContainer { flex: 1; position: relative; width: 100%; display: flex; justify-content: center; align-items: center; padding: 0 20px; box-sizing: border-box; }
+        canvas { background-color: #323232; border: 4px solid #555; box-shadow: 0 0 20px rgba(0,0,0,0.5); display: block; width: 100%; height: 100%; max-width: 1200px; border-radius: 8px; }
+        
+        .screen-overlay { position: absolute; top: 0; left: 20px; right: 20px; bottom: 0; max-width: 1200px; margin: 0 auto; background: rgba(0, 0, 0, 0.9); display: none; flex-direction: column; justify-content: center; align-items: center; border-radius: 8px; z-index: 10; overflow-y: auto; }
+        #mainMenuScreen { display: flex; }
+        
+        h1 { color: #FFD700; font-size: clamp(28px, 5vw, 52px); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
+        h2.screen-title { color: #FFF; font-size: 32px; margin-bottom: 30px; border-bottom: 2px solid #555; padding-bottom: 10px; }
+        
+        .menu-btn { background: #444; color: #FFF; border: 2px solid #888; padding: 12px 25px; font-size: 18px; cursor: pointer; border-radius: 5px; transition: all 0.2s; font-weight: bold; }
+        .menu-btn:hover:not(:disabled) { background: #FFD700; color: #000; border-color: #FFF; transform: scale(1.05); }
+        .menu-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .back-btn { background: #222; margin-top: 30px; width: 200px; font-size: 16px; }
+        
+        .menu-box { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; border: 1px solid #555; margin: 10px; display: flex; flex-direction: column; gap: 15px; align-items: center; width: 350px; }
+        .menu-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+        
+        select, input[type="text"], input[type="range"] { background: #333; color: #fff; border: 1px solid #777; padding: 10px; border-radius: 4px; font-size: 16px; width: 100%; box-sizing: border-box; cursor: pointer; outline: none; text-align: center;}
+        select:focus, input:focus { border-color: #FFD700; }
+        
+        .flex-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-bottom: 20px; }
+        .loadout-box { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; border: 1px solid #555; display: flex; flex-direction: column; gap: 10px; text-align: left; min-width: 250px; }
+        label { font-weight: bold; color: #CCC; }
+
+        .keybind-row { display: flex; justify-content: space-between; align-items: center; width: 100%; border-bottom: 1px solid #444; padding: 5px 0; }
+        .keybind-btn { background: #555; color: #FFF; border: none; padding: 5px 15px; border-radius: 3px; cursor: pointer; min-width: 100px; font-family: monospace; font-size: 14px;}
+        .keybind-btn:hover { background: #FFD700; color: #000; }
+        .keybind-btn.listening { background: #C83232; animation: pulse 1s infinite; }
+        
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+        .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 15px; background: #1a1a1a; border-top: 2px solid #333; }
+        .player-card { background: #111; padding: 10px 20px; border-radius: 8px; border: 2px solid; width: 200px; text-align: left; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <h2>Forklift Fencing: 4-Player</h2>
+    
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div id="mainMenuScreen" class="screen-overlay">
+            <h1>Warehouse Warfare</h1>
+            <div class="menu-row">
+                <div class="menu-box">
+                    <h3 style="color: #FFD700; margin: 0;">Offline Play</h3>
+                    <select id="offlineModeSelect">
+                        <option value="LOCAL">Opponent: Player 2 (Local)</option>
+                        <option value="AI">Opponent: AI (Singleplayer)</option>
+                    </select>
+                    <button class="menu-btn" style="width: 100%;" onclick="startOfflineGame()">Start Match</button>
+                </div>
+                <div class="menu-box">
+                    <h3 style="color: #00FFFF; margin: 0;">Online Multiplayer (Up to 4)</h3>
+                    <div style="display: flex; gap: 10px; width: 100%;">
+                        <button class="menu-btn" style="flex: 1; padding: 12px 10px;" onclick="showScreen('hostScreen')">Host Game</button>
+                        <button class="menu-btn" style="flex: 1; padding: 12px 10px;" onclick="showScreen('joinScreen')">Join Game</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-row" style="margin-top: 20px;">
+                <button class="menu-btn" style="background: #333; border-color: #555; width: 250px;" onclick="showScreen('garageScreen')">The Garage</button>
+                <button class="menu-btn" style="background: #333; border-color: #555; width: 250px;" onclick="showScreen('settingsScreen')">Settings</button>
+            </div>
+        </div>
+
+        <div id="settingsScreen" class="screen-overlay">
+            <h2 class="screen-title">Settings</h2>
+            <div class="flex-container">
+                <div class="loadout-box" style="border-color: #FFF;">
+                    <h3 style="color: #FFF; margin: 0 0 10px 0;">System</h3>
+                    <label>Graphics Quality:</label><select id="gfxSelect" onchange="gameSettings.graphics = this.value"><option value="high">High (Neon Glow)</option><option value="low">Low (Flat & Fast)</option></select>
+                    <label style="margin-top: 10px;">SFX Status:</label><select id="sfxSelect" onchange="gameSettings.sfxEnabled = (this.value === 'on')"><option value="on">Enabled</option><option value="off">Disabled</option></select>
+                    <label style="margin-top: 10px;">SFX Volume:</label><input type="range" min="0" max="1" step="0.1" value="0.5" onchange="gameSettings.sfxVolume = parseFloat(this.value)">
+                </div>
+                <div class="loadout-box" style="border-color: #FFD700;">
+                    <h3 style="color: #FFD700; margin: 0 0 10px 0;">Primary Controls</h3>
+                    <div class="keybind-row"><span>Forward</span><button class="keybind-btn" onclick="startRebind('p1', 'up', this)" id="kb-p1-up">KeyW</button></div>
+                    <div class="keybind-row"><span>Reverse</span><button class="keybind-btn" onclick="startRebind('p1', 'down', this)" id="kb-p1-down">KeyS</button></div>
+                    <div class="keybind-row"><span>Left</span><button class="keybind-btn" onclick="startRebind('p1', 'left', this)" id="kb-p1-left">KeyA</button></div>
+                    <div class="keybind-row"><span>Right</span><button class="keybind-btn" onclick="startRebind('p1', 'right', this)" id="kb-p1-right">KeyD</button></div>
+                    <div class="keybind-row"><span>Swing</span><button class="keybind-btn" onclick="startRebind('p1', 'swing', this)" id="kb-p1-swing">Space</button></div>
+                    <div class="keybind-row"><span>Parry</span><button class="keybind-btn" onclick="startRebind('p1', 'block', this)" id="kb-p1-block">KeyE</button></div>
+                </div>
+                <div class="loadout-box" style="border-color: #C83232;">
+                    <h3 style="color: #C83232; margin: 0 0 10px 0;">Local Player 2 Controls</h3>
+                    <div class="keybind-row"><span>Forward</span><button class="keybind-btn" onclick="startRebind('p2', 'up', this)" id="kb-p2-up">ArrowUp</button></div>
+                    <div class="keybind-row"><span>Reverse</span><button class="keybind-btn" onclick="startRebind('p2', 'down', this)" id="kb-p2-down">ArrowDown</button></div>
+                    <div class="keybind-row"><span>Left</span><button class="keybind-btn" onclick="startRebind('p2', 'left', this)" id="kb-p2-left">ArrowLeft</button></div>
+                    <div class="keybind-row"><span>Right</span><button class="keybind-btn" onclick="startRebind('p2', 'right', this)" id="kb-p2-right">ArrowRight</button></div>
+                    <div class="keybind-row"><span>Swing</span><button class="keybind-btn" onclick="startRebind('p2', 'swing', this)" id="kb-p2-swing">ShiftRight</button></div>
+                    <div class="keybind-row"><span>Parry</span><button class="keybind-btn" onclick="startRebind('p2', 'block', this)" id="kb-p2-block">Slash</button></div>
+                </div>
+            </div>
+            <button class="menu-btn back-btn" onclick="showScreen('mainMenuScreen')">Back to Menu</button>
+        </div>
+
+        <div id="garageScreen" class="screen-overlay">
+            <h2 class="screen-title">The Garage</h2>
+            <div class="flex-container">
+                <div class="loadout-box" style="border-color: #FFD700;">
+                    <h3 style="color: #FFF; margin: 0 0 10px 0;">Your Loadout</h3>
+                    <p style="color: #AAA; font-size: 14px; margin-top: 0;">Sent to Host when joining online.</p>
+                    <label>Chassis Type:</label><select id="myChassis"><option value="standard">Standard</option><option value="bulldozer">Bulldozer</option><option value="speedster">Speedster</option><option value="tank">Tank</option><option value="drifter">Drifter</option></select>
+                    <label>Weapon Type:</label><select id="myWeapon"><option value="standard">Standard Fork</option><option value="greatsword">Greatsword</option><option value="rapier">Rapier</option><option value="lance">Lance</option><option value="dagger">Dagger</option></select>
+                </div>
+            </div>
+            <button class="menu-btn back-btn" onclick="showScreen('mainMenuScreen')">Back to Menu</button>
+        </div>
+
+        <div id="hostScreen" class="screen-overlay">
+            <h1>Hosting Game</h1>
+            <div class="menu-box" style="width: 400px;">
+                <p>Send this ID to your friends (Max 4 Players):</p>
+                <input type="text" id="hostIdDisplay" readonly value="Generating ID...">
+                <div style="text-align: left; width: 100%; margin-top: 15px; background: #222; padding: 10px; border-radius: 5px;">
+                    <h4 style="margin: 0 0 10px 0; color: #AAA;">Lobby:</h4>
+                    <p id="lobby-p1" style="margin: 5px 0; color: #FFD700;">Player 1: Host (You)</p>
+                    <p id="lobby-p2" style="margin: 5px 0; color: #555;">Player 2: Waiting...</p>
+                    <p id="lobby-p3" style="margin: 5px 0; color: #555;">Player 3: Waiting...</p>
+                    <p id="lobby-p4" style="margin: 5px 0; color: #555;">Player 4: Waiting...</p>
+                </div>
+                <button class="menu-btn" style="width: 100%; margin-top: 10px; background: #00C800;" onclick="startMultiplayerHost()">Start Match</button>
+            </div>
+            <button class="menu-btn back-btn" onclick="cancelHost()">Cancel</button>
+        </div>
+
+        <div id="joinScreen" class="screen-overlay">
+            <h1>Join Game</h1>
+            <div class="menu-box">
+                <p>Enter Host ID:</p>
+                <input type="text" id="joinIdInput" placeholder="Paste ID here">
+                <button class="menu-btn" style="width: 100%; margin-top: 10px;" onclick="joinOnlineGame()">Connect</button>
+                
+                <button id="rejoinBtn" class="menu-btn" style="width: 100%; margin-top: 10px; background: #3264C8; display: none;" onclick="rejoinLastGame()">Rejoin Last Host</button>
+                
+                <p id="joinStatus" style="color: #FFD700; margin: 0;"></p>
+            </div>
+            <button class="menu-btn back-btn" onclick="showScreen('mainMenuScreen')">Cancel</button>
+        </div>
+
+        <div id="gameOverScreen" class="screen-overlay">
+            <h1 id="winnerText" style="font-size: 60px;">Game Over</h1>
+            <p style="color: #AAA; font-size: 20px; margin-bottom: 20px;">Use the Rejoin button on the Main Menu to quickly play again!</p>
+            <button class="menu-btn" onclick="location.reload()">Return to Main Menu</button>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="player-card" style="border-color: #FFF;">
+            <h3 style="color: #FFF; margin: 0 0 10px 0; text-align: center;">Your Controls</h3>
+            <p style="margin: 5px 0;"><strong>Fwd/Rev:</strong> <span id="disp-p1-up">W</span> / <span id="disp-p1-down">S</span></p>
+            <p style="margin: 5px 0;"><strong>Turn:</strong> <span id="disp-p1-left">A</span> / <span id="disp-p1-right">D</span></p>
+            <p style="margin: 5px 0;"><strong>Swing:</strong> <span id="disp-p1-swing">Space</span></p>
+            <p style="margin: 5px 0; color: #00FFFF;"><strong>Parry:</strong> <span id="disp-p1-block">E</span></p>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let gameState = "MENU"; 
+        let gameMode = "LOCAL"; 
+        let animationFrameId;
+
+        // Check for last saved Host ID on page load
+        window.addEventListener('load', () => {
+            const savedHost = localStorage.getItem('forkliftLastHostId');
+            if (savedHost) {
+                document.getElementById('rejoinBtn').style.display = 'block';
+            }
+        });
+
+        // --- SETTINGS & KEYBINDS ---
+        const gameSettings = { graphics: 'high', sfxEnabled: true, sfxVolume: 0.5 };
+        const keyBinds = {
+            p1: { up: 'KeyW', down: 'KeyS', left: 'KeyA', right: 'KeyD', swing: 'Space', block: 'KeyE' },
+            p2: { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', swing: 'ShiftRight', block: 'Slash' }
+        };
+
+        const keys = {};
+        let rebindingTarget = null;
+
+        window.addEventListener("keydown", e => {
+            if (rebindingTarget) {
+                e.preventDefault();
+                keyBinds[rebindingTarget.player][rebindingTarget.action] = e.code;
+                rebindingTarget.btn.innerText = e.code;
+                rebindingTarget.btn.classList.remove('listening');
+                updateControlDisplay(); rebindingTarget = null; return;
+            }
+            keys[e.code] = true;
+        });
+        window.addEventListener("keyup", e => { if(!rebindingTarget) keys[e.code] = false; });
+
+        function startRebind(player, action, btnElement) {
+            if (rebindingTarget) rebindingTarget.btn.classList.remove('listening');
+            rebindingTarget = { player, action, btn: btnElement };
+            btnElement.innerText = "Press Key..."; btnElement.classList.add('listening');
+        }
+
+        function updateControlDisplay() {
+            const formatKey = k => k.replace('Key', '').replace('Arrow', '').replace('Right', 'R').replace('Left', 'L');
+            ['up', 'down', 'left', 'right', 'swing', 'block'].forEach(a => {
+                document.getElementById(`disp-p1-${a}`).innerText = formatKey(keyBinds.p1[a]);
+            });
+        }
+        updateControlDisplay();
+
+        // --- AUDIO ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+        function playSound(type) {
+            if (!gameSettings.sfxEnabled) return;
+            if (!audioCtx) audioCtx = new AudioContext(); 
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            gain.gain.value = gameSettings.sfxVolume * 0.1; 
+            const now = audioCtx.currentTime;
+            if (type === 'swing') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(100, now + 0.15);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15); osc.start(now); osc.stop(now + 0.15);
+            } else if (type === 'hit') {
+                osc.type = 'square'; osc.frequency.setValueAtTime(150, now); osc.frequency.exponentialRampToValueAtTime(50, now + 0.2);
+                gain.gain.setValueAtTime(gain.gain.value * 2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                osc.start(now); osc.stop(now + 0.2);
+            } else if (type === 'block') {
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(800, now); osc.frequency.linearRampToValueAtTime(1200, now + 0.1);
+                gain.gain.setValueAtTime(gain.gain.value * 1.5, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now); osc.stop(now + 0.1);
+            }
+        }
+
+        // --- GAME DATABASES ---
+        const CHASSIS_DB = {
+            standard:  { w: 40, h: 30, maxSpeed: 6.0, acc: 0.30, turn: 0.07, hp: 100 },
+            bulldozer: { w: 50, h: 40, maxSpeed: 3.5, acc: 0.15, turn: 0.04, hp: 150 },
+            speedster: { w: 32, h: 22, maxSpeed: 8.5, acc: 0.50, turn: 0.10, hp: 60  },
+            tank:      { w: 60, h: 45, maxSpeed: 2.5, acc: 0.10, turn: 0.03, hp: 200 },
+            drifter:   { w: 35, h: 25, maxSpeed: 7.0, acc: 0.20, turn: 0.15, hp: 80  }
+        };
+        const WEAPON_DB = {
+            standard:   { length: 70,  swingSpeed: 0.25, retractSpeed: 0.10, damage: 20 },
+            greatsword: { length: 100, swingSpeed: 0.12, retractSpeed: 0.04, damage: 40 },
+            rapier:     { length: 45,  swingSpeed: 0.50, retractSpeed: 0.25, damage: 10 },
+            lance:      { length: 140, swingSpeed: 0.08, retractSpeed: 0.05, damage: 30 },
+            dagger:     { length: 25,  swingSpeed: 0.80, retractSpeed: 0.40, damage: 15 }
+        };
+
+        class Forklift {
+            constructor(index, color, name) {
+                this.index = index; this.color = color; this.name = name;
+                this.active = false; 
+                this.swordTip = { x: 0, y: 0 };
+                this.setLoadout("standard", "standard");
+            }
+            setLoadout(chassisId, weaponId) {
+                this.chassisId = chassisId; this.weaponId = weaponId;
+                this.stats = CHASSIS_DB[chassisId] || CHASSIS_DB["standard"];
+                this.weapon = WEAPON_DB[weaponId] || WEAPON_DB["standard"];
+                this.reset();
+            }
+            reset() {
+                const spawnPoints = [
+                    { x: canvas.width * 0.1, y: canvas.height * 0.2, a: 0 },
+                    { x: canvas.width * 0.9, y: canvas.height * 0.8, a: Math.PI },
+                    { x: canvas.width * 0.9, y: canvas.height * 0.2, a: Math.PI/2 },
+                    { x: canvas.width * 0.1, y: canvas.height * 0.8, a: -Math.PI/2 }
+                ];
+                let spawn = spawnPoints[this.index] || spawnPoints[0];
+                this.x = spawn.x; this.y = spawn.y; this.angle = spawn.a;
+                this.health = this.stats.hp; this.speed = 0;
+                this.swordAngle = 0; this.isSwinging = false; this.hasHitThisSwing = false;
+                this.isBlocking = false; this.blockTimer = 0; this.blockCooldown = 0;
+                this.updatePositions();
+            }
+            move(forward, turn) {
+                this.angle += turn * this.stats.turn;
+                if (forward !== 0) this.speed += forward * this.stats.acc; else this.speed *= 0.92; 
+                if (this.speed > this.stats.maxSpeed) this.speed = this.stats.maxSpeed;
+                if (this.speed < -this.stats.maxSpeed / 2) this.speed = -this.stats.maxSpeed / 2;
+
+                const newX = this.x + Math.cos(this.angle) * this.speed; const newY = this.y + Math.sin(this.angle) * this.speed;
+                const bounds = this.stats.w / 2;
+                if (newX > bounds && newX < canvas.width - bounds) this.x = newX; else this.speed *= -0.5; 
+                if (newY > bounds && newY < canvas.height - bounds) this.y = newY; else this.speed *= -0.5; 
+            }
+            swing() { if (!this.isSwinging && this.swordAngle <= 0 && !this.isBlocking) { this.isSwinging = true; this.hasHitThisSwing = false; playSound('swing'); } }
+            block() { if (!this.isSwinging && !this.isBlocking && this.blockCooldown === 0) { this.isBlocking = true; this.blockTimer = 15; this.blockCooldown = 60; playSound('block'); } }
+            updateAbilities() {
+                if (this.isSwinging) { this.swordAngle += this.weapon.swingSpeed; if (this.swordAngle >= 2.0) this.isSwinging = false; } 
+                else if (this.swordAngle > 0) this.swordAngle -= this.weapon.retractSpeed; else this.swordAngle = 0;
+                if (this.isBlocking) { this.blockTimer--; if (this.blockTimer <= 0) this.isBlocking = false; }
+                if (this.blockCooldown > 0) this.blockCooldown--;
+                this.updatePositions();
+            }
+            updatePositions() {
+                const startOffset = this.stats.w / 2;
+                const swordStartX = this.x + Math.cos(this.angle) * startOffset;
+                const swordStartY = this.y + Math.sin(this.angle) * startOffset;
+                const totalSwordAngle = this.angle + this.swordAngle - 0.8; 
+                this.swordTip.x = swordStartX + Math.cos(totalSwordAngle) * this.weapon.length;
+                this.swordTip.y = swordStartY + Math.sin(totalSwordAngle) * this.weapon.length;
+            }
+            draw() {
+                if (!this.active || this.health <= 0) return; 
+                ctx.save();
+                if (gameSettings.graphics === 'high') { ctx.shadowBlur = 15; ctx.shadowColor = this.color; } else { ctx.shadowBlur = 0; }
+                ctx.translate(this.x, this.y); ctx.rotate(this.angle);
+                ctx.fillStyle = this.color; ctx.fillRect(-this.stats.w/2, -this.stats.h/2, this.stats.w, this.stats.h);
+                ctx.fillStyle = "#000"; ctx.shadowBlur = 0; ctx.fillRect(-5, -10, 15, 20);
+
+                if (this.isBlocking) {
+                    ctx.beginPath(); ctx.arc(0, 0, this.stats.w/2 + 15, -Math.PI/2, Math.PI/2);
+                    ctx.strokeStyle = "#00FFFF"; ctx.lineWidth = 4;
+                    if(gameSettings.graphics === 'high') { ctx.shadowBlur = 20; ctx.shadowColor = "#00FFFF"; }
+                    ctx.stroke();
+                }
+                ctx.restore();
+
+                const startOffset = this.stats.w / 2;
+                ctx.beginPath(); ctx.moveTo(this.x + Math.cos(this.angle) * startOffset, this.y + Math.sin(this.angle) * startOffset); ctx.lineTo(this.swordTip.x, this.swordTip.y);
+                
+                if(this.weaponId === 'lance') ctx.lineWidth = 12; else if(this.weaponId === 'greatsword') ctx.lineWidth = 9;
+                else if(this.weaponId === 'rapier' || this.weaponId === 'dagger') ctx.lineWidth = 3; else ctx.lineWidth = 6;
+
+                ctx.strokeStyle = this.isSwinging ? "#FFFFFF" : "#969696";
+                if(gameSettings.graphics === 'high' && this.isSwinging) { ctx.shadowBlur = 10; ctx.shadowColor = "#FFFFFF"; }
+                ctx.stroke(); ctx.shadowBlur = 0; 
+
+                ctx.fillStyle = "#FFF"; ctx.font = "12px Arial"; ctx.fillText(this.name, this.x - 20, this.y - 45);
+                ctx.fillStyle = "#C80000"; ctx.fillRect(this.x - 25, this.y - 35, 50, 5);
+                ctx.fillStyle = "#00C800"; ctx.fillRect(this.x - 25, this.y - 35, 50 * (Math.max(0, this.health) / this.stats.hp), 5);
+            }
+            
+            getState() { return { active: this.active, x: this.x, y: this.y, angle: this.angle, health: this.health, swordAngle: this.swordAngle, isSwinging: this.isSwinging, isBlocking: this.isBlocking, cId: this.chassisId, wId: this.weaponId }; }
+            setState(data) { 
+                this.active = data.active;
+                if (!this.active) return;
+                if (this.chassisId !== data.cId || this.weaponId !== data.wId) this.setLoadout(data.cId, data.wId);
+                this.x = data.x; this.y = data.y; this.angle = data.angle; this.health = data.health; this.swordAngle = data.swordAngle; this.isSwinging = data.isSwinging; this.isBlocking = data.isBlocking;
+                this.updatePositions();
+            }
+        }
+
+        let players = [
+            new Forklift(0, "#FFD700", "Player 1"),
+            new Forklift(1, "#C83232", "Player 2"),
+            new Forklift(2, "#3264C8", "Player 3"),
+            new Forklift(3, "#32C832", "Player 4")
+        ];
+
+        function resizeCanvas() {
+            const container = document.getElementById("gameContainer");
+            canvas.width = container.clientWidth - 40; canvas.height = container.clientHeight;
+        }
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+
+        function checkCollision(attacker, defender) {
+            if (attacker.isSwinging && !attacker.hasHitThisSwing) {
+                const dx = attacker.swordTip.x - defender.x; const dy = attacker.swordTip.y - defender.y;
+                if (Math.sqrt(dx * dx + dy * dy) < (defender.stats.w / 2) + 15) { 
+                    attacker.hasHitThisSwing = true; 
+                    if (defender.isBlocking) {
+                        playSound('block'); 
+                        attacker.speed = 0; attacker.x -= Math.cos(attacker.angle) * 25; attacker.y -= Math.sin(attacker.angle) * 25;
+                    } else {
+                        playSound('hit'); 
+                        defender.health -= attacker.weapon.damage; 
+                        defender.speed = 0; defender.x += Math.cos(attacker.angle) * 30; defender.y += Math.sin(attacker.angle) * 30;
+                    }
+                }
+            }
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen-overlay').forEach(s => s.style.display = 'none');
+            if(screenId) {
+                document.getElementById(screenId).style.display = 'flex';
+                gameState = "MENU";
+                if(screenId === 'hostScreen') startHostingLobby();
+            } else {
+                gameState = "PLAYING";
+                if(!audioCtx && gameSettings.sfxEnabled) audioCtx = new AudioContext();
+            }
+        }
+
+        // --- MULTIPLAYER NETWORKING ---
+        let peer = null, myConnection = null;
+        let clients = {}; 
+        let nextPlayerIndex = 1;
+
+        function startHostingLobby() {
+            gameMode = "HOST";
+            players.forEach(p => p.active = false);
+            players[0].active = true; 
+            players[0].setLoadout(document.getElementById("myChassis").value, document.getElementById("myWeapon").value);
+
+            if(!peer) {
+                peer = new Peer();
+                peer.on('open', id => document.getElementById('hostIdDisplay').value = id);
+                peer.on('connection', conn => {
+                    if (gameState !== "MENU" || nextPlayerIndex > 3) {
+                        conn.send({ type: "ERROR", msg: "Lobby Full or Game Started" });
+                        setTimeout(() => conn.close(), 500);
+                        return;
+                    }
+                    
+                    let pIdx = nextPlayerIndex++;
+                    clients[conn.peer] = { 
+                        index: pIdx, conn: conn, 
+                        inputs: { forward: 0, turn: 0, swing: false, block: false } 
+                    };
+                    
+                    document.getElementById(`lobby-p${pIdx+1}`).innerText = `Player ${pIdx+1}: Connected!`;
+                    document.getElementById(`lobby-p${pIdx+1}`).style.color = players[pIdx].color;
+
+                    conn.on('data', data => {
+                        if (data.type === 'LOADOUT') {
+                            players[pIdx].setLoadout(data.cId, data.wId);
+                            players[pIdx].active = true;
+                        }
+                        if (data.type === 'INPUT') {
+                            clients[conn.peer].inputs = data;
+                        }
+                    });
+
+                    conn.on('close', () => {
+                        players[pIdx].active = false;
+                        document.getElementById(`lobby-p${pIdx+1}`).innerText = `Player ${pIdx+1}: Disconnected`;
+                        document.getElementById(`lobby-p${pIdx+1}`).style.color = "#555";
+                    });
+                });
+            }
+        }
+
+        function cancelHost() {
+            if(peer) { peer.destroy(); peer = null; }
+            nextPlayerIndex = 1; clients = {};
+            showScreen('mainMenuScreen');
+        }
+
+        function startMultiplayerHost() {
+            players.forEach(p => p.reset()); 
+            Object.values(clients).forEach(c => c.conn.send({ type: "START" }));
+            showScreen(null);
+        }
+
+        // HELPER TO REJOIN THE LAST MATCH
+        function rejoinLastGame() {
+            const savedHost = localStorage.getItem('forkliftLastHostId');
+            if (savedHost) {
+                document.getElementById('joinIdInput').value = savedHost;
+                joinOnlineGame(savedHost);
+            }
+        }
+
+        function joinOnlineGame(overrideId = null) {
+            const hostId = overrideId || document.getElementById('joinIdInput').value.trim();
+            if(!hostId) return;
+            
+            // Save the ID so the user can easily rejoin later!
+            localStorage.setItem('forkliftLastHostId', hostId);
+            
+            // Ensure the Rejoin button is visible now
+            document.getElementById('rejoinBtn').style.display = 'block';
+
+            document.getElementById('joinStatus').innerText = "Connecting...";
+            gameMode = "CLIENT";
+            
+            if(!peer) peer = new Peer();
+            peer.on('open', () => {
+                myConnection = peer.connect(hostId);
+                myConnection.on('open', () => {
+                    document.getElementById('joinStatus').innerText = "Waiting for Host to start...";
+                    myConnection.send({ 
+                        type: 'LOADOUT', 
+                        cId: document.getElementById("myChassis").value, 
+                        wId: document.getElementById("myWeapon").value 
+                    });
+                });
+
+                myConnection.on('data', data => {
+                    if (data.type === "START") {
+                        showScreen(null);
+                    } else if (data.type === "STATE") {
+                        applyNetworkState(data.state);
+                    } else if (data.type === "ERROR") {
+                        document.getElementById('joinStatus').innerText = data.msg;
+                    }
+                });
+            });
+        }
+
+        function startOfflineGame() {
+            gameMode = document.getElementById('offlineModeSelect').value;
+            players.forEach(p => p.active = false);
+            players[0].active = true; players[1].active = true;
+            players[0].setLoadout(document.getElementById("myChassis").value, document.getElementById("myWeapon").value);
+            players[1].setLoadout("standard", "standard"); 
+            players.forEach(p => p.reset());
+            showScreen(null);
+        }
+
+        function endGame(winnerName, winnerColor) {
+            gameState = "GAMEOVER";
+            document.getElementById("winnerText").innerText = winnerName + " Wins!";
+            document.getElementById("winnerText").style.color = winnerColor;
+            document.getElementById("gameOverScreen").style.display = "flex";
+        }
+
+        function applyNetworkState(stateArray) {
+            let activeCount = 0;
+            let lastAlive = null;
+
+            for(let i=0; i<4; i++) {
+                players[i].setState(stateArray[i]);
+                if(players[i].active && players[i].health > 0) {
+                    activeCount++;
+                    lastAlive = players[i];
+                }
+            }
+            if (activeCount <= 1 && lastAlive) endGame(lastAlive.name, lastAlive.color);
+        }
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (gameState === "PLAYING") {
+                if (gameMode === "LOCAL" || gameMode === "AI" || gameMode === "HOST") {
+                    
+                    let p1Fwd = (keys[keyBinds.p1.up] ? 1 : 0) - (keys[keyBinds.p1.down] ? 1 : 0);
+                    let p1Trn = (keys[keyBinds.p1.right] ? 1 : 0) - (keys[keyBinds.p1.left] ? 1 : 0);
+                    players[0].move(p1Fwd, p1Trn);
+                    if (keys[keyBinds.p1.swing]) players[0].swing();
+                    if (keys[keyBinds.p1.block]) players[0].block();
+
+                    if (gameMode === "LOCAL") {
+                        let p2Fwd = (keys[keyBinds.p2.up] ? 1 : 0) - (keys[keyBinds.p2.down] ? 1 : 0);
+                        let p2Trn = (keys[keyBinds.p2.right] ? 1 : 0) - (keys[keyBinds.p2.left] ? 1 : 0);
+                        players[1].move(p2Fwd, p2Trn);
+                        if (keys[keyBinds.p2.swing]) players[1].swing();
+                        if (keys[keyBinds.p2.block]) players[1].block();
+                    } 
+                    else if (gameMode === "AI") {
+                        let ai = players[1]; let target = players[0];
+                        let dx = target.x - ai.x; let dy = target.y - ai.y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+                        let targetAngle = Math.atan2(dy, dx);
+                        let diff = targetAngle - ai.angle;
+                        
+                        while (diff > Math.PI) diff -= Math.PI * 2; while (diff < -Math.PI) diff += Math.PI * 2;
+                        
+                        let p2Trn = 0; let p2Fwd = 0;
+                        if (diff > 0.1) p2Trn = 1; else if (diff < -0.1) p2Trn = -1;
+                        const optimalDist = ai.weapon.length + (target.stats.w / 2) + 20;
+                        if (distance > optimalDist + 20) p2Fwd = 0.85; else if (distance < optimalDist - 15) p2Fwd = -0.6; 
+                        
+                        if (distance < optimalDist + 30 && Math.abs(diff) < 0.5) ai.swing();
+                        if (target.isSwinging && distance < target.weapon.length + 50 && ai.blockCooldown === 0) {
+                            if (Math.random() < 0.15) ai.block();
+                        }
+                        ai.move(p2Fwd, p2Trn);
+                    }
+                    else if (gameMode === "HOST") {
+                        Object.values(clients).forEach(c => {
+                            let p = players[c.index];
+                            if(p.active && p.health > 0) {
+                                p.move(c.inputs.forward, c.inputs.turn);
+                                if (c.inputs.swing) p.swing();
+                                if (c.inputs.block) p.block();
+                            }
+                        });
+                    }
+                    
+                    players.forEach(p => { if(p.active) p.updateAbilities(); });
+
+                    for (let i = 0; i < players.length; i++) {
+                        for (let j = 0; j < players.length; j++) {
+                            if (i !== j && players[i].active && players[j].active && players[i].health > 0 && players[j].health > 0) {
+                                checkCollision(players[i], players[j]);
+                            }
+                        }
+                    }
+
+                    let activeAlive = players.filter(p => p.active && p.health > 0);
+                    
+                    if (gameMode === "HOST") {
+                        let statePack = players.map(p => p.getState());
+                        Object.values(clients).forEach(c => c.conn.send({ type: "STATE", state: statePack }));
+                    }
+
+                    let totalActive = players.filter(p => p.active).length;
+                    if (totalActive > 1 && activeAlive.length <= 1) {
+                        if (activeAlive.length === 1) endGame(activeAlive[0].name, activeAlive[0].color);
+                        else endGame("Nobody", "#FFF"); 
+                    }
+                } 
+                
+                else if (gameMode === "CLIENT" && myConnection) {
+                    myConnection.send({
+                        type: 'INPUT',
+                        forward: (keys[keyBinds.p1.up] ? 1 : 0) - (keys[keyBinds.p1.down] ? 1 : 0),
+                        turn: (keys[keyBinds.p1.right] ? 1 : 0) - (keys[keyBinds.p1.left] ? 1 : 0),
+                        swing: keys[keyBinds.p1.swing],
+                        block: keys[keyBinds.p1.block]
+                    });
+                }
+            }
+
+            players.forEach(p => p.draw());
+            
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        animationFrameId = requestAnimationFrame(gameLoop);
+    </script>
+</body>
+</html>
