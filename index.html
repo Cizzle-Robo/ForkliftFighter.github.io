@@ -152,8 +152,11 @@
 
         <div id="gameOverScreen" class="screen-overlay">
             <h1 id="winnerText" style="font-size: 60px;">Game Over</h1>
-            <p style="color: #AAA; font-size: 20px; margin-bottom: 20px;">Use the Rejoin button on the Main Menu to quickly play again!</p>
-            <button class="menu-btn" onclick="location.reload()">Return to Main Menu</button>
+            <p style="color: #AAA; font-size: 20px; margin-bottom: 30px;">Do you want to play again?</p>
+            <div style="display: flex; gap: 20px; justify-content: center;">
+                <button class="menu-btn" style="background: #333; width: 200px;" onclick="location.reload()">Main Menu</button>
+                <button class="menu-btn" style="background: #3264C8; width: 200px;" onclick="quickRejoin()">Rejoin Game</button>
+            </div>
         </div>
     </div>
 
@@ -536,6 +539,13 @@
 
                 myConnection.on('close', () => {
                     document.getElementById('joinStatus').innerText = "Host closed the connection.";
+                    if (gameState === "PLAYING") {
+                        // Kick players to the game over screen if the host drops mid-match
+                        gameState = "GAMEOVER";
+                        document.getElementById("winnerText").innerText = "Host Disconnected!";
+                        document.getElementById("winnerText").style.color = "#C83232";
+                        document.getElementById("gameOverScreen").style.display = "flex";
+                    }
                 });
             };
 
@@ -565,6 +575,24 @@
             document.getElementById("winnerText").innerText = winnerName + " Wins!";
             document.getElementById("winnerText").style.color = winnerColor;
             document.getElementById("gameOverScreen").style.display = "flex";
+        }
+
+        function quickRejoin() {
+            document.getElementById("gameOverScreen").style.display = "none";
+            
+            if (gameMode === "HOST") {
+                // If you are the host, reopen the lobby using your existing ID
+                showScreen('hostScreen');
+            } 
+            else if (gameMode === "CLIENT") {
+                // If you are a client, jump to the join screen and auto-reconnect
+                showScreen('joinScreen');
+                rejoinLastGame();
+            } 
+            else {
+                // If you were playing offline/AI, just instantly restart
+                startOfflineGame();
+            }
         }
 
         function applyNetworkState(stateArray) {
