@@ -165,6 +165,10 @@
         let gameMode = "LOCAL"; 
         let animationFrameId;
 
+        // --- SAFE STORAGE WRAPPERS ---
+        function safeStorageSet(key, value) { try { localStorage.setItem(key, value); } catch(e) {} }
+        function safeStorageGet(key) { try { return localStorage.getItem(key); } catch(e) { return null; } }
+
         // --- SETTINGS & KEYBINDS ---
         let gameSettings = { graphics: 'high', sfxEnabled: true, sfxVolume: 0.5 };
         let keyBinds = {
@@ -172,20 +176,17 @@
             p2: { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', swing: 'ShiftRight', block: 'Slash' }
         };
 
-        // Load saved data on page load
+        // Load saved data on page load safely
         window.addEventListener('load', () => {
-            // Rejoin button
-            const savedHost = localStorage.getItem('forkliftLastHostId');
+            const savedHost = safeStorageGet('forkliftLastHostId');
             if (savedHost) document.getElementById('rejoinBtn').style.display = 'block';
 
-            // Loadout
-            const savedChassis = localStorage.getItem('forkliftChassis');
+            const savedChassis = safeStorageGet('forkliftChassis');
             if (savedChassis) document.getElementById('myChassis').value = savedChassis;
-            const savedWeapon = localStorage.getItem('forkliftWeapon');
+            const savedWeapon = safeStorageGet('forkliftWeapon');
             if (savedWeapon) document.getElementById('myWeapon').value = savedWeapon;
 
-            // Settings
-            const savedSettings = localStorage.getItem('forkliftSettings');
+            const savedSettings = safeStorageGet('forkliftSettings');
             if (savedSettings) {
                 gameSettings = JSON.parse(savedSettings);
                 document.getElementById('gfxSelect').value = gameSettings.graphics;
@@ -193,14 +194,13 @@
                 document.getElementById('sfxVolume').value = gameSettings.sfxVolume;
             }
 
-            // Keybinds
-            const savedBinds = localStorage.getItem('forkliftBinds');
+            const savedBinds = safeStorageGet('forkliftBinds');
             if (savedBinds) {
                 keyBinds = JSON.parse(savedBinds);
                 ['p1', 'p2'].forEach(p => {
                     ['up', 'down', 'left', 'right', 'swing', 'block'].forEach(a => {
                         const btn = document.getElementById(`kb-${p}-${a}`);
-                        if (btn) btn.innerText = keyBinds[p][a];
+                        if (btn && keyBinds[p] && keyBinds[p][a]) btn.innerText = keyBinds[p][a];
                     });
                 });
             }
@@ -208,12 +208,12 @@
 
         function updateSetting(key, value) {
             gameSettings[key] = value;
-            localStorage.setItem('forkliftSettings', JSON.stringify(gameSettings));
+            safeStorageSet('forkliftSettings', JSON.stringify(gameSettings));
         }
 
         function saveLoadout() {
-            localStorage.setItem('forkliftChassis', document.getElementById("myChassis").value);
-            localStorage.setItem('forkliftWeapon', document.getElementById("myWeapon").value);
+            safeStorageSet('forkliftChassis', document.getElementById("myChassis").value);
+            safeStorageSet('forkliftWeapon', document.getElementById("myWeapon").value);
         }
 
         const keys = {};
@@ -225,7 +225,7 @@
                 keyBinds[rebindingTarget.player][rebindingTarget.action] = e.code;
                 rebindingTarget.btn.innerText = e.code;
                 rebindingTarget.btn.classList.remove('listening');
-                localStorage.setItem('forkliftBinds', JSON.stringify(keyBinds)); // Save new bind
+                safeStorageSet('forkliftBinds', JSON.stringify(keyBinds));
                 rebindingTarget = null; 
                 return;
             }
@@ -429,7 +429,8 @@
             players[0].active = true; 
             players[0].setLoadout(document.getElementById("myChassis").value, document.getElementById("myWeapon").value);
 
-            Object.values(clients).forEach(c => c.conn.close());
+            // Safely close and clear old lobby clients
+            Object.values(clients).forEach(c => { if(c.conn) c.conn.close(); });
             clients = {};
             
             for(let i=2; i<=4; i++) {
@@ -437,63 +438,66 @@
                 document.getElementById(`lobby-p${i}`).style.color = "#555";
             }
 
+            // Create Peer and Listeners ONLY ONCE so we don't break PeerJS's internal events
             if(!peer) {
                 peer = new Peer();
-                peer.on('open', id => document.getElementById('hostIdDisplay').value = id);
-            } else {
-                document.getElementById('hostIdDisplay').value = peer.id;
-            }
+                
+                peer.on('open', id => {
+                    document.getElementById('hostIdDisplay').value = id;
+                });
 
-            peer.off('connection'); 
-            
-            peer.on('connection', conn => {
-                conn.on('open', () => {
-                    if (clients[conn.peer]) return;
+                peer.on('connection', conn => {
+                    conn.on('open', () => {
+                        if (clients[conn.peer]) return;
 
-                    let pIdx = -1;
-                    for (let i = 1; i <= 3; i++) {
-                        if (!Object.values(clients).some(c => c.index === i)) {
-                            pIdx = i;
-                            break;
+                        let pIdx = -1;
+                        for (let i = 1; i <= 3; i++) {
+                            if (!Object.values(clients).some(c => c.index === i)) {
+                                pIdx = i;
+                                break;
+                            }
                         }
-                    }
 
-                    if (gameState !== "MENU" || pIdx === -1) {
-                        conn.send({ type: "ERROR", msg: "Lobby Full or Match Started!" });
-                        setTimeout(() => conn.close(), 500);
-                        return;
-                    }
-                    
-                    clients[conn.peer] = { 
-                        index: pIdx, conn: conn, 
-                        inputs: { forward: 0, turn: 0, swing: false, block: false } 
-                    };
-                    
-                    document.getElementById(`lobby-p${pIdx+1}`).innerText = `Player ${pIdx+1}: Connected!`;
-                    document.getElementById(`lobby-p${pIdx+1}`).style.color = players[pIdx].color;
-
-                    conn.on('data', data => {
-                        if (data.type === 'LOADOUT') {
-                            players[pIdx].setLoadout(data.cId, data.wId);
-                            players[pIdx].active = true;
+                        if (gameState !== "MENU" || pIdx === -1) {
+                            conn.send({ type: "ERROR", msg: "Lobby Full or Match Started!" });
+                            setTimeout(() => conn.close(), 500);
+                            return;
                         }
-                        if (data.type === 'INPUT') {
-                            clients[conn.peer].inputs = data;
-                        }
-                    });
+                        
+                        clients[conn.peer] = { 
+                            index: pIdx, conn: conn, 
+                            inputs: { forward: 0, turn: 0, swing: false, block: false } 
+                        };
+                        
+                        document.getElementById(`lobby-p${pIdx+1}`).innerText = `Player ${pIdx+1}: Connected!`;
+                        document.getElementById(`lobby-p${pIdx+1}`).style.color = players[pIdx].color;
 
-                    conn.on('close', () => {
-                        players[pIdx].active = false;
-                        document.getElementById(`lobby-p${pIdx+1}`).innerText = `Player ${pIdx+1}: Waiting...`;
-                        document.getElementById(`lobby-p${pIdx+1}`).style.color = "#555";
-                        delete clients[conn.peer]; 
+                        conn.on('data', data => {
+                            if (data.type === 'LOADOUT') {
+                                players[pIdx].setLoadout(data.cId, data.wId);
+                                players[pIdx].active = true;
+                            }
+                            if (data.type === 'INPUT') {
+                                clients[conn.peer].inputs = data;
+                            }
+                        });
+
+                        conn.on('close', () => {
+                            players[pIdx].active = false;
+                            document.getElementById(`lobby-p${pIdx+1}`).innerText = `Player ${pIdx+1}: Waiting...`;
+                            document.getElementById(`lobby-p${pIdx+1}`).style.color = "#555";
+                            delete clients[conn.peer]; 
+                        });
                     });
                 });
-            });
+            } else {
+                // If peer already exists, just show the ID
+                document.getElementById('hostIdDisplay').value = peer.id;
+            }
         }
 
         function cancelHost() {
-            Object.values(clients).forEach(c => c.conn.close());
+            Object.values(clients).forEach(c => { if(c.conn) c.conn.close(); });
             clients = {};
             
             for(let i=2; i<=4; i++) {
@@ -510,7 +514,7 @@
         }
 
         function rejoinLastGame() {
-            const savedHost = localStorage.getItem('forkliftLastHostId');
+            const savedHost = safeStorageGet('forkliftLastHostId');
             if (savedHost) {
                 document.getElementById('joinIdInput').value = savedHost;
                 joinOnlineGame(savedHost);
@@ -521,8 +525,14 @@
             const hostId = overrideId || document.getElementById('joinIdInput').value.trim();
             if(!hostId) return;
             
-            localStorage.setItem('forkliftLastHostId', hostId);
+            safeStorageSet('forkliftLastHostId', hostId);
             document.getElementById('rejoinBtn').style.display = 'block';
+
+            // Prevent ghost connections by clearing any old connection first
+            if (myConnection) {
+                myConnection.close();
+                myConnection = null;
+            }
 
             document.getElementById('joinStatus').innerText = "Connecting to Host...";
             gameMode = "CLIENT";
@@ -681,7 +691,11 @@
                     
                     if (gameMode === "HOST") {
                         let statePack = players.map(p => p.getState());
-                        Object.values(clients).forEach(c => c.conn.send({ type: "STATE", state: statePack }));
+                        Object.values(clients).forEach(c => {
+                            if (c.conn && c.conn.open) {
+                                c.conn.send({ type: "STATE", state: statePack });
+                            }
+                        });
                     }
 
                     let totalActive = players.filter(p => p.active).length;
@@ -691,7 +705,7 @@
                     }
                 } 
                 
-                else if (gameMode === "CLIENT" && myConnection) {
+                else if (gameMode === "CLIENT" && myConnection && myConnection.open) {
                     myConnection.send({
                         type: 'INPUT',
                         forward: (keys[keyBinds.p1.up] ? 1 : 0) - (keys[keyBinds.p1.down] ? 1 : 0),
