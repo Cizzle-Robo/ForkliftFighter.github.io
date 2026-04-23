@@ -41,6 +41,8 @@
         .keybind-btn:hover { background: #FFD700; color: #000; }
         .keybind-btn.listening { background: #C83232; animation: pulse 1s infinite; }
         
+        .version-text { position: absolute; bottom: 20px; right: 30px; color: #777; font-family: monospace; font-size: 16px; }
+
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
     </style>
 </head>
@@ -54,11 +56,36 @@
         
         <div id="mainMenuScreen" class="screen-overlay">
             <h1>Warehouse Warfare</h1>
-            <div style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
+            <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
                 <button class="menu-btn" style="width: 250px; font-size: 24px;" onclick="showScreen('playScreen')">Play</button>
                 <button class="menu-btn" style="width: 250px; font-size: 24px;" onclick="showScreen('garageScreen')">The Garage</button>
                 <button class="menu-btn" style="width: 250px; font-size: 24px;" onclick="showScreen('settingsScreen')">Settings</button>
+                <button class="menu-btn" style="width: 250px; font-size: 18px; background: #333; margin-top: 10px;" onclick="showScreen('patchNotesScreen')">Patch Notes</button>
             </div>
+            <div class="version-text">v1.0.1</div>
+        </div>
+
+        <div id="patchNotesScreen" class="screen-overlay">
+            <h2 class="screen-title">Patch Notes</h2>
+            <div class="menu-box" style="width: 80%; max-width: 700px; text-align: left; overflow-y: auto; max-height: 60vh; background: rgba(0,0,0,0.5);">
+                
+                <h3 style="color: #FFD700; border-bottom: 1px solid #444; padding-bottom: 5px; margin-top: 0;">v1.0.1 - The Lunge Update</h3>
+                <ul style="color: #CCC; line-height: 1.6;">
+                    <li><strong>Feature:</strong> Added an in-game Patch Notes screen so players can track updates.</li>
+                    <li><strong>Combat Fix:</strong> The Rapier's 'Lunge' special ability has been fully weaponized. It now correctly registers damage and applies knockback when crashing into an opponent while active.</li>
+                    <li><strong>UI:</strong> Added Version tracking to the main menu.</li>
+                </ul>
+
+                <h3 style="color: #00FFFF; border-bottom: 1px solid #444; padding-bottom: 5px; margin-top: 30px;">v1.0.0 - Initial Release</h3>
+                <ul style="color: #CCC; line-height: 1.6;">
+                    <li><strong>Welcome to Forklift Fencing!</strong> The chaotic warehouse arena is open.</li>
+                    <li><strong>The Garage:</strong> Choose from 5 base Chassis types and 5 devastating Melee weapons (plus secret admin codes).</li>
+                    <li><strong>Multiplayer:</strong> Added support for Local Player 2, AI Trainees, and 4-Player Online Lobbies.</li>
+                    <li><strong>Combat System:</strong> Swings, Parries, HP tracking, and custom Special Abilities are fully functional.</li>
+                </ul>
+
+            </div>
+            <button class="menu-btn back-btn" onclick="showScreen('mainMenuScreen')">Back to Menu</button>
         </div>
 
         <div id="playScreen" class="screen-overlay">
