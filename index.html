@@ -105,6 +105,7 @@
                     <div class="keybind-row"><span>Right</span><button class="keybind-btn" onclick="startRebind('p1', 'right', this)" id="kb-p1-right">KeyD</button></div>
                     <div class="keybind-row"><span>Swing/Fire</span><button class="keybind-btn" onclick="startRebind('p1', 'swing', this)" id="kb-p1-swing">Space</button></div>
                     <div class="keybind-row"><span>Parry</span><button class="keybind-btn" onclick="startRebind('p1', 'block', this)" id="kb-p1-block">KeyE</button></div>
+                    <div class="keybind-row"><span>Special Ability</span><button class="keybind-btn" onclick="startRebind('p1', 'special', this)" id="kb-p1-special">KeyQ</button></div>
                 </div>
                 <div class="loadout-box" style="border-color: #C83232;">
                     <h3 style="color: #C83232; margin: 0 0 10px 0;">Local Player 2 Controls</h3>
@@ -112,8 +113,9 @@
                     <div class="keybind-row"><span>Reverse</span><button class="keybind-btn" onclick="startRebind('p2', 'down', this)" id="kb-p2-down">ArrowDown</button></div>
                     <div class="keybind-row"><span>Left</span><button class="keybind-btn" onclick="startRebind('p2', 'left', this)" id="kb-p2-left">ArrowLeft</button></div>
                     <div class="keybind-row"><span>Right</span><button class="keybind-btn" onclick="startRebind('p2', 'right', this)" id="kb-p2-right">ArrowRight</button></div>
-                    <div class="keybind-row"><span>Swing/Fire</span><button class="keybind-btn" onclick="startRebind('p2', 'swing', this)" id="kb-p2-swing">ShiftRight</button></div>
+                    <div class="keybind-row"><span>Swing/Fire</span><button class="keybind-btn" onclick="startRebind('p2', 'swing', this)" id="kb-p2-swing">Enter</button></div>
                     <div class="keybind-row"><span>Parry</span><button class="keybind-btn" onclick="startRebind('p2', 'block', this)" id="kb-p2-block">Slash</button></div>
+                    <div class="keybind-row"><span>Special Ability</span><button class="keybind-btn" onclick="startRebind('p2', 'special', this)" id="kb-p2-special">ShiftRight</button></div>
                 </div>
             </div>
             <button class="menu-btn back-btn" onclick="showScreen('mainMenuScreen')">Back to Menu</button>
@@ -137,11 +139,11 @@
                     
                     <label>Weapon Type:</label>
                     <select id="p1Weapon" onchange="saveLoadout()">
-                        <option value="standard">Standard Fork</option>
-                        <option value="greatsword">Greatsword</option>
-                        <option value="rapier">Rapier</option>
-                        <option value="lance">Lance</option>
-                        <option value="dagger">Dagger</option>
+                        <option value="standard">Standard Fork (Ability: Overdrive)</option>
+                        <option value="greatsword">Greatsword (Ability: Whirlwind)</option>
+                        <option value="rapier">Rapier (Ability: Lunge)</option>
+                        <option value="lance">Lance (Ability: Juggernaut)</option>
+                        <option value="dagger">Dagger (Ability: Cloak)</option>
                         <option class="opt-admin" value="admin" style="color: #FF00FF; font-weight: bold;" hidden>Admin Gun</option>
                     </select>
                 </div>
@@ -160,11 +162,11 @@
                     
                     <label>Weapon Type:</label>
                     <select id="p2Weapon" onchange="saveLoadout()">
-                        <option value="standard">Standard Fork</option>
-                        <option value="greatsword">Greatsword</option>
-                        <option value="rapier">Rapier</option>
-                        <option value="lance">Lance</option>
-                        <option value="dagger">Dagger</option>
+                        <option value="standard">Standard Fork (Ability: Overdrive)</option>
+                        <option value="greatsword">Greatsword (Ability: Whirlwind)</option>
+                        <option value="rapier">Rapier (Ability: Lunge)</option>
+                        <option value="lance">Lance (Ability: Juggernaut)</option>
+                        <option value="dagger">Dagger (Ability: Cloak)</option>
                         <option class="opt-admin" value="admin" style="color: #FF00FF; font-weight: bold;" hidden>Admin Gun</option>
                     </select>
                 </div>
@@ -226,8 +228,8 @@
         // --- SETTINGS & KEYBINDS ---
         let gameSettings = { graphics: 'high', sfxEnabled: true, sfxVolume: 0.5 };
         let keyBinds = {
-            p1: { up: 'KeyW', down: 'KeyS', left: 'KeyA', right: 'KeyD', swing: 'Space', block: 'KeyE' },
-            p2: { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', swing: 'ShiftRight', block: 'Slash' }
+            p1: { up: 'KeyW', down: 'KeyS', left: 'KeyA', right: 'KeyD', swing: 'Space', block: 'KeyE', special: 'KeyQ' },
+            p2: { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', swing: 'Enter', block: 'Slash', special: 'ShiftRight' }
         };
 
         window.addEventListener('load', () => {
@@ -253,7 +255,7 @@
             if (savedBinds) {
                 keyBinds = JSON.parse(savedBinds);
                 ['p1', 'p2'].forEach(p => {
-                    ['up', 'down', 'left', 'right', 'swing', 'block'].forEach(a => {
+                    ['up', 'down', 'left', 'right', 'swing', 'block', 'special'].forEach(a => {
                         const btn = document.getElementById(`kb-${p}-${a}`);
                         if (btn && keyBinds[p] && keyBinds[p][a]) btn.innerText = keyBinds[p][a];
                     });
@@ -313,6 +315,7 @@
             else if (type === 'hit') { osc.type = 'square'; osc.frequency.setValueAtTime(150, now); osc.frequency.exponentialRampToValueAtTime(50, now + 0.2); gain.gain.setValueAtTime(gain.gain.value * 2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2); osc.start(now); osc.stop(now + 0.2); } 
             else if (type === 'block') { osc.type = 'triangle'; osc.frequency.setValueAtTime(800, now); osc.frequency.linearRampToValueAtTime(1200, now + 0.1); gain.gain.setValueAtTime(gain.gain.value * 1.5, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1); } 
             else if (type === 'shoot') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(600, now); osc.frequency.exponentialRampToValueAtTime(100, now + 0.1); gain.gain.setValueAtTime(gain.gain.value * 0.8, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1); }
+            else if (type === 'special') { osc.type = 'sine'; osc.frequency.setValueAtTime(300, now); osc.frequency.linearRampToValueAtTime(800, now + 0.3); gain.gain.setValueAtTime(gain.gain.value * 1.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3); osc.start(now); osc.stop(now + 0.3); }
         }
 
         // --- GAME DATABASES ---
@@ -325,12 +328,12 @@
             admin:     { w: 40, h: 30, maxSpeed: 15.0, acc: 1.50, turn: 0.20, hp: 5000 }
         };
         const WEAPON_DB = {
-            standard:   { type: 'melee', length: 70,  swingSpeed: 0.25, retractSpeed: 0.10, damage: 20 },
-            greatsword: { type: 'melee', length: 100, swingSpeed: 0.12, retractSpeed: 0.04, damage: 40 },
-            rapier:     { type: 'melee', length: 45,  swingSpeed: 0.50, retractSpeed: 0.25, damage: 10 },
-            lance:      { type: 'melee', length: 140, swingSpeed: 0.08, retractSpeed: 0.05, damage: 30 },
-            dagger:     { type: 'melee', length: 25,  swingSpeed: 0.80, retractSpeed: 0.40, damage: 15 },
-            admin:      { type: 'ranged', length: 30,  fireRate: 8, projSpeed: 25, damage: 9999 } 
+            standard:   { type: 'melee', length: 70,  swingSpeed: 0.25, retractSpeed: 0.10, damage: 20, spCooldown: 600 }, // Overdrive (10s cd)
+            greatsword: { type: 'melee', length: 100, swingSpeed: 0.12, retractSpeed: 0.04, damage: 40, spCooldown: 480 }, // Whirlwind (8s cd)
+            rapier:     { type: 'melee', length: 45,  swingSpeed: 0.50, retractSpeed: 0.25, damage: 10, spCooldown: 300 }, // Lunge (5s cd)
+            lance:      { type: 'melee', length: 140, swingSpeed: 0.08, retractSpeed: 0.05, damage: 30, spCooldown: 720 }, // Juggernaut (12s cd)
+            dagger:     { type: 'melee', length: 25,  swingSpeed: 0.80, retractSpeed: 0.40, damage: 15, spCooldown: 600 }, // Cloak (10s cd)
+            admin:      { type: 'ranged', length: 30,  fireRate: 8, projSpeed: 25, damage: 9999, spCooldown: 120 }          // Scatter (2s cd)
         };
 
         // --- PROJECTILES & FORKLIFT CLASSES ---
@@ -357,15 +360,29 @@
                 const spawnPoints = [ { x: canvas.width * 0.1, y: canvas.height * 0.2, a: 0 }, { x: canvas.width * 0.9, y: canvas.height * 0.8, a: Math.PI }, { x: canvas.width * 0.9, y: canvas.height * 0.2, a: Math.PI/2 }, { x: canvas.width * 0.1, y: canvas.height * 0.8, a: -Math.PI/2 } ];
                 let spawn = spawnPoints[this.index] || spawnPoints[0];
                 this.x = spawn.x; this.y = spawn.y; this.angle = spawn.a; this.health = this.stats.hp; this.speed = 0;
-                this.swordAngle = 0; this.isSwinging = false; this.hasHitThisSwing = false; this.isBlocking = false; this.blockTimer = 0; this.blockCooldown = 0; this.fireCooldown = 0;
+                this.swordAngle = 0; this.swordTargetAngle = 2.0; this.isSwinging = false; this.hasHitThisSwing = false; 
+                this.isBlocking = false; this.blockTimer = 0; this.blockCooldown = 0; this.fireCooldown = 0;
+                this.specialCooldown = 0; this.specialActiveTimer = 0; this.isCloaked = false; this.isJuggernaut = false;
                 this.aiTimer = 0; this.hasRolledParry = false;
                 this.updatePositions();
             }
             move(forward, turn) {
                 this.angle += turn * this.stats.turn;
-                if (forward !== 0) this.speed += forward * this.stats.acc; else this.speed *= 0.92; 
-                if (this.speed > this.stats.maxSpeed) this.speed = this.stats.maxSpeed;
-                if (this.speed < -this.stats.maxSpeed / 2) this.speed = -this.stats.maxSpeed / 2;
+                
+                // Ability: Overdrive
+                let currentAcc = this.stats.acc;
+                let currentMaxSpeed = this.stats.maxSpeed;
+                if (this.weaponId === 'standard' && this.specialActiveTimer > 0) { currentAcc *= 1.5; currentMaxSpeed *= 1.5; }
+
+                // Apply Rapier Lunge or Normal Movement
+                if (this.weaponId === 'rapier' && this.specialActiveTimer > 0) {
+                    this.speed = currentMaxSpeed * 3.5; // Force high speed and ignore the clamp during lunge
+                } else {
+                    if (forward !== 0) this.speed += forward * currentAcc; else this.speed *= 0.92; 
+                    if (this.speed > currentMaxSpeed) this.speed = currentMaxSpeed;
+                    if (this.speed < -currentMaxSpeed / 2) this.speed = -currentMaxSpeed / 2;
+                }
+                
                 this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed;
                 const bounds = this.stats.w / 2; let hitWall = false;
                 if (this.x < bounds) { this.x = bounds; hitWall = true; } if (this.x > canvas.width - bounds) { this.x = canvas.width - bounds; hitWall = true; }
@@ -378,12 +395,69 @@
                         this.fireCooldown = this.weapon.fireRate; let bulletColor = (this.weaponId === 'admin') ? '#FF00FF' : '#FFF';
                         projectiles.push(new Projectile(this.swordTip.x, this.swordTip.y, this.angle, this.weapon.projSpeed, this.weapon.damage, this.index, bulletColor)); playSound('shoot');
                     }
-                } else { if (!this.isSwinging && this.swordAngle <= 0 && !this.isBlocking) { this.isSwinging = true; this.hasHitThisSwing = false; playSound('swing'); } }
+                } else { 
+                    if (!this.isSwinging && this.swordAngle <= 0 && !this.isBlocking) { 
+                        this.isSwinging = true; this.hasHitThisSwing = false; 
+                        this.swordTargetAngle = 2.0; // Normal arc
+                        playSound('swing'); 
+                    } 
+                }
             }
             block() { if (!this.isSwinging && !this.isBlocking && this.blockCooldown === 0) { this.isBlocking = true; this.blockTimer = 15; this.blockCooldown = 60; playSound('block'); } }
+            
+            useSpecial() {
+                if (this.specialCooldown > 0 || this.health <= 0) return;
+                this.specialCooldown = this.weapon.spCooldown;
+                playSound('special');
+
+                if (this.weaponId === 'standard') {
+                    // Overdrive: Fast movement
+                    this.specialActiveTimer = 180; // 3 seconds
+                } else if (this.weaponId === 'greatsword') {
+                    // Whirlwind: 360 degree spin
+                    this.isSwinging = true; 
+                    this.hasHitThisSwing = false; 
+                    this.swordTargetAngle = Math.PI * 2; // Full circle
+                } else if (this.weaponId === 'rapier') {
+                    // Lunge: Dash forward
+                    this.specialActiveTimer = 15; // Active for 15 frames (1/4 second)
+                    this.hasHitThisSwing = false; // Arm the weapon so it can deal damage on contact
+                } else if (this.weaponId === 'lance') {
+                    // Juggernaut: Immune to knockback
+                    this.isJuggernaut = true;
+                    this.specialActiveTimer = 240; // 4 seconds
+                } else if (this.weaponId === 'dagger') {
+                    // Cloak: Semi-invisible
+                    this.isCloaked = true;
+                    this.specialActiveTimer = 240; // 4 seconds
+                } else if (this.weaponId === 'admin') {
+                    // Scatter Shot
+                    let bulletColor = '#FF00FF';
+                    for(let i = -2; i <= 2; i++) {
+                        projectiles.push(new Projectile(this.swordTip.x, this.swordTip.y, this.angle + (i * 0.2), this.weapon.projSpeed, this.weapon.damage, this.index, bulletColor));
+                    }
+                }
+            }
+
             updateAbilities() {
                 if (this.fireCooldown > 0) this.fireCooldown--;
-                if (this.isSwinging) { this.swordAngle += this.weapon.swingSpeed; if (this.swordAngle >= 2.0) this.isSwinging = false; } 
+                if (this.specialCooldown > 0) this.specialCooldown--;
+                if (this.specialActiveTimer > 0) {
+                    this.specialActiveTimer--;
+                    if (this.specialActiveTimer <= 0) {
+                        this.isCloaked = false;
+                        this.isJuggernaut = false;
+                    }
+                }
+
+                if (this.isSwinging) { 
+                    this.swordAngle += this.weapon.swingSpeed; 
+                    if (this.swordAngle >= this.swordTargetAngle) {
+                        this.isSwinging = false; 
+                        this.swordTargetAngle = 2.0; // Reset
+                        if(this.weaponId === 'greatsword') this.swordAngle = 0; // Snap back for full spin
+                    } 
+                } 
                 else if (this.swordAngle > 0) this.swordAngle -= this.weapon.retractSpeed; else this.swordAngle = 0;
                 if (this.isBlocking) { this.blockTimer--; if (this.blockTimer <= 0) this.isBlocking = false; }
                 if (this.blockCooldown > 0) this.blockCooldown--;
@@ -396,29 +470,52 @@
                 this.swordTip.x = swordStartX + Math.cos(totalSwordAngle) * this.weapon.length; this.swordTip.y = swordStartY + Math.sin(totalSwordAngle) * this.weapon.length;
             }
             draw() {
-                if (!this.active || this.health <= 0) return; ctx.save();
+                if (!this.active || this.health <= 0) return; 
+                ctx.save();
+                
+                // Cloak Effect
+                if (this.isCloaked) { ctx.globalAlpha = 0.25; }
+
                 let glowColor = (this.chassisId === 'admin' || this.weaponId === 'admin') ? '#FF00FF' : this.color;
                 if (gameSettings.graphics === 'high') { ctx.shadowBlur = 15; ctx.shadowColor = glowColor; } else { ctx.shadowBlur = 0; }
                 ctx.translate(this.x, this.y); ctx.rotate(this.angle);
+                
+                // Juggernaut Effect (Thicker Border)
+                if (this.isJuggernaut) { ctx.strokeStyle = "#FFF"; ctx.lineWidth = 3; ctx.strokeRect(-this.stats.w/2, -this.stats.h/2, this.stats.w, this.stats.h); }
+
                 ctx.fillStyle = this.color; ctx.fillRect(-this.stats.w/2, -this.stats.h/2, this.stats.w, this.stats.h);
                 ctx.fillStyle = "#000"; ctx.shadowBlur = 0; ctx.fillRect(-5, -10, 15, 20);
                 if (this.isBlocking) {
                     ctx.beginPath(); ctx.arc(0, 0, this.stats.w/2 + 15, -Math.PI/2, Math.PI/2); ctx.strokeStyle = "#00FFFF"; ctx.lineWidth = 4;
                     if(gameSettings.graphics === 'high') { ctx.shadowBlur = 20; ctx.shadowColor = "#00FFFF"; } ctx.stroke();
                 } ctx.restore();
+                
                 const startOffset = this.stats.w / 2;
                 ctx.beginPath(); ctx.moveTo(this.x + Math.cos(this.angle) * startOffset, this.y + Math.sin(this.angle) * startOffset); ctx.lineTo(this.swordTip.x, this.swordTip.y);
                 if(this.weaponId === 'lance') ctx.lineWidth = 12; else if(this.weaponId === 'greatsword') ctx.lineWidth = 9; else if(this.weaponId === 'rapier' || this.weaponId === 'dagger') ctx.lineWidth = 3; else if(this.weaponId === 'admin') ctx.lineWidth = 8; else ctx.lineWidth = 6;
                 ctx.strokeStyle = this.isSwinging ? "#FFFFFF" : ((this.weaponId === 'admin') ? "#FF00FF" : "#969696");
                 if(gameSettings.graphics === 'high' && this.isSwinging) { ctx.shadowBlur = 10; ctx.shadowColor = "#FFFFFF"; } ctx.stroke(); ctx.shadowBlur = 0; 
+                
+                if (this.isCloaked) ctx.globalAlpha = 1.0; // Reset alpha for UI
+
                 ctx.fillStyle = "#FFF"; ctx.font = "12px Arial"; ctx.fillText(this.name, this.x - 20, this.y - 45);
+                
+                // HP Bar
                 ctx.fillStyle = "#C80000"; ctx.fillRect(this.x - 25, this.y - 35, 50, 5); ctx.fillStyle = "#00C800"; ctx.fillRect(this.x - 25, this.y - 35, 50 * (Math.max(0, this.health) / this.stats.hp), 5);
+                
+                // Special Cooldown Bar
+                ctx.fillStyle = "#222"; ctx.fillRect(this.x - 25, this.y - 28, 50, 3);
+                ctx.fillStyle = (this.specialCooldown === 0) ? "#00FFFF" : "#555";
+                let fillRatio = 1 - (this.specialCooldown / this.weapon.spCooldown);
+                ctx.fillRect(this.x - 25, this.y - 28, 50 * fillRatio, 3);
             }
-            getState() { return { active: this.active, x: this.x, y: this.y, angle: this.angle, health: this.health, swordAngle: this.swordAngle, isSwinging: this.isSwinging, isBlocking: this.isBlocking, cId: this.chassisId, wId: this.weaponId }; }
+            getState() { return { active: this.active, x: this.x, y: this.y, angle: this.angle, health: this.health, swordAngle: this.swordAngle, isSwinging: this.isSwinging, isBlocking: this.isBlocking, cId: this.chassisId, wId: this.weaponId, spCd: this.specialCooldown, spTimer: this.specialActiveTimer, cloak: this.isCloaked, jug: this.isJuggernaut }; }
             setState(data) { 
                 this.active = data.active; if (!this.active) return;
                 if (this.chassisId !== data.cId || this.weaponId !== data.wId) this.setLoadout(data.cId, data.wId);
-                this.x = data.x; this.y = data.y; this.angle = data.angle; this.health = data.health; this.swordAngle = data.swordAngle; this.isSwinging = data.isSwinging; this.isBlocking = data.isBlocking; this.updatePositions();
+                this.x = data.x; this.y = data.y; this.angle = data.angle; this.health = data.health; this.swordAngle = data.swordAngle; this.isSwinging = data.isSwinging; this.isBlocking = data.isBlocking; 
+                this.specialCooldown = data.spCd; this.specialActiveTimer = data.spTimer; this.isCloaked = data.cloak; this.isJuggernaut = data.jug;
+                this.updatePositions();
             }
         }
 
@@ -429,7 +526,12 @@
 
         function checkMeleeCollision(attacker, defender) {
             if (attacker.weapon.type !== 'melee') return;
-            if (attacker.isSwinging && !attacker.hasHitThisSwing) {
+            
+            // Treat normal swings OR an active Rapier Lunge as an attack
+            let isLunging = attacker.weaponId === 'rapier' && attacker.specialActiveTimer > 0;
+            
+            // Allow greatsword whirlwind to hit multiple times over the spin, but not instantly kill.
+            if ((attacker.isSwinging || isLunging) && (!attacker.hasHitThisSwing || attacker.weaponId === 'greatsword')) {
                 const startOffset = attacker.stats.w / 2; const baseX = attacker.x + Math.cos(attacker.angle) * startOffset; const baseY = attacker.y + Math.sin(attacker.angle) * startOffset;
                 const tipX = attacker.swordTip.x; const tipY = attacker.swordTip.y;
                 const defX = defender.x; const defY = defender.y; const defRadius = (defender.stats.w / 2) + 15; 
@@ -440,8 +542,14 @@
 
                 if (distance < defRadius) { 
                     attacker.hasHitThisSwing = true; 
-                    if (defender.isBlocking) { playSound('block'); attacker.speed = 0; attacker.x -= Math.cos(attacker.angle) * 25; attacker.y -= Math.sin(attacker.angle) * 25; } 
-                    else { playSound('hit'); defender.health -= attacker.weapon.damage; defender.speed = 0; defender.x += Math.cos(attacker.angle) * 30; defender.y += Math.sin(attacker.angle) * 30; }
+                    if (defender.isBlocking) { 
+                        playSound('block'); attacker.speed = 0; 
+                        if (!attacker.isJuggernaut) { attacker.x -= Math.cos(attacker.angle) * 25; attacker.y -= Math.sin(attacker.angle) * 25; }
+                    } 
+                    else { 
+                        playSound('hit'); defender.health -= attacker.weapon.damage; defender.speed = 0; 
+                        if (!defender.isJuggernaut) { defender.x += Math.cos(attacker.angle) * 30; defender.y += Math.sin(attacker.angle) * 30; }
+                    }
                 }
             }
         }
@@ -456,7 +564,7 @@
         let peer = null, myConnection = null, clients = {}; 
         function startHostingLobby() {
             gameMode = "HOST"; players.forEach(p => p.active = false); players[0].active = true; 
-            players[0].setLoadout(document.getElementById("p1Chassis").value, document.getElementById("p1Weapon").value); // Uses Player 1's Loadout
+            players[0].setLoadout(document.getElementById("p1Chassis").value, document.getElementById("p1Weapon").value); 
             Object.values(clients).forEach(c => { if(c.conn) c.conn.close(); }); clients = {};
             for(let i=2; i<=4; i++) { document.getElementById(`lobby-p${i}`).innerText = `Player ${i}: Waiting...`; document.getElementById(`lobby-p${i}`).style.color = "#555"; }
             if(!peer) {
@@ -466,7 +574,7 @@
                         if (clients[conn.peer]) return; let pIdx = -1;
                         for (let i = 1; i <= 3; i++) { if (!Object.values(clients).some(c => c.index === i)) { pIdx = i; break; } }
                         if (gameState !== "MENU" || pIdx === -1) { conn.send({ type: "ERROR", msg: "Lobby Full or Match Started!" }); setTimeout(() => conn.close(), 500); return; }
-                        clients[conn.peer] = { index: pIdx, conn: conn, inputs: { forward: 0, turn: 0, swing: false, block: false } };
+                        clients[conn.peer] = { index: pIdx, conn: conn, inputs: { forward: 0, turn: 0, swing: false, block: false, special: false } };
                         document.getElementById(`lobby-p${pIdx+1}`).innerText = `Player ${pIdx+1}: Connected!`; document.getElementById(`lobby-p${pIdx+1}`).style.color = players[pIdx].color;
                         conn.on('data', data => { if (data.type === 'LOADOUT') { players[pIdx].setLoadout(data.cId, data.wId); players[pIdx].active = true; } if (data.type === 'INPUT') clients[conn.peer].inputs = data; });
                         conn.on('close', () => { players[pIdx].active = false; document.getElementById(`lobby-p${pIdx+1}`).innerText = `Player ${pIdx+1}: Waiting...`; document.getElementById(`lobby-p${pIdx+1}`).style.color = "#555"; delete clients[conn.peer]; });
@@ -486,7 +594,6 @@
                 myConnection = peer.connect(hostId, { reliable: true });
                 myConnection.on('open', () => { 
                     document.getElementById('joinStatus').innerText = "Connected! Waiting for Host..."; 
-                    // Send Player 1's Loadout to the host
                     myConnection.send({ type: 'LOADOUT', cId: document.getElementById("p1Chassis").value, wId: document.getElementById("p1Weapon").value }); 
                 });
                 myConnection.on('data', data => { if (data.type === "START") { projectiles = []; showScreen(null); } else if (data.type === "STATE") applyNetworkState(data.state, data.projs); else if (data.type === "ERROR") document.getElementById('joinStatus').innerText = data.msg; });
@@ -500,7 +607,6 @@
             players.forEach(p => p.active = false); projectiles = [];
             players[0].active = true; players[1].active = true;
             
-            // Assign loadouts to both players from the Garage selects
             players[0].setLoadout(document.getElementById("p1Chassis").value, document.getElementById("p1Weapon").value);
             players[1].setLoadout(document.getElementById("p2Chassis").value, document.getElementById("p2Weapon").value); 
             
@@ -548,6 +654,7 @@
                     players[0].move(p1Fwd, p1Trn);
                     if (keys[keyBinds.p1.swing]) players[0].swing();
                     if (keys[keyBinds.p1.block]) players[0].block();
+                    if (keys[keyBinds.p1.special]) players[0].useSpecial();
 
                     if (gameMode === "LOCAL") {
                         let p2Fwd = (keys[keyBinds.p2.up] ? 1 : 0) - (keys[keyBinds.p2.down] ? 1 : 0);
@@ -555,54 +662,67 @@
                         players[1].move(p2Fwd, p2Trn);
                         if (keys[keyBinds.p2.swing]) players[1].swing();
                         if (keys[keyBinds.p2.block]) players[1].block();
+                        if (keys[keyBinds.p2.special]) players[1].useSpecial();
                     } 
                     
                     else if (gameMode.startsWith("AI")) {
                         let ai = players[1]; let target = players[0];
-                        let dx = target.x - ai.x; let dy = target.y - ai.y;
-                        let distance = Math.sqrt(dx * dx + dy * dy);
-                        let targetAngle = Math.atan2(dy, dx);
-                        let diff = targetAngle - ai.angle;
                         
-                        while (diff > Math.PI) diff -= Math.PI * 2; while (diff < -Math.PI) diff += Math.PI * 2;
-                        
-                        let p2Trn = 0; let p2Fwd = 0;
-                        if (diff > 0.1) p2Trn = 1; else if (diff < -0.1) p2Trn = -1;
-                        
-                        let diffLevel = gameMode === "AI_EASY" ? 1 : (gameMode === "AI_MED" ? 2 : 3);
-                        const optimalDist = ai.weapon.length + (target.stats.w / 2) + (diffLevel === 1 ? -10 : 20);
-                        
-                        ai.aiTimer++;
+                        // AI loses tracking if target is cloaked
+                        if (target.isCloaked && Math.random() > 0.1) {
+                            // AI drifts randomly
+                            ai.move((Math.random() > 0.5 ? 0.5 : -0.5), (Math.random() > 0.5 ? 1 : -1));
+                        } else {
+                            let dx = target.x - ai.x; let dy = target.y - ai.y;
+                            let distance = Math.sqrt(dx * dx + dy * dy);
+                            let targetAngle = Math.atan2(dy, dx);
+                            let diff = targetAngle - ai.angle;
+                            
+                            while (diff > Math.PI) diff -= Math.PI * 2; while (diff < -Math.PI) diff += Math.PI * 2;
+                            
+                            let p2Trn = 0; let p2Fwd = 0;
+                            if (diff > 0.1) p2Trn = 1; else if (diff < -0.1) p2Trn = -1;
+                            
+                            let diffLevel = gameMode === "AI_EASY" ? 1 : (gameMode === "AI_MED" ? 2 : 3);
+                            const optimalDist = ai.weapon.length + (target.stats.w / 2) + (diffLevel === 1 ? -10 : 20);
+                            
+                            ai.aiTimer++;
 
-                        if (ai.blockCooldown > 0 && diffLevel > 1) { 
-                            p2Fwd = -1; 
-                        } else if (distance > optimalDist + 20) {
-                            p2Fwd = (diffLevel === 1 ? 0.5 : 0.85); 
-                        } else if (distance < optimalDist - 15) {
-                            p2Fwd = (diffLevel === 1 ? -0.3 : -0.8); 
-                        } else if (diffLevel > 1 && Math.random() < 0.02) {
-                            p2Fwd = (Math.random() > 0.5 ? 0.5 : -0.5); 
-                        }
-                        
-                        if (distance < optimalDist + 30 && Math.abs(diff) < 0.5) {
-                            if (ai.aiTimer % (60 / diffLevel) === 0 && Math.random() < (0.3 * diffLevel)) {
-                                ai.swing();
+                            if (ai.blockCooldown > 0 && diffLevel > 1) { 
+                                p2Fwd = -1; 
+                            } else if (distance > optimalDist + 20) {
+                                p2Fwd = (diffLevel === 1 ? 0.5 : 0.85); 
+                            } else if (distance < optimalDist - 15) {
+                                p2Fwd = (diffLevel === 1 ? -0.3 : -0.8); 
+                            } else if (diffLevel > 1 && Math.random() < 0.02) {
+                                p2Fwd = (Math.random() > 0.5 ? 0.5 : -0.5); 
                             }
-                        }
-
-                        if (target.isSwinging && target.swordAngle > 0 && target.swordAngle < 0.5 && ai.blockCooldown === 0) {
-                            if (!ai.hasRolledParry) {
-                                ai.hasRolledParry = true; 
-                                let parryChance = diffLevel === 1 ? 0.05 : (diffLevel === 2 ? 0.40 : 0.85);
-                                if (distance < target.weapon.length + 60 && Math.random() < parryChance) {
-                                    ai.block(); 
+                            
+                            if (distance < optimalDist + 30 && Math.abs(diff) < 0.5) {
+                                if (ai.aiTimer % (60 / diffLevel) === 0 && Math.random() < (0.3 * diffLevel)) {
+                                    ai.swing();
                                 }
                             }
-                        } else if (!target.isSwinging) {
-                            ai.hasRolledParry = false;
-                        }
 
-                        ai.move(p2Fwd, p2Trn);
+                            if (target.isSwinging && target.swordAngle > 0 && target.swordAngle < 0.5 && ai.blockCooldown === 0) {
+                                if (!ai.hasRolledParry) {
+                                    ai.hasRolledParry = true; 
+                                    let parryChance = diffLevel === 1 ? 0.05 : (diffLevel === 2 ? 0.40 : 0.85);
+                                    if (distance < target.weapon.length + 60 && Math.random() < parryChance) {
+                                        ai.block(); 
+                                    }
+                                }
+                            } else if (!target.isSwinging) {
+                                ai.hasRolledParry = false;
+                            }
+                            
+                            // AI using Special
+                            if (ai.specialCooldown === 0 && distance < optimalDist + 100 && diffLevel > 1) {
+                                if (Math.random() < 0.05) ai.useSpecial();
+                            }
+
+                            ai.move(p2Fwd, p2Trn);
+                        }
                     }
                     
                     else if (gameMode === "HOST") {
@@ -612,6 +732,7 @@
                                 p.move(c.inputs.forward, c.inputs.turn);
                                 if (c.inputs.swing) p.swing();
                                 if (c.inputs.block) p.block();
+                                if (c.inputs.special) p.useSpecial();
                             }
                         });
                     }
@@ -624,8 +745,8 @@
                             if (p.active && p.health > 0 && p.index !== proj.ownerId && proj.active) {
                                 let dx = proj.x - p.x; let dy = proj.y - p.y;
                                 if (Math.sqrt(dx*dx + dy*dy) < (p.stats.w / 2) + 10) {
-                                    if (p.isBlocking) { playSound('block'); p.speed = 0; p.x += Math.cos(proj.angle) * 5; p.y += Math.sin(proj.angle) * 5; } 
-                                    else { playSound('hit'); p.health -= proj.damage; p.speed = 0; p.x += Math.cos(proj.angle) * 20; p.y += Math.sin(proj.angle) * 20; }
+                                    if (p.isBlocking) { playSound('block'); p.speed = 0; if(!p.isJuggernaut){ p.x += Math.cos(proj.angle) * 5; p.y += Math.sin(proj.angle) * 5; } } 
+                                    else { playSound('hit'); p.health -= proj.damage; p.speed = 0; if(!p.isJuggernaut){ p.x += Math.cos(proj.angle) * 20; p.y += Math.sin(proj.angle) * 20; } }
                                     proj.active = false;
                                 }
                             }
@@ -662,7 +783,8 @@
                         forward: (keys[keyBinds.p1.up] ? 1 : 0) - (keys[keyBinds.p1.down] ? 1 : 0),
                         turn: (keys[keyBinds.p1.right] ? 1 : 0) - (keys[keyBinds.p1.left] ? 1 : 0),
                         swing: keys[keyBinds.p1.swing],
-                        block: keys[keyBinds.p1.block]
+                        block: keys[keyBinds.p1.block],
+                        special: keys[keyBinds.p1.special]
                     });
                 }
             }
