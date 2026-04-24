@@ -29,10 +29,10 @@
         .menu-box { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; border: 1px solid #555; margin: 10px; display: flex; flex-direction: column; gap: 15px; align-items: center; width: 350px; }
         .menu-box.clickable { cursor: pointer; transition: transform 0.2s, background 0.2s; }
         .menu-box.clickable:hover { transform: scale(1.05); background: rgba(255,255,255,0.1); }
-        .menu-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
         
-        select, input[type="text"], input[type="range"] { background: #333; color: #fff; border: 1px solid #777; padding: 10px; border-radius: 4px; font-size: 16px; width: 100%; box-sizing: border-box; cursor: pointer; outline: none; text-align: center;}
+        select, input[type="text"], input[type="range"], input[type="color"] { background: #333; color: #fff; border: 1px solid #777; padding: 10px; border-radius: 4px; font-size: 16px; width: 100%; box-sizing: border-box; cursor: pointer; outline: none; text-align: center;}
         select:focus, input:focus { border-color: #FFD700; }
+        input[type="color"] { height: 45px; padding: 2px; }
         
         .flex-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-bottom: 20px; }
         .loadout-box { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; border: 1px solid #555; display: flex; flex-direction: column; gap: 10px; text-align: left; min-width: 250px; }
@@ -43,12 +43,10 @@
         .keybind-btn:hover { background: #FFD700; color: #000; }
         .keybind-btn.listening { background: #C83232; animation: pulse 1s infinite; }
         
-        .version-text { position: absolute; bottom: 20px; right: 30px; color: #777; font-family: monospace; font-size: 16px; }
+        .bottom-right-container { position: absolute; bottom: 20px; right: 30px; display: flex; gap: 10px; align-items: center; }
+        .small-menu-btn { background: rgba(255,255,255,0.1); color: #AAA; border: 1px solid #555; padding: 8px 12px; font-size: 14px; cursor: pointer; border-radius: 4px; font-family: monospace; transition: all 0.2s; }
+        .small-menu-btn:hover { background: #444; color: #FFF; border-color: #FFF; }
         
-        /* New Credits Button Styles */
-        .credits-btn { position: absolute; bottom: 20px; left: 30px; background: #333; color: #AAA; border: 1px solid #555; padding: 5px 10px; font-size: 12px; cursor: pointer; border-radius: 4px; font-family: monospace; transition: all 0.2s; }
-        .credits-btn:hover { background: #FFD700; color: #000; border-color: #FFF; }
-
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
     </style>
 </head>
@@ -66,38 +64,53 @@
                 <button class="menu-btn" style="width: 250px; font-size: 24px;" onclick="showScreen('playScreen')">Play</button>
                 <button class="menu-btn" style="width: 250px; font-size: 24px;" onclick="showScreen('garageScreen')">The Garage</button>
                 <button class="menu-btn" style="width: 250px; font-size: 24px;" onclick="showScreen('settingsScreen')">Settings</button>
-                <button class="menu-btn" style="width: 250px; font-size: 18px; background: #333; margin-top: 10px;" onclick="showScreen('patchNotesScreen')">Patch Notes</button>
             </div>
-            <button class="credits-btn" onclick="showScreen('creditsScreen')">Credits</button>
-            <div class="version-text">v1.1.2</div>
+            
+            <div class="bottom-right-container">
+                <button class="small-menu-btn" onclick="showScreen('creditsScreen')">Credits</button>
+                <button class="small-menu-btn" style="color: #FFD700; border-color: #FFD700;" onclick="showScreen('patchNotesScreen')">v1.3.0</button>
+            </div>
         </div>
 
-        <div id="creditsScreen" class="screen-overlay">
-            <h2 class="screen-title">Credits</h2>
-            <div class="menu-box" style="width: 80%; max-width: 600px; text-align: center; border-color: #00FFFF;">
-                <p style="color: #FFF; font-size: 22px; line-height: 1.6;">
-                    Game coded and developed and design by <strong>Google Gemini</strong>
-                    <br><br><span style="color: #FFD700; font-size: 18px;">and</span><br><br>
-                    Game thought of by <strong>Cizzle_Robo</strong>
-                </p>
+        <div id="patchNotesScreen" class="screen-overlay">
+            <h2 class="screen-title">Patch Notes</h2>
+            <div class="menu-box" style="width: 80%; max-width: 600px; text-align: left; max-height: 60vh; overflow-y: auto; display: block;">
+                <h3 style="color: #FFD700; margin-top: 0;">v1.3.0 (Current) - Garage & Glory</h3>
+                <ul style="color: #CCC; line-height: 1.6; padding-left: 20px; margin-bottom: 0;">
+                    <li><strong>New Chassis:</strong> The Drifter added. High speed, terrible traction, great for spin attacks!</li>
+                    <li><strong>New Weapons:</strong> The Fork-Shield (heavy knockback/defense) and The Blowtorch (cone tick damage) added.</li>
+                    <li><strong>Power-Ups:</strong> Health Kits, Armor Plating, and Overcharge Batteries now spawn dynamically in the arena.</li>
+                    <li><strong>Paint Shop:</strong> Added custom color pickers in The Garage (Applies in FFA modes).</li>
+                    <li><strong>Horns:</strong> Added working horns. Honk away! (Rebind in Settings).</li>
+                </ul>
+                <hr style="border-color: #555; width: 100%; margin: 20px 0;">
+
+                <h3 style="color: #00FFFF; margin-top: 0;">v1.2.0</h3>
+                <ul style="color: #CCC; line-height: 1.6; padding-left: 20px; margin-bottom: 0;">
+                    <li><strong>Credits Update:</strong> Official credits established.</li>
+                    <li><strong>Security Update:</strong> Secret characters properly secured in menus.</li>
+                </ul>
+                <hr style="border-color: #555; width: 100%; margin: 20px 0;">
+
+                <h3 style="color: #999; margin-top: 0;">v1.1.0</h3>
+                <ul style="color: #CCC; line-height: 1.6; padding-left: 20px; margin-bottom: 0;">
+                    <li><strong>Secret Roster:</strong> Added Gojo, Sukuna, Zoro, Dio, Ghost, and Admin.</li>
+                    <li><strong>Juggernaut Mode:</strong> 1v3 boss battle mode added.</li>
+                </ul>
             </div>
             <button class="menu-btn back-btn" onclick="showScreen('mainMenuScreen')">Back to Menu</button>
         </div>
 
-        <div id="patchNotesScreen" class="screen-overlay">
-            <h2 class="screen-title">Update History</h2>
-            <div class="menu-box" style="width: 80%; max-width: 700px; text-align: left; overflow-y: auto; max-height: 60vh; background: rgba(0,0,0,0.5); padding-right: 20px;">
-                <h3 style="color: #00FFFF; border-bottom: 1px solid #444; padding-bottom: 5px; margin-top: 0;">v1.1.2 - Menu Fixes & Credits</h3>
-                <ul style="color: #CCC; line-height: 1.6;">
-                    <li><strong>Bug Fix:</strong> Fixed an issue where the Play Menu instantly closed itself when opened.</li>
-                    <li><strong>New Feature:</strong> Added a Credits page in the Main Menu!</li>
-                </ul>
-
-                <h3 style="color: #FFD700; border-bottom: 1px solid #444; padding-bottom: 5px; margin-top: 30px;">v1.1.1 - UI Overhaul</h3>
-                <ul style="color: #CCC; line-height: 1.6;">
-                    <li><strong>UI Flow:</strong> Redesigned the Play Menu to cleanly separate Local and Online configurations.</li>
-                    <li><strong>Host Control:</strong> Hosts now select the Map and Game Mode directly from the hosting lobby screen.</li>
-                </ul>
+        <div id="creditsScreen" class="screen-overlay">
+            <h2 class="screen-title">Credits</h2>
+            <div class="menu-box" style="width: 80%; max-width: 400px; text-align: center;">
+                <p style="color: #FFD700; font-size: 22px; margin-bottom: 5px;"><strong>Game Design & Vision</strong></p>
+                <p style="color: #FFF; font-size: 18px; margin-top: 0;">@Cizzle_Robo</p>
+                
+                <hr style="border-color: #555; width: 100%; margin: 20px 0;">
+                
+                <p style="color: #00FFFF; font-size: 22px; margin-bottom: 5px;"><strong>Code & Development</strong></p>
+                <p style="color: #FFF; font-size: 18px; margin-top: 0;">Gemini</p>
             </div>
             <button class="menu-btn back-btn" onclick="showScreen('mainMenuScreen')">Back to Menu</button>
         </div>
@@ -121,8 +134,10 @@
                     <div class="menu-box" style="width: 250px; margin: 0;">
                         <label style="color:#FFF;">Game Rules:</label>
                         <select id="rulesSelectOffline">
-                            <option value="FFA">Free-For-All (Deathmatch)</option>
-                            <option value="TDM">Team Deathmatch (2v2)</option>
+                            <option value="FFA">Free-For-All</option>
+                            <option value="TDM">Team Deathmatch</option>
+                            <option value="CTF">Capture the Pallet</option>
+                            <option value="JUG">Juggernaut</option>
                         </select>
                     </div>
                     <div class="menu-box" style="width: 250px; margin: 0;">
@@ -169,9 +184,7 @@
                     <h3 style="color: #FFF; margin: 0 0 10px 0;">System</h3>
                     <label>Graphics Quality:</label><select id="gfxSelect" onchange="updateSetting('graphics', this.value)"><option value="high">High (Neon Glow)</option><option value="low">Low (Flat & Fast)</option></select>
                     <label style="margin-top: 10px;">SFX Status:</label><select id="sfxSelect" onchange="updateSetting('sfxEnabled', this.value === 'on')"><option value="on">Enabled</option><option value="off">Disabled</option></select>
-                    <label style="margin-top: 10px;">SFX Volume:</label><input type="range" id="sfxVolume" min="0" max="1" step="0.1" value="0.5" onchange="updateSetting('sfxVolume', parseFloat(this.value))">
-                    
-                    <label style="margin-top: 15px; color: #FF00FF;">Secret Code:</label>
+                    <label style="margin-top: 15px; color: #FFD700;">Secret Codes:</label>
                     <input type="text" id="secretCodeInput" placeholder="Enter code here..." oninput="checkSecretCode(this.value)">
                 </div>
                 <div class="loadout-box" style="border-color: #FFD700;">
@@ -182,17 +195,8 @@
                     <div class="keybind-row"><span>Right</span><button class="keybind-btn" onclick="startRebind('p1', 'right', this)" id="kb-p1-right">KeyD</button></div>
                     <div class="keybind-row"><span>Swing/Fire</span><button class="keybind-btn" onclick="startRebind('p1', 'swing', this)" id="kb-p1-swing">Space</button></div>
                     <div class="keybind-row"><span>Parry</span><button class="keybind-btn" onclick="startRebind('p1', 'block', this)" id="kb-p1-block">KeyE</button></div>
-                    <div class="keybind-row"><span>Special Ability</span><button class="keybind-btn" onclick="startRebind('p1', 'special', this)" id="kb-p1-special">KeyQ</button></div>
-                </div>
-                <div class="loadout-box" style="border-color: #C83232;">
-                    <h3 style="color: #C83232; margin: 0 0 10px 0;">Local Player 2 Controls</h3>
-                    <div class="keybind-row"><span>Forward</span><button class="keybind-btn" onclick="startRebind('p2', 'up', this)" id="kb-p2-up">ArrowUp</button></div>
-                    <div class="keybind-row"><span>Reverse</span><button class="keybind-btn" onclick="startRebind('p2', 'down', this)" id="kb-p2-down">ArrowDown</button></div>
-                    <div class="keybind-row"><span>Left</span><button class="keybind-btn" onclick="startRebind('p2', 'left', this)" id="kb-p2-left">ArrowLeft</button></div>
-                    <div class="keybind-row"><span>Right</span><button class="keybind-btn" onclick="startRebind('p2', 'right', this)" id="kb-p2-right">ArrowRight</button></div>
-                    <div class="keybind-row"><span>Swing/Fire</span><button class="keybind-btn" onclick="startRebind('p2', 'swing', this)" id="kb-p2-swing">Enter</button></div>
-                    <div class="keybind-row"><span>Parry</span><button class="keybind-btn" onclick="startRebind('p2', 'block', this)" id="kb-p2-block">Slash</button></div>
-                    <div class="keybind-row"><span>Special Ability</span><button class="keybind-btn" onclick="startRebind('p2', 'special', this)" id="kb-p2-special">ShiftRight</button></div>
+                    <div class="keybind-row"><span>Special</span><button class="keybind-btn" onclick="startRebind('p1', 'special', this)" id="kb-p1-special">KeyQ</button></div>
+                    <div class="keybind-row"><span>Horn</span><button class="keybind-btn" onclick="startRebind('p1', 'horn', this)" id="kb-p1-horn">KeyH</button></div>
                 </div>
             </div>
             <button class="menu-btn back-btn" onclick="showScreen('mainMenuScreen')">Back to Menu</button>
@@ -203,48 +207,66 @@
             <div class="flex-container">
                 <div class="loadout-box" style="border-color: #FFD700;">
                     <h3 style="color: #FFD700; margin: 0 0 10px 0;">Player 1 (Host/You)</h3>
-                    <p style="color: #AAA; font-size: 14px; margin-top: 0;">Sent to Host when joining online.</p>
+                    <label>Paint Job (FFA Only):</label>
+                    <input type="color" id="p1Color" value="#FFD700" onchange="saveLoadout()">
                     <label>Chassis Type:</label>
                     <select id="p1Chassis" onchange="saveLoadout()">
                         <option value="standard">Standard</option>
                         <option value="bulldozer">Bulldozer</option>
                         <option value="speedster">Speedster</option>
                         <option value="tank">Tank</option>
-                        <option value="drifter">Drifter</option>
-                        <option class="opt-admin" value="admin" style="color: #FF00FF; font-weight: bold;" hidden>Admin Forklift</option>
+                        <option value="drifter">The Drifter</option>
+                        <option class="opt-admin" value="admin" style="color: #FF00FF; font-weight: bold;" hidden disabled>Admin</option>
+                        <option class="opt-gojo" value="gojo" style="color: #6495ED; font-weight: bold;" hidden disabled>Gojo</option>
+                        <option class="opt-sukuna" value="sukuna" style="color: #DC143C; font-weight: bold;" hidden disabled>Sukuna</option>
+                        <option class="opt-ghost" value="ghost" style="color: #AAAAAA; font-weight: bold;" hidden disabled>Ghost</option>
                     </select>
-                    
                     <label>Weapon Type:</label>
                     <select id="p1Weapon" onchange="saveLoadout()">
-                        <option value="standard">Standard Fork (Ability: Overdrive)</option>
-                        <option value="greatsword">Greatsword (Ability: Whirlwind)</option>
-                        <option value="rapier">Rapier (Ability: Lunge)</option>
-                        <option value="lance">Lance (Ability: Juggernaut)</option>
-                        <option value="dagger">Dagger (Ability: Cloak)</option>
-                        <option class="opt-admin" value="admin" style="color: #FF00FF; font-weight: bold;" hidden>Admin Gun</option>
+                        <option value="standard">Standard Fork</option>
+                        <option value="greatsword">Greatsword</option>
+                        <option value="rapier">Rapier</option>
+                        <option value="chainsaw">Chainsaw</option>
+                        <option value="grapple">Grappling Hook</option>
+                        <option value="boomerang">Boomerang</option>
+                        <option value="shield">The Fork-Shield</option>
+                        <option value="blowtorch">The Blowtorch</option>
+                        <option class="opt-gojo" value="gojo_weapon" style="color: #6495ED; font-weight: bold;" hidden disabled>Limitless</option>
+                        <option class="opt-sukuna" value="sukuna_weapon" style="color: #DC143C; font-weight: bold;" hidden disabled>Cleaver</option>
+                        <option class="opt-zoro" value="zoro_weapon" style="color: #32CD32; font-weight: bold;" hidden disabled>Three Swords</option>
+                        <option class="opt-dio" value="dio_weapon" style="color: #FFD700; font-weight: bold;" hidden disabled>The World</option>
                     </select>
                 </div>
                 <div class="loadout-box" style="border-color: #C83232;">
                     <h3 style="color: #C83232; margin: 0 0 10px 0;">Player 2 (Local)</h3>
-                    <p style="color: #AAA; font-size: 14px; margin-top: 0;">Used for Offline & AI play.</p>
+                    <label>Paint Job (FFA Only):</label>
+                    <input type="color" id="p2Color" value="#C83232" onchange="saveLoadout()">
                     <label>Chassis Type:</label>
                     <select id="p2Chassis" onchange="saveLoadout()">
                         <option value="standard">Standard</option>
                         <option value="bulldozer">Bulldozer</option>
                         <option value="speedster">Speedster</option>
                         <option value="tank">Tank</option>
-                        <option value="drifter">Drifter</option>
-                        <option class="opt-admin" value="admin" style="color: #FF00FF; font-weight: bold;" hidden>Admin Forklift</option>
+                        <option value="drifter">The Drifter</option>
+                        <option class="opt-admin" value="admin" style="color: #FF00FF; font-weight: bold;" hidden disabled>Admin</option>
+                        <option class="opt-gojo" value="gojo" style="color: #6495ED; font-weight: bold;" hidden disabled>Gojo</option>
+                        <option class="opt-sukuna" value="sukuna" style="color: #DC143C; font-weight: bold;" hidden disabled>Sukuna</option>
+                        <option class="opt-ghost" value="ghost" style="color: #AAAAAA; font-weight: bold;" hidden disabled>Ghost</option>
                     </select>
-                    
                     <label>Weapon Type:</label>
                     <select id="p2Weapon" onchange="saveLoadout()">
-                        <option value="standard">Standard Fork (Ability: Overdrive)</option>
-                        <option value="greatsword">Greatsword (Ability: Whirlwind)</option>
-                        <option value="rapier">Rapier (Ability: Lunge)</option>
-                        <option value="lance">Lance (Ability: Juggernaut)</option>
-                        <option value="dagger">Dagger (Ability: Cloak)</option>
-                        <option class="opt-admin" value="admin" style="color: #FF00FF; font-weight: bold;" hidden>Admin Gun</option>
+                        <option value="standard">Standard Fork</option>
+                        <option value="greatsword">Greatsword</option>
+                        <option value="rapier">Rapier</option>
+                        <option value="chainsaw">Chainsaw</option>
+                        <option value="grapple">Grappling Hook</option>
+                        <option value="boomerang">Boomerang</option>
+                        <option value="shield">The Fork-Shield</option>
+                        <option value="blowtorch">The Blowtorch</option>
+                        <option class="opt-gojo" value="gojo_weapon" style="color: #6495ED; font-weight: bold;" hidden disabled>Limitless</option>
+                        <option class="opt-sukuna" value="sukuna_weapon" style="color: #DC143C; font-weight: bold;" hidden disabled>Cleaver</option>
+                        <option class="opt-zoro" value="zoro_weapon" style="color: #32CD32; font-weight: bold;" hidden disabled>Three Swords</option>
+                        <option class="opt-dio" value="dio_weapon" style="color: #FFD700; font-weight: bold;" hidden disabled>The World</option>
                     </select>
                 </div>
             </div>
@@ -256,13 +278,14 @@
             <div class="menu-box" style="width: 450px;">
                 <p style="margin: 0;">Send this ID to your friends (Max 4 Players):</p>
                 <input type="text" id="hostIdDisplay" readonly value="Generating ID...">
-                
                 <div style="display: flex; gap: 10px; width: 100%; margin-top: 10px;">
                     <div style="flex: 1;">
                         <label style="color:#FFF; font-size: 14px;">Game Rules:</label>
                         <select id="rulesSelectOnline" style="padding: 8px; font-size: 14px;">
                             <option value="FFA">Free-For-All</option>
                             <option value="TDM">Team Deathmatch</option>
+                            <option value="CTF">Capture the Pallet</option>
+                            <option value="JUG">Juggernaut</option>
                         </select>
                     </div>
                     <div style="flex: 1;">
@@ -273,14 +296,6 @@
                             <option value="center">The Vault</option>
                         </select>
                     </div>
-                </div>
-
-                <div style="text-align: left; width: 100%; margin-top: 15px; background: #222; padding: 10px; border-radius: 5px; box-sizing: border-box;">
-                    <h4 style="margin: 0 0 10px 0; color: #AAA;">Lobby:</h4>
-                    <p id="lobby-p1" style="margin: 5px 0; color: #FFD700;">Player 1: Host (You)</p>
-                    <p id="lobby-p2" style="margin: 5px 0; color: #555;">Player 2: Waiting...</p>
-                    <p id="lobby-p3" style="margin: 5px 0; color: #555;">Player 3: Waiting...</p>
-                    <p id="lobby-p4" style="margin: 5px 0; color: #555;">Player 4: Waiting...</p>
                 </div>
                 <button class="menu-btn" style="width: 100%; margin-top: 10px; background: #00C800;" onclick="startMultiplayerHost()">Start Match</button>
             </div>
@@ -293,7 +308,6 @@
                 <p>Enter Host ID:</p>
                 <input type="text" id="joinIdInput" placeholder="Paste ID here">
                 <button class="menu-btn" style="width: 100%; margin-top: 10px;" onclick="joinOnlineGame()">Connect</button>
-                <button id="rejoinBtn" class="menu-btn" style="width: 100%; margin-top: 10px; background: #3264C8; display: none;" onclick="rejoinLastGame()">Rejoin Last Host</button>
                 <p id="joinStatus" style="color: #FFD700; margin: 0;"></p>
             </div>
             <button class="menu-btn back-btn" onclick="showScreen('playScreen'); setPlayPath('online');">Cancel</button>
@@ -301,7 +315,6 @@
 
         <div id="gameOverScreen" class="screen-overlay">
             <h1 id="winnerText" style="font-size: 60px;">Game Over</h1>
-            <p style="color: #AAA; font-size: 20px; margin-bottom: 30px;">Do you want to play again?</p>
             <div style="display: flex; gap: 20px; justify-content: center;">
                 <button class="menu-btn" style="background: #333; width: 200px;" onclick="quitToMenu()">Main Menu</button>
                 <button class="menu-btn" style="background: #3264C8; width: 200px;" onclick="quickRejoin()">Replay</button>
@@ -315,273 +328,293 @@
 
         let gameState = "MENU"; 
         let gameMode = "LOCAL"; 
-        let animationFrameId;
-
         let currentRules = "FFA";
         let currentMapId = "open";
         let activePillars = [];
+        
+        let globalTimeStop = 0;
+        let timeStopOwner = -1;
 
-        // --- MAP DEFINITIONS ---
+        let score = { 1: 0, 2: 0, 3: 0, 4: 0 };
+        let ctfPallet = { x: 0, y: 0, holder: -1, active: false };
+
         const MAP_DB = {
             open: [],
-            pillars: [
-                { rx: 0.25, ry: 0.25, r: 50 }, { rx: 0.75, ry: 0.25, r: 50 },
-                { rx: 0.25, ry: 0.75, r: 50 }, { rx: 0.75, ry: 0.75, r: 50 }
-            ],
-            center: [
-                { rx: 0.5, ry: 0.5, r: 150 }
-            ]
+            pillars: [ { rx: 0.25, ry: 0.25, r: 50 }, { rx: 0.75, ry: 0.25, r: 50 }, { rx: 0.25, ry: 0.75, r: 50 }, { rx: 0.75, ry: 0.75, r: 50 } ],
+            center: [ { rx: 0.5, ry: 0.5, r: 150 } ]
         };
 
-        function buildMap() {
-            activePillars = [];
-            const template = MAP_DB[currentMapId];
-            if (template) {
-                template.forEach(p => {
-                    activePillars.push({ x: canvas.width * p.rx, y: canvas.height * p.ry, r: p.r });
-                });
+        class PowerUp {
+            constructor(x, y, type) { this.x = x; this.y = y; this.type = type; this.active = true; this.radius = 15; }
+            draw() {
+                if (!this.active) return;
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+                ctx.fillStyle = this.type === 'health' ? '#00C800' : (this.type === 'armor' ? '#AAAAAA' : '#00FFFF');
+                ctx.fill(); ctx.strokeStyle = '#FFF'; ctx.lineWidth = 2; ctx.stroke();
+                ctx.fillStyle = '#000'; ctx.font = 'bold 14px Arial'; ctx.textAlign = 'center';
+                let char = this.type === 'health' ? '+' : (this.type === 'armor' ? 'A' : 'E');
+                ctx.fillText(char, this.x, this.y + 5);
             }
         }
+        let powerups = [];
 
-        // --- SAFE STORAGE WRAPPERS ---
+        function buildMap() {
+            activePillars = []; const template = MAP_DB[currentMapId];
+            if (template) template.forEach(p => activePillars.push({ x: canvas.width * p.rx, y: canvas.height * p.ry, r: p.r }));
+            ctfPallet.x = canvas.width / 2; ctfPallet.y = canvas.height / 2; ctfPallet.holder = -1;
+            ctfPallet.active = (currentRules === "CTF");
+            score = { 1: 0, 2: 0, 3: 0, 4: 0 };
+            powerups = [];
+        }
+
         function safeStorageSet(key, value) { try { localStorage.setItem(key, value); } catch(e) {} }
         function safeStorageGet(key) { try { return localStorage.getItem(key); } catch(e) { return null; } }
 
-        // --- SETTINGS & KEYBINDS ---
-        let gameSettings = { graphics: 'high', sfxEnabled: true, sfxVolume: 0.5 };
+        let gameSettings = { graphics: 'high', sfxEnabled: true };
         let keyBinds = {
-            p1: { up: 'KeyW', down: 'KeyS', left: 'KeyA', right: 'KeyD', swing: 'Space', block: 'KeyE', special: 'KeyQ' },
-            p2: { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', swing: 'Enter', block: 'Slash', special: 'ShiftRight' }
+            p1: { up: 'KeyW', down: 'KeyS', left: 'KeyA', right: 'KeyD', swing: 'Space', block: 'KeyE', special: 'KeyQ', horn: 'KeyH' },
+            p2: { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', swing: 'Enter', block: 'Slash', special: 'ShiftRight', horn: 'KeyL' }
         };
 
         window.addEventListener('load', () => {
-            const savedHost = safeStorageGet('forkliftLastHostId');
-            if (savedHost) document.getElementById('rejoinBtn').style.display = 'block';
-
-            if (safeStorageGet('forkliftAdminUnlocked') === 'true') unlockAdmin();
-
-            const p1Chassis = safeStorageGet('forkliftP1Chassis'); if (p1Chassis) document.getElementById('p1Chassis').value = p1Chassis;
-            const p1Weapon = safeStorageGet('forkliftP1Weapon'); if (p1Weapon) document.getElementById('p1Weapon').value = p1Weapon;
-            const p2Chassis = safeStorageGet('forkliftP2Chassis'); if (p2Chassis) document.getElementById('p2Chassis').value = p2Chassis;
-            const p2Weapon = safeStorageGet('forkliftP2Weapon'); if (p2Weapon) document.getElementById('p2Weapon').value = p2Weapon;
-
-            const savedSettings = safeStorageGet('forkliftSettings');
-            if (savedSettings) {
-                gameSettings = JSON.parse(savedSettings);
-                document.getElementById('gfxSelect').value = gameSettings.graphics;
-                document.getElementById('sfxSelect').value = gameSettings.sfxEnabled ? 'on' : 'off';
-                document.getElementById('sfxVolume').value = gameSettings.sfxVolume;
-            }
-
-            const savedBinds = safeStorageGet('forkliftBinds');
-            if (savedBinds) {
-                keyBinds = JSON.parse(savedBinds);
-                ['p1', 'p2'].forEach(p => {
-                    ['up', 'down', 'left', 'right', 'swing', 'block', 'special'].forEach(a => {
-                        const btn = document.getElementById(`kb-${p}-${a}`);
-                        if (btn && keyBinds[p] && keyBinds[p][a]) btn.innerText = keyBinds[p][a];
+            ['Admin', 'Gojo', 'Sukuna', 'Zoro', 'Dio', 'Ghost'].forEach(secret => {
+                if (safeStorageGet(`forklift${secret}Unlocked`) === 'true') {
+                    document.querySelectorAll(`.opt-${secret.toLowerCase()}`).forEach(el => {
+                        el.hidden = false;
+                        el.disabled = false;
                     });
-                });
-            }
+                }
+            });
+            const p1c = safeStorageGet('forkliftP1Chassis'); if(p1c) document.getElementById('p1Chassis').value = p1c;
+            const p1w = safeStorageGet('forkliftP1Weapon'); if(p1w) document.getElementById('p1Weapon').value = p1w;
+            const p2c = safeStorageGet('forkliftP2Chassis'); if(p2c) document.getElementById('p2Chassis').value = p2c;
+            const p2w = safeStorageGet('forkliftP2Weapon'); if(p2w) document.getElementById('p2Weapon').value = p2w;
+            const p1col = safeStorageGet('forkliftP1Color'); if(p1col) document.getElementById('p1Color').value = p1col;
+            const p2col = safeStorageGet('forkliftP2Color'); if(p2col) document.getElementById('p2Color').value = p2col;
         });
 
         function checkSecretCode(val) {
-            if (val.trim().toUpperCase() === "ROBO") {
-                safeStorageSet('forkliftAdminUnlocked', 'true'); unlockAdmin();
-                const input = document.getElementById('secretCodeInput');
-                input.value = ""; input.placeholder = "ADMIN UNLOCKED!"; input.style.borderColor = "#FF00FF";
-            }
+            val = val.trim().toUpperCase(); const input = document.getElementById('secretCodeInput');
+            const unlock = (key, msg, color) => {
+                safeStorageSet(`forklift${key}Unlocked`, 'true'); 
+                document.querySelectorAll(`.opt-${key.toLowerCase()}`).forEach(el => {
+                    el.hidden = false;
+                    el.disabled = false;
+                });
+                input.value = ""; input.placeholder = msg; input.style.borderColor = color;
+            };
+            if (val === "ROBO") unlock("Admin", "ADMIN UNLOCKED!", "#FF00FF");
+            else if (val === "GOJO") unlock("Gojo", "THROUGHOUT HEAVEN AND EARTH...", "#6495ED");
+            else if (val === "SUKUNA") unlock("Sukuna", "KNOW YOUR PLACE, FOOL.", "#DC143C");
+            else if (val === "ZORO") unlock("Zoro", "NOTHING HAPPENED.", "#32CD32");
+            else if (val === "DIO") unlock("Dio", "ZA WARUDO!", "#FFD700");
+            else if (val === "GHOST") unlock("Ghost", "SPOOKY.", "#AAAAAA");
         }
-        function unlockAdmin() { document.querySelectorAll('.opt-admin').forEach(el => el.hidden = false); }
-        function updateSetting(key, value) { gameSettings[key] = value; safeStorageSet('forkliftSettings', JSON.stringify(gameSettings)); }
         
+        function updateSetting(k, v) { gameSettings[k] = v; }
         function saveLoadout() { 
             safeStorageSet('forkliftP1Chassis', document.getElementById("p1Chassis").value); 
             safeStorageSet('forkliftP1Weapon', document.getElementById("p1Weapon").value); 
             safeStorageSet('forkliftP2Chassis', document.getElementById("p2Chassis").value); 
             safeStorageSet('forkliftP2Weapon', document.getElementById("p2Weapon").value); 
+            safeStorageSet('forkliftP1Color', document.getElementById("p1Color").value);
+            safeStorageSet('forkliftP2Color', document.getElementById("p2Color").value);
         }
 
-        const keys = {};
-        let rebindingTarget = null;
-        window.addEventListener("keydown", e => {
-            if (rebindingTarget) {
-                e.preventDefault();
-                keyBinds[rebindingTarget.player][rebindingTarget.action] = e.code;
-                rebindingTarget.btn.innerText = e.code; rebindingTarget.btn.classList.remove('listening');
-                safeStorageSet('forkliftBinds', JSON.stringify(keyBinds));
-                rebindingTarget = null; return;
-            }
-            keys[e.code] = true;
-        });
+        const keys = {}; let rebindingTarget = null;
+        window.addEventListener("keydown", e => { if (rebindingTarget) { e.preventDefault(); keyBinds[rebindingTarget.player][rebindingTarget.action] = e.code; rebindingTarget.btn.innerText = e.code; rebindingTarget.btn.classList.remove('listening'); rebindingTarget = null; return; } keys[e.code] = true; });
         window.addEventListener("keyup", e => { if(!rebindingTarget) keys[e.code] = false; });
-        function startRebind(player, action, btnElement) {
-            if (rebindingTarget) rebindingTarget.btn.classList.remove('listening');
-            rebindingTarget = { player, action, btn: btnElement };
-            btnElement.innerText = "Press Key..."; btnElement.classList.add('listening');
-        }
+        function startRebind(p, a, btn) { if (rebindingTarget) rebindingTarget.btn.classList.remove('listening'); rebindingTarget = { player: p, action: a, btn: btn }; btn.innerText = "Press Key..."; btn.classList.add('listening'); }
 
-        // --- AUDIO ---
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx;
-        function playSound(type) {
-            if (!gameSettings.sfxEnabled) return;
-            if (!audioCtx) audioCtx = new AudioContext(); 
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            gain.gain.value = gameSettings.sfxVolume * 0.1; 
-            const now = audioCtx.currentTime;
-            
-            if (type === 'swing') { osc.type = 'sine'; osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(100, now + 0.15); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15); osc.start(now); osc.stop(now + 0.15); } 
-            else if (type === 'hit') { osc.type = 'square'; osc.frequency.setValueAtTime(150, now); osc.frequency.exponentialRampToValueAtTime(50, now + 0.2); gain.gain.setValueAtTime(gain.gain.value * 2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2); osc.start(now); osc.stop(now + 0.2); } 
-            else if (type === 'block') { osc.type = 'triangle'; osc.frequency.setValueAtTime(800, now); osc.frequency.linearRampToValueAtTime(1200, now + 0.1); gain.gain.setValueAtTime(gain.gain.value * 1.5, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1); } 
-            else if (type === 'shoot') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(600, now); osc.frequency.exponentialRampToValueAtTime(100, now + 0.1); gain.gain.setValueAtTime(gain.gain.value * 0.8, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1); }
-            else if (type === 'special') { osc.type = 'sine'; osc.frequency.setValueAtTime(300, now); osc.frequency.linearRampToValueAtTime(800, now + 0.3); gain.gain.setValueAtTime(gain.gain.value * 1.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3); osc.start(now); osc.stop(now + 0.3); }
-        }
-
-        // --- GAME DATABASES ---
         const CHASSIS_DB = {
             standard:  { w: 40, h: 30, maxSpeed: 6.0, acc: 0.30, turn: 0.07, hp: 150 }, 
             bulldozer: { w: 50, h: 40, maxSpeed: 3.5, acc: 0.15, turn: 0.04, hp: 200 }, 
             speedster: { w: 32, h: 22, maxSpeed: 8.5, acc: 0.50, turn: 0.10, hp: 100 }, 
             tank:      { w: 60, h: 45, maxSpeed: 2.5, acc: 0.10, turn: 0.03, hp: 300 }, 
-            drifter:   { w: 35, h: 25, maxSpeed: 7.0, acc: 0.20, turn: 0.15, hp: 120 }, 
-            admin:     { w: 40, h: 30, maxSpeed: 15.0, acc: 1.50, turn: 0.20, hp: 5000 }
+            drifter:   { w: 35, h: 25, maxSpeed: 9.0, acc: 0.20, turn: 0.04, hp: 120 }, 
+            admin:     { w: 40, h: 30, maxSpeed: 15.0, acc: 1.50, turn: 0.20, hp: 5000 },
+            gojo:      { w: 38, h: 28, maxSpeed: 7.5, acc: 0.40, turn: 0.12, hp: 250 }, 
+            sukuna:    { w: 42, h: 32, maxSpeed: 8.0, acc: 0.60, turn: 0.15, hp: 200 },
+            ghost:     { w: 40, h: 30, maxSpeed: 6.5, acc: 0.35, turn: 0.08, hp: 120 }
         };
         const WEAPON_DB = {
-            standard:   { type: 'melee', length: 70,  swingSpeed: 0.25, retractSpeed: 0.10, damage: 15, spCooldown: 600 }, 
-            greatsword: { type: 'melee', length: 100, swingSpeed: 0.12, retractSpeed: 0.04, damage: 30, spCooldown: 480 }, 
-            rapier:     { type: 'melee', length: 45,  swingSpeed: 0.50, retractSpeed: 0.25, damage: 8,  spCooldown: 300 }, 
-            lance:      { type: 'melee', length: 140, swingSpeed: 0.08, retractSpeed: 0.05, damage: 25, spCooldown: 720 }, 
-            dagger:     { type: 'melee', length: 25,  swingSpeed: 0.80, retractSpeed: 0.40, damage: 10, spCooldown: 600 }, 
-            admin:      { type: 'ranged', length: 30,  fireRate: 8, projSpeed: 25, damage: 9999, spCooldown: 120 }          
+            standard:      { type: 'melee', length: 70,  swingSpeed: 0.25, retractSpeed: 0.10, damage: 15, spCooldown: 600 }, 
+            greatsword:    { type: 'melee', length: 100, swingSpeed: 0.12, retractSpeed: 0.04, damage: 30, spCooldown: 480 }, 
+            rapier:        { type: 'melee', length: 45,  swingSpeed: 0.50, retractSpeed: 0.25, damage: 8,  spCooldown: 300 }, 
+            chainsaw:      { type: 'melee', length: 55,  swingSpeed: 0, retractSpeed: 0, damage: 2, spCooldown: 300 },
+            grapple:       { type: 'ranged', length: 30, fireRate: 60, projSpeed: 25, damage: 5, spCooldown: 300 },
+            boomerang:     { type: 'ranged', length: 30, fireRate: 60, projSpeed: 15, damage: 15, spCooldown: 300 },
+            shield:        { type: 'melee', length: 35,  swingSpeed: 0, retractSpeed: 0, damage: 5, spCooldown: 300 },
+            blowtorch:     { type: 'melee', length: 60,  swingSpeed: 0, retractSpeed: 0, damage: 1, spCooldown: 400 },
+            gojo_weapon:   { type: 'melee', length: 65,  swingSpeed: 0.30, retractSpeed: 0.15, damage: 18, spCooldown: 900 }, 
+            sukuna_weapon: { type: 'melee', length: 85,  swingSpeed: 0.40, retractSpeed: 0.20, damage: 22, spCooldown: 600 },
+            zoro_weapon:   { type: 'melee', length: 70,  swingSpeed: 0.25, retractSpeed: 0.10, damage: 18, spCooldown: 600 },
+            dio_weapon:    { type: 'melee', length: 60,  swingSpeed: 0.30, retractSpeed: 0.15, damage: 20, spCooldown: 1200 }
         };
 
-        // --- PROJECTILES & FORKLIFT CLASSES ---
         class Projectile {
-            constructor(x, y, angle, speed, damage, ownerId, color, teamId) {
-                this.x = x; this.y = y; this.angle = angle;
-                this.speed = speed; this.damage = damage; this.ownerId = ownerId;
-                this.color = color || "#FFF"; this.team = teamId; this.active = true;
+            constructor(x, y, angle, speed, damage, ownerId, color, teamId, radius = 6, type = 'normal') {
+                this.x = x; this.y = y; this.angle = angle; this.speed = speed; this.damage = damage; 
+                this.ownerId = ownerId; this.color = color; this.team = teamId; this.active = true;
+                this.radius = radius; this.type = type; this.life = 0;
             }
             update() { 
-                this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; 
-                if (this.x < -50 || this.x > canvas.width + 50 || this.y < -50 || this.y > canvas.height + 50) this.active = false; 
+                this.life++;
+                if (this.type === 'boomerang') {
+                    if (this.life > 30) {
+                        let owner = players[this.ownerId];
+                        if (owner && owner.active) {
+                            let dx = owner.x - this.x; let dy = owner.y - this.y;
+                            this.angle = Math.atan2(dy, dx);
+                            if (Math.sqrt(dx*dx + dy*dy) < 30) this.active = false;
+                        } else { this.active = false; }
+                    }
+                }
                 
-                // Pillar Collision
+                this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; 
+                if (this.x < -100 || this.x > canvas.width + 100 || this.y < -100 || this.y > canvas.height + 100) this.active = false; 
+                
                 for(let p of activePillars) {
                     let dx = this.x - p.x; let dy = this.y - p.y;
-                    if (Math.sqrt(dx*dx + dy*dy) < p.r + 6) { this.active = false; break; }
+                    if (Math.sqrt(dx*dx + dy*dy) < p.r + this.radius) { 
+                        if (this.type === 'grapple') players[this.ownerId].grappleTarget = {x: p.x, y: p.y};
+                        this.active = false; break; 
+                    }
                 }
             }
-            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, 6, 0, Math.PI * 2); ctx.fillStyle = this.color; if(gameSettings.graphics === 'high') { ctx.shadowBlur = 15; ctx.shadowColor = this.color; } ctx.fill(); ctx.shadowBlur = 0; }
+            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fillStyle = this.color; ctx.fill(); }
         }
         let projectiles = [];
 
         class Forklift {
-            constructor(index, name) {
-                this.index = index; this.name = name; this.team = index + 1;
-                this.color = "#FFF"; this.active = false; this.swordTip = { x: 0, y: 0 };
-                this.aiTimer = 0; this.hasRolledParry = false;
-                this.setLoadout("standard", "standard");
+            constructor(index, name) { 
+                this.index = index; this.name = name; this.team = index + 1; this.color = "#FFF"; this.customColor = "#FFF"; 
+                this.active = false; this.swordTip = { x: 0, y: 0 }; this.setLoadout("standard", "standard"); 
             }
-            setLoadout(chassisId, weaponId) { this.chassisId = chassisId; this.weaponId = weaponId; this.stats = CHASSIS_DB[chassisId] || CHASSIS_DB["standard"]; this.weapon = WEAPON_DB[weaponId] || WEAPON_DB["standard"]; this.reset(); }
+            setLoadout(chassisId, weaponId) { 
+                this.chassisId = chassisId; this.weaponId = weaponId; 
+                this.stats = JSON.parse(JSON.stringify(CHASSIS_DB[this.chassisId] || CHASSIS_DB["standard"])); 
+                this.weapon = WEAPON_DB[this.weaponId] || WEAPON_DB["standard"]; 
+                this.reset(); 
+            }
             reset() {
-                const spawnPoints = [ { x: canvas.width * 0.1, y: canvas.height * 0.2, a: 0 }, { x: canvas.width * 0.9, y: canvas.height * 0.8, a: Math.PI }, { x: canvas.width * 0.9, y: canvas.height * 0.2, a: Math.PI/2 }, { x: canvas.width * 0.1, y: canvas.height * 0.8, a: -Math.PI/2 } ];
-                let spawn = spawnPoints[this.index] || spawnPoints[0];
+                const spawns = [ { x: canvas.width * 0.1, y: canvas.height * 0.2, a: 0 }, { x: canvas.width * 0.9, y: canvas.height * 0.8, a: Math.PI }, { x: canvas.width * 0.9, y: canvas.height * 0.2, a: Math.PI/2 }, { x: canvas.width * 0.1, y: canvas.height * 0.8, a: -Math.PI/2 } ];
+                let spawn = spawns[this.index] || spawns[0];
                 this.x = spawn.x; this.y = spawn.y; this.angle = spawn.a; this.health = this.stats.hp; this.speed = 0;
                 this.swordAngle = 0; this.swordTargetAngle = 2.0; this.isSwinging = false; this.hasHitThisSwing = false; 
                 this.isBlocking = false; this.blockTimer = 0; this.blockCooldown = 0; this.fireCooldown = 0;
-                this.specialCooldown = 0; this.specialActiveTimer = 0; this.isCloaked = false; this.isJuggernaut = false;
-                this.aiTimer = 0; this.hasRolledParry = false;
+                this.specialCooldown = 0; this.specialActiveTimer = 0; this.grappleTarget = null;
+                this.isJuggernaut = false; this.hasArmor = false; this.batteryTimer = 0;
+                this.hornTimer = 0; this.hornCooldown = 0;
                 this.updatePositions();
             }
             move(forward, turn) {
-                this.angle += turn * this.stats.turn;
-                
-                let currentAcc = this.stats.acc;
-                let currentMaxSpeed = this.stats.maxSpeed;
-                if (this.weaponId === 'standard' && this.specialActiveTimer > 0) { currentAcc *= 1.5; currentMaxSpeed *= 1.5; }
-
-                if (this.weaponId === 'rapier' && this.specialActiveTimer > 0) {
-                    this.speed = currentMaxSpeed * 3.5; 
-                } else {
-                    if (forward !== 0) this.speed += forward * currentAcc; else this.speed *= 0.92; 
-                    if (this.speed > currentMaxSpeed) this.speed = currentMaxSpeed;
-                    if (this.speed < -currentMaxSpeed / 2) this.speed = -currentMaxSpeed / 2;
+                if (this.grappleTarget) {
+                    let dx = this.grappleTarget.x - this.x; let dy = this.grappleTarget.y - this.y;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < 50) { this.grappleTarget = null; } 
+                    else { this.x += (dx/dist) * 15; this.y += (dy/dist) * 15; }
+                    return;
                 }
+
+                this.angle += turn * this.stats.turn;
+                if (forward !== 0) this.speed += forward * this.stats.acc; else this.speed *= 0.92; 
+                if (this.speed > this.stats.maxSpeed) this.speed = this.stats.maxSpeed;
+                if (this.speed < -this.stats.maxSpeed / 2) this.speed = -this.stats.maxSpeed / 2;
                 
                 this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed;
                 
-                // Wall Collision
                 const bounds = this.stats.w / 2; let hitWall = false;
                 if (this.x < bounds) { this.x = bounds; hitWall = true; } if (this.x > canvas.width - bounds) { this.x = canvas.width - bounds; hitWall = true; }
                 if (this.y < bounds) { this.y = bounds; hitWall = true; } if (this.y > canvas.height - bounds) { this.y = canvas.height - bounds; hitWall = true; }
                 if (hitWall) this.speed *= -0.5; 
 
-                // Pillar Collision
                 for(let p of activePillars) {
-                    let dx = this.x - p.x; let dy = this.y - p.y;
-                    let dist = Math.sqrt(dx*dx + dy*dy);
-                    let minDist = bounds + p.r;
-                    if (dist < minDist) {
-                        let overlap = minDist - dist;
-                        this.x += (dx/dist) * overlap;
-                        this.y += (dy/dist) * overlap;
-                        this.speed *= -0.5;
+                    let dx = this.x - p.x; let dy = this.y - p.y; let dist = Math.sqrt(dx*dx + dy*dy); let minDist = bounds + p.r;
+                    if (dist < minDist) { let overlap = minDist - dist; this.x += (dx/dist) * overlap; this.y += (dy/dist) * overlap; this.speed *= -0.5; }
+                }
+
+                // Power-up Collision
+                powerups.forEach(pu => {
+                    if (pu.active) {
+                        let dx = this.x - pu.x; let dy = this.y - pu.y;
+                        if (Math.sqrt(dx*dx + dy*dy) < bounds + pu.radius) {
+                            if (pu.type === 'health') this.health = Math.min(this.stats.hp, this.health + 50);
+                            if (pu.type === 'armor') this.hasArmor = true;
+                            if (pu.type === 'battery') { this.specialCooldown = 0; this.batteryTimer = 600; }
+                            pu.active = false;
+                        }
                     }
+                });
+
+                // CTF Logic
+                if (ctfPallet.active && ctfPallet.holder === -1 && this.health > 0) {
+                    let dx = this.x - ctfPallet.x; let dy = this.y - ctfPallet.y;
+                    if (Math.sqrt(dx*dx + dy*dy) < bounds + 20) ctfPallet.holder = this.index;
+                }
+                if (ctfPallet.active && ctfPallet.holder === this.index) {
+                    ctfPallet.x = this.x; ctfPallet.y = this.y - 30;
+                    let inSpawn = false;
+                    if (this.team === 1 && this.x < 200 && this.y < 200) inSpawn = true;
+                    if (this.team === 2 && this.x > canvas.width - 200 && this.y > canvas.height - 200) inSpawn = true;
+                    if (this.team === 3 && this.x > canvas.width - 200 && this.y < 200) inSpawn = true;
+                    if (this.team === 4 && this.x < 200 && this.y > canvas.height - 200) inSpawn = true;
+                    if (inSpawn) { score[this.team]++; ctfPallet.x = canvas.width/2; ctfPallet.y = canvas.height/2; ctfPallet.holder = -1; checkGameWinCondition(); }
                 }
             }
-            swing() { 
+            swing(isHeld) { 
                 if (this.weapon.type === 'ranged') {
-                    if (this.fireCooldown <= 0 && !this.isBlocking) {
-                        this.fireCooldown = this.weapon.fireRate; let bulletColor = (this.weaponId === 'admin') ? '#FF00FF' : '#FFF';
-                        projectiles.push(new Projectile(this.swordTip.x, this.swordTip.y, this.angle, this.weapon.projSpeed, this.weapon.damage, this.index, bulletColor, this.team)); playSound('shoot');
+                    if (this.fireCooldown <= 0 && !this.isBlocking && isHeld) {
+                        this.fireCooldown = this.weapon.fireRate;
+                        let type = this.weaponId === 'boomerang' ? 'boomerang' : (this.weaponId === 'grapple' ? 'grapple' : 'normal');
+                        projectiles.push(new Projectile(this.swordTip.x, this.swordTip.y, this.angle, this.weapon.projSpeed, this.weapon.damage, this.index, this.color, this.team, 6, type));
                     }
+                } else if (this.weaponId === 'chainsaw' || this.weaponId === 'blowtorch' || this.weaponId === 'shield') {
+                    this.isSwinging = isHeld;
+                    if (!isHeld) this.hasHitThisSwing = false;
                 } else { 
-                    if (!this.isSwinging && this.swordAngle <= 0 && !this.isBlocking) { 
-                        this.isSwinging = true; this.hasHitThisSwing = false; 
-                        this.swordTargetAngle = 2.0;
-                        playSound('swing'); 
+                    if (!this.isSwinging && this.swordAngle <= 0 && !this.isBlocking && isHeld) { 
+                        this.isSwinging = true; this.hasHitThisSwing = false; this.swordTargetAngle = 2.0;
                     } 
                 }
             }
-            block() { if (!this.isSwinging && !this.isBlocking && this.blockCooldown === 0) { this.isBlocking = true; this.blockTimer = 15; this.blockCooldown = 60; playSound('block'); } }
+            block() { if (!this.isSwinging && !this.isBlocking && this.blockCooldown === 0) { this.isBlocking = true; this.blockTimer = 15; this.blockCooldown = 60; } }
             
             useSpecial() {
                 if (this.specialCooldown > 0 || this.health <= 0) return;
-                this.specialCooldown = this.weapon.spCooldown;
-                playSound('special');
+                if (this.batteryTimer <= 0) this.specialCooldown = this.weapon.spCooldown;
 
                 if (this.weaponId === 'standard') { this.specialActiveTimer = 180; } 
-                else if (this.weaponId === 'greatsword') { this.isSwinging = true; this.hasHitThisSwing = false; this.swordTargetAngle = Math.PI * 2; } 
-                else if (this.weaponId === 'rapier') { this.specialActiveTimer = 15; this.hasHitThisSwing = false; } 
-                else if (this.weaponId === 'lance') { this.isJuggernaut = true; this.specialActiveTimer = 240; } 
-                else if (this.weaponId === 'dagger') { this.isCloaked = true; this.specialActiveTimer = 240; } 
-                else if (this.weaponId === 'admin') {
-                    let bulletColor = '#FF00FF';
-                    for(let i = -2; i <= 2; i++) { projectiles.push(new Projectile(this.swordTip.x, this.swordTip.y, this.angle + (i * 0.2), this.weapon.projSpeed, this.weapon.damage, this.index, bulletColor, this.team)); }
+                else if (this.weaponId === 'dio_weapon') { globalTimeStop = 180; timeStopOwner = this.index; }
+            }
+
+            useHorn() {
+                if (this.hornCooldown <= 0 && this.health > 0) {
+                    this.hornTimer = 30; this.hornCooldown = 60;
                 }
             }
 
             updateAbilities() {
                 if (this.fireCooldown > 0) this.fireCooldown--;
-                if (this.specialCooldown > 0) this.specialCooldown--;
-                if (this.specialActiveTimer > 0) {
-                    this.specialActiveTimer--;
-                    if (this.specialActiveTimer <= 0) { this.isCloaked = false; this.isJuggernaut = false; }
+                if (this.specialCooldown > 0 && this.batteryTimer <= 0) this.specialCooldown--;
+                if (this.specialActiveTimer > 0) this.specialActiveTimer--;
+                if (this.batteryTimer > 0) { this.batteryTimer--; this.specialCooldown = 0; }
+                if (this.hornTimer > 0) this.hornTimer--;
+                if (this.hornCooldown > 0) this.hornCooldown--;
+                
+                if (this.weaponId === 'chainsaw' || this.weaponId === 'blowtorch' || this.weaponId === 'shield') {
+                    if (this.isSwinging) {
+                        this.swordAngle = (Math.random() * 0.1) - 0.05; 
+                        if (this.fireCooldown <= 0) { this.hasHitThisSwing = false; this.fireCooldown = 10; } // Tick damage
+                    } else { this.swordAngle = 0; }
+                } else {
+                    if (this.isSwinging) { 
+                        this.swordAngle += this.weapon.swingSpeed; 
+                        if (this.swordAngle >= this.swordTargetAngle) { this.isSwinging = false; this.swordTargetAngle = 2.0; if(this.weaponId === 'greatsword') this.swordAngle = 0; } 
+                    } 
+                    else if (this.swordAngle > 0) this.swordAngle -= this.weapon.retractSpeed; else this.swordAngle = 0;
                 }
 
-                if (this.isSwinging) { 
-                    this.swordAngle += this.weapon.swingSpeed; 
-                    if (this.swordAngle >= this.swordTargetAngle) {
-                        this.isSwinging = false; 
-                        this.swordTargetAngle = 2.0;
-                        if(this.weaponId === 'greatsword') this.swordAngle = 0;
-                    } 
-                } 
-                else if (this.swordAngle > 0) this.swordAngle -= this.weapon.retractSpeed; else this.swordAngle = 0;
                 if (this.isBlocking) { this.blockTimer--; if (this.blockTimer <= 0) this.isBlocking = false; }
                 if (this.blockCooldown > 0) this.blockCooldown--;
                 this.updatePositions();
@@ -596,44 +629,58 @@
                 if (!this.active || this.health <= 0) return; 
                 ctx.save();
                 
-                if (this.isCloaked) { ctx.globalAlpha = 0.25; }
+                if (this.chassisId === 'ghost') ctx.globalAlpha = 0.25;
 
-                let glowColor = (this.chassisId === 'admin' || this.weaponId === 'admin') ? '#FF00FF' : this.color;
-                if (gameSettings.graphics === 'high') { ctx.shadowBlur = 15; ctx.shadowColor = glowColor; } else { ctx.shadowBlur = 0; }
                 ctx.translate(this.x, this.y); ctx.rotate(this.angle);
                 
-                if (this.isJuggernaut) { ctx.strokeStyle = "#FFF"; ctx.lineWidth = 3; ctx.strokeRect(-this.stats.w/2, -this.stats.h/2, this.stats.w, this.stats.h); }
+                if (this.isJuggernaut) { ctx.scale(1.5, 1.5); }
 
                 ctx.fillStyle = this.color; ctx.fillRect(-this.stats.w/2, -this.stats.h/2, this.stats.w, this.stats.h);
-                ctx.fillStyle = "#000"; ctx.shadowBlur = 0; ctx.fillRect(-5, -10, 15, 20);
-                if (this.isBlocking) {
-                    ctx.beginPath(); ctx.arc(0, 0, this.stats.w/2 + 15, -Math.PI/2, Math.PI/2); ctx.strokeStyle = "#00FFFF"; ctx.lineWidth = 4;
-                    if(gameSettings.graphics === 'high') { ctx.shadowBlur = 20; ctx.shadowColor = "#00FFFF"; } ctx.stroke();
-                } ctx.restore();
+                ctx.fillStyle = "#000"; ctx.fillRect(-5, -10, 15, 20);
                 
-                const startOffset = this.stats.w / 2;
-                ctx.beginPath(); ctx.moveTo(this.x + Math.cos(this.angle) * startOffset, this.y + Math.sin(this.angle) * startOffset); ctx.lineTo(this.swordTip.x, this.swordTip.y);
-                if(this.weaponId === 'lance') ctx.lineWidth = 12; else if(this.weaponId === 'greatsword') ctx.lineWidth = 9; else if(this.weaponId === 'rapier' || this.weaponId === 'dagger') ctx.lineWidth = 3; else if(this.weaponId === 'admin') ctx.lineWidth = 8; else ctx.lineWidth = 6;
-                ctx.strokeStyle = this.isSwinging ? "#FFFFFF" : ((this.weaponId === 'admin') ? "#FF00FF" : "#969696");
-                if(gameSettings.graphics === 'high' && this.isSwinging) { ctx.shadowBlur = 10; ctx.shadowColor = "#FFFFFF"; } ctx.stroke(); ctx.shadowBlur = 0; 
+                if (this.hasArmor) { ctx.beginPath(); ctx.arc(0, 0, this.stats.w/2 + 10, 0, Math.PI*2); ctx.strokeStyle = "rgba(170, 170, 170, 0.8)"; ctx.lineWidth = 5; ctx.stroke(); }
+                if (this.isBlocking) { ctx.beginPath(); ctx.arc(0, 0, this.stats.w/2 + 15, -Math.PI/2, Math.PI/2); ctx.strokeStyle = "#00FFFF"; ctx.lineWidth = 4; ctx.stroke(); } 
+                ctx.restore();
                 
-                if (this.isCloaked) ctx.globalAlpha = 1.0; 
+                const drawSword = (angOffset) => {
+                    const totalAng = this.angle + this.swordAngle - (this.weapon.type === 'ranged' || this.weaponId === 'shield' || this.weaponId === 'blowtorch' ? 0 : 0.8) + angOffset;
+                    const sX = this.x + Math.cos(this.angle) * (this.stats.w / 2); const sY = this.y + Math.sin(this.angle) * (this.stats.w / 2);
+                    
+                    if (this.weaponId === 'shield') {
+                        ctx.beginPath(); ctx.arc(sX, sY, this.weapon.length, totalAng - 0.5, totalAng + 0.5);
+                        ctx.lineWidth = 10; ctx.strokeStyle = this.isSwinging ? "#FFFFFF" : "#777"; ctx.stroke();
+                    } else if (this.weaponId === 'blowtorch') {
+                        const eX = sX + Math.cos(totalAng) * (this.weapon.length / 2); const eY = sY + Math.sin(totalAng) * (this.weapon.length / 2);
+                        ctx.beginPath(); ctx.moveTo(sX, sY); ctx.lineTo(eX, eY); ctx.lineWidth = 6; ctx.strokeStyle = "#969696"; ctx.stroke();
+                        if (this.isSwinging) {
+                            ctx.beginPath(); ctx.moveTo(eX, eY); ctx.arc(eX, eY, this.weapon.length, totalAng - 0.4, totalAng + 0.4);
+                            ctx.fillStyle = 'rgba(255, 100, 0, 0.7)'; ctx.fill();
+                        }
+                    } else {
+                        const eX = sX + Math.cos(totalAng) * this.weapon.length; const eY = sY + Math.sin(totalAng) * this.weapon.length;
+                        ctx.beginPath(); ctx.moveTo(sX, sY); ctx.lineTo(eX, eY);
+                        ctx.lineWidth = 6; ctx.strokeStyle = this.isSwinging ? "#FFFFFF" : "#969696"; ctx.stroke();
+                    }
+                };
 
-                ctx.fillStyle = "#FFF"; ctx.font = "12px Arial"; ctx.fillText(this.name, this.x - 20, this.y - 45);
+                if (this.weaponId === 'zoro_weapon') { drawSword(0); drawSword(-0.4); drawSword(0.4); } 
+                else { drawSword(0); }
                 
+                if (this.chassisId !== 'ghost') {
+                    ctx.fillStyle = "#FFF"; ctx.font = "12px Arial"; ctx.textAlign = "center"; ctx.fillText(this.name, this.x, this.y - (this.isJuggernaut? 60 : 45));
+                }
+                
+                if (this.hornTimer > 0) { ctx.fillStyle = "#FFD700"; ctx.font = "bold 16px Arial"; ctx.fillText("HONK!", this.x, this.y - (this.isJuggernaut? 80 : 65)); }
+
                 ctx.fillStyle = "#C80000"; ctx.fillRect(this.x - 25, this.y - 35, 50, 5); ctx.fillStyle = "#00C800"; ctx.fillRect(this.x - 25, this.y - 35, 50 * (Math.max(0, this.health) / this.stats.hp), 5);
-                
-                ctx.fillStyle = "#222"; ctx.fillRect(this.x - 25, this.y - 28, 50, 3);
-                ctx.fillStyle = (this.specialCooldown === 0) ? "#00FFFF" : "#555";
-                let fillRatio = 1 - (this.specialCooldown / this.weapon.spCooldown);
-                ctx.fillRect(this.x - 25, this.y - 28, 50 * fillRatio, 3);
+                ctx.fillStyle = "#222"; ctx.fillRect(this.x - 25, this.y - 28, 50, 3); ctx.fillStyle = (this.specialCooldown === 0 || this.batteryTimer > 0) ? "#00FFFF" : "#555";
+                let fillRatio = (this.batteryTimer > 0) ? 1 : 1 - (this.specialCooldown / this.weapon.spCooldown); ctx.fillRect(this.x - 25, this.y - 28, 50 * fillRatio, 3);
             }
-            getState() { return { active: this.active, x: this.x, y: this.y, angle: this.angle, health: this.health, swordAngle: this.swordAngle, isSwinging: this.isSwinging, isBlocking: this.isBlocking, cId: this.chassisId, wId: this.weaponId, spCd: this.specialCooldown, spTimer: this.specialActiveTimer, cloak: this.isCloaked, jug: this.isJuggernaut }; }
-            setState(data) { 
-                this.active = data.active; if (!this.active) return;
-                if (this.chassisId !== data.cId || this.weaponId !== data.wId) this.setLoadout(data.cId, data.wId);
-                this.x = data.x; this.y = data.y; this.angle = data.angle; this.health = data.health; this.swordAngle = data.swordAngle; this.isSwinging = data.isSwinging; this.isBlocking = data.isBlocking; 
-                this.specialCooldown = data.spCd; this.specialActiveTimer = data.spTimer; this.isCloaked = data.cloak; this.isJuggernaut = data.jug;
+            getState() { return { active: this.active, x: this.x, y: this.y, angle: this.angle, health: this.health, swordAngle: this.swordAngle, isSwinging: this.isSwinging, isBlocking: this.isBlocking, cId: this.chassisId, wId: this.weaponId, jug: this.isJuggernaut, arm: this.hasArmor, horn: (this.hornTimer > 0), bat: this.batteryTimer }; }
+            setState(d) { 
+                this.active = d.active; if (!this.active) return;
+                if (this.chassisId !== d.cId || this.weaponId !== d.wId) this.setLoadout(d.cId, d.wId);
+                this.x = d.x; this.y = d.y; this.angle = d.angle; this.health = d.health; this.swordAngle = d.swordAngle; this.isSwinging = d.isSwinging; this.isBlocking = d.isBlocking; this.isJuggernaut = d.jug; this.hasArmor = d.arm; this.batteryTimer = d.bat; if(d.horn) this.hornTimer = 2;
                 this.updatePositions();
             }
         }
@@ -641,226 +688,188 @@
         let players = [ new Forklift(0, "Player 1"), new Forklift(1, "Player 2"), new Forklift(2, "Player 3"), new Forklift(3, "Player 4") ];
 
         function assignTeamsAndColors() {
-            if (currentRules === "TDM") {
-                players[0].team = 1; players[2].team = 1; // Team Blue
-                players[1].team = 2; players[3].team = 2; // Team Red
-                players[0].color = "#3264C8"; players[2].color = "#00FFFF";
-                players[1].color = "#C83232"; players[3].color = "#FF8000";
+            if (currentRules === "TDM" || currentRules === "JUG") {
+                players[0].team = 1; players[2].team = 1; players[1].team = 2; players[3].team = 2;
+                players[0].color = "#3264C8"; players[2].color = "#00FFFF"; players[1].color = "#C83232"; players[3].color = "#FF8000";
             } else {
                 players[0].team = 1; players[1].team = 2; players[2].team = 3; players[3].team = 4;
-                players[0].color = "#FFD700"; players[1].color = "#C83232"; players[2].color = "#3264C8"; players[3].color = "#32C832";
+                players[0].color = document.getElementById('p1Color').value || "#FFD700"; 
+                players[1].color = document.getElementById('p2Color').value || "#C83232"; 
+                players[2].color = players[2].customColor || "#3264C8"; 
+                players[3].color = players[3].customColor || "#32C832";
+            }
+
+            if (currentRules === "JUG") {
+                let active = players.filter(p => p.active);
+                if (active.length > 1) {
+                    let jugIdx = Math.floor(Math.random() * active.length);
+                    active.forEach((p, i) => {
+                        if (i === jugIdx) { p.isJuggernaut = true; p.stats.hp = 1000; p.health = 1000; p.team = 99; p.color = "#FF00FF"; p.stats.maxSpeed *= 0.8; }
+                        else { p.team = 1; p.color = "#3264C8"; }
+                    });
+                }
             }
         }
 
-        function resizeCanvas() { 
-            const container = document.getElementById("gameContainer"); canvas.width = container.clientWidth - 40; canvas.height = container.clientHeight - 20; 
-            if (gameState === "PLAYING") buildMap();
-        }
+        function resizeCanvas() { const container = document.getElementById("gameContainer"); canvas.width = container.clientWidth - 40; canvas.height = container.clientHeight - 20; if (gameState === "PLAYING") buildMap(); }
         window.addEventListener("resize", resizeCanvas); resizeCanvas();
 
         function checkMeleeCollision(attacker, defender) {
             if (attacker.weapon.type !== 'melee') return;
-            if (attacker.team === defender.team) return; // Friendly Fire Prevention
+            if (attacker.team === defender.team && currentRules !== "FFA" && currentRules !== "CTF") return; 
             
-            let isLunging = attacker.weaponId === 'rapier' && attacker.specialActiveTimer > 0;
-            
-            if ((attacker.isSwinging || isLunging) && !attacker.hasHitThisSwing) {
-                const startOffset = attacker.stats.w / 2; const baseX = attacker.x + Math.cos(attacker.angle) * startOffset; const baseY = attacker.y + Math.sin(attacker.angle) * startOffset;
-                const tipX = attacker.swordTip.x; const tipY = attacker.swordTip.y;
+            if (attacker.isSwinging && !attacker.hasHitThisSwing) {
+                const sOffset = attacker.stats.w / 2; const bX = attacker.x + Math.cos(attacker.angle) * sOffset; const bY = attacker.y + Math.sin(attacker.angle) * sOffset;
                 
-                // Weapon to Pillar Collision
-                for(let p of activePillars) {
-                    const lSq = (tipX - baseX)*(tipX - baseX) + (tipY - baseY)*(tipY - baseY); let pt = 0;
-                    if (lSq !== 0) { pt = ((p.x - baseX)*(tipX - baseX) + (p.y - baseY)*(tipY - baseY)) / lSq; pt = Math.max(0, Math.min(1, pt)); }
-                    const pCx = baseX + pt*(tipX - baseX); const pCy = baseY + pt*(tipY - baseY);
-                    if (Math.sqrt((p.x - pCx)*(p.x - pCx) + (p.y - pCy)*(p.y - pCy)) < p.r) { attacker.hasHitThisSwing = true; playSound('block'); return; }
-                }
+                const checkHit = (angOffset) => {
+                    const totalAng = attacker.angle + attacker.swordAngle - (attacker.weaponId === 'shield' || attacker.weaponId === 'blowtorch' ? 0 : 0.8) + angOffset;
+                    let tipX = bX + Math.cos(totalAng) * attacker.weapon.length; let tipY = bY + Math.sin(totalAng) * attacker.weapon.length;
+                    const defRadius = (defender.stats.w / 2) + (defender.isJuggernaut ? 20 : 15); 
+                    
+                    if (attacker.weaponId === 'blowtorch' || attacker.weaponId === 'shield') {
+                        let dx = defender.x - bX; let dy = defender.y - bY; let dist = Math.sqrt(dx*dx + dy*dy);
+                        if (dist < attacker.weapon.length + defRadius) {
+                            let angleToDef = Math.atan2(dy, dx);
+                            let diff = angleToDef - totalAng;
+                            while (diff > Math.PI) diff -= Math.PI * 2; while (diff < -Math.PI) diff += Math.PI * 2;
+                            if (Math.abs(diff) < 0.5) return true;
+                        }
+                        return false;
+                    }
 
-                const defX = defender.x; const defY = defender.y; const defRadius = (defender.stats.w / 2) + 15; 
-                const lenSq = (tipX - baseX) * (tipX - baseX) + (tipY - baseY) * (tipY - baseY); let t = 0;
-                if (lenSq !== 0) { t = ((defX - baseX) * (tipX - baseX) + (defY - baseY) * (tipY - baseY)) / lenSq; t = Math.max(0, Math.min(1, t)); }
-                const closestX = baseX + t * (tipX - baseX); const closestY = baseY + t * (tipY - baseY);
-                const distance = Math.sqrt((defX - closestX)*(defX - closestX) + (defY - closestY)*(defY - closestY));
+                    const lenSq = (tipX - bX)*(tipX - bX) + (tipY - bY)*(tipY - bY); let t = 0;
+                    if (lenSq !== 0) { t = ((defender.x - bX) * (tipX - bX) + (defender.y - bY) * (tipY - bY)) / lenSq; t = Math.max(0, Math.min(1, t)); }
+                    const closestX = bX + t * (tipX - bX); const closestY = bY + t * (tipY - bY);
+                    return Math.sqrt((defender.x - closestX)*(defender.x - closestX) + (defender.y - closestY)*(defender.y - closestY)) < defRadius;
+                };
 
-                if (distance < defRadius) { 
+                let hit = checkHit(0);
+                if (attacker.weaponId === 'zoro_weapon') hit = hit || checkHit(-0.4) || checkHit(0.4);
+
+                if (hit) { 
                     attacker.hasHitThisSwing = true;
-                    if (defender.isBlocking) { 
-                        playSound('block'); attacker.speed = 0; 
-                        if (!attacker.isJuggernaut) { attacker.x -= Math.cos(attacker.angle) * 25; attacker.y -= Math.sin(attacker.angle) * 25; }
-                    } 
-                    else { 
-                        playSound('hit'); defender.health -= attacker.weapon.damage; defender.speed = 0; 
-                        if (!defender.isJuggernaut) { defender.x += Math.cos(attacker.angle) * 30; defender.y += Math.sin(attacker.angle) * 30; }
+                    
+                    if (defender.hasArmor) {
+                        defender.hasArmor = false; attacker.speed = 0;
+                        if (!attacker.isJuggernaut) { attacker.x -= Math.cos(attacker.angle) * 15; attacker.y -= Math.sin(attacker.angle) * 15; }
+                    }
+                    else if (defender.isBlocking) { 
+                        attacker.speed = 0; if (!attacker.isJuggernaut) { attacker.x -= Math.cos(attacker.angle) * 25; attacker.y -= Math.sin(attacker.angle) * 25; }
+                    } else { 
+                        defender.health -= attacker.weapon.damage; defender.speed = 0; 
+                        let knockback = attacker.weaponId === 'shield' ? 60 : 30;
+                        if (!defender.isJuggernaut) { defender.x += Math.cos(attacker.angle) * knockback; defender.y += Math.sin(attacker.angle) * knockback; }
+                        if (ctfPallet.holder === defender.index) ctfPallet.holder = -1;
+                        if (defender.health <= 0 && defender.isJuggernaut && currentRules === "JUG") {
+                            attacker.isJuggernaut = true; attacker.stats.hp = 1000; attacker.health = 1000; attacker.team = 99; attacker.color = "#FF00FF"; attacker.stats.maxSpeed *= 0.8;
+                            defender.isJuggernaut = false; defender.team = 1; defender.color = "#3264C8"; defender.health = 0; 
+                        }
                     }
                 }
             }
         }
 
-        // --- NEW PLAY MENU LOGIC ---
         function setPlayPath(path) {
             document.getElementById('pathSelection').style.display = 'none';
-            document.getElementById('playBackBtn').onclick = resetPlayScreen;
-            document.getElementById('playBackBtn').innerText = 'Back';
-
-            if (path === 'offline') {
-                document.getElementById('playScreenTitle').innerText = 'Offline Setup';
-                document.getElementById('offlineOptions').style.display = 'flex';
-                document.getElementById('onlineOptions').style.display = 'none';
-            } else if (path === 'online') {
-                document.getElementById('playScreenTitle').innerText = 'Online Multiplayer';
-                document.getElementById('offlineOptions').style.display = 'none';
-                document.getElementById('onlineOptions').style.display = 'flex';
-            }
+            document.getElementById('playBackBtn').onclick = resetPlayScreen; document.getElementById('playBackBtn').innerText = 'Back';
+            if (path === 'offline') { document.getElementById('playScreenTitle').innerText = 'Offline Setup'; document.getElementById('offlineOptions').style.display = 'flex'; document.getElementById('onlineOptions').style.display = 'none'; } 
+            else if (path === 'online') { document.getElementById('playScreenTitle').innerText = 'Online Multiplayer'; document.getElementById('offlineOptions').style.display = 'none'; document.getElementById('onlineOptions').style.display = 'flex'; }
         }
 
         function resetPlayScreen() {
-            // Show the path selection choices
-            document.getElementById('pathSelection').style.display = 'flex';
-            
-            // Hide the sub-menus
-            document.getElementById('offlineOptions').style.display = 'none';
-            document.getElementById('onlineOptions').style.display = 'none';
-            
-            // Reset the titles and Back button
-            document.getElementById('playScreenTitle').innerText = 'Select Connection';
-            document.getElementById('playBackBtn').onclick = () => showScreen('mainMenuScreen');
-            document.getElementById('playBackBtn').innerText = 'Back to Menu';
+            document.getElementById('pathSelection').style.display = 'flex'; document.getElementById('offlineOptions').style.display = 'none'; document.getElementById('onlineOptions').style.display = 'none';
+            document.getElementById('playScreenTitle').innerText = 'Select Connection'; document.getElementById('playBackBtn').onclick = () => showScreen('mainMenuScreen'); document.getElementById('playBackBtn').innerText = 'Back to Menu';
         }
 
-        function showScreen(screenId) {
+        function showScreen(id) {
             document.querySelectorAll('.screen-overlay').forEach(s => s.style.display = 'none');
-            if(screenId) { 
-                document.getElementById('inGameMenuBtn').style.display = 'none'; 
-                document.getElementById(screenId).style.display = 'flex'; 
-                gameState = "MENU"; 
-                if(screenId === 'playScreen') resetPlayScreen();
-                if(screenId === 'hostScreen') startHostingLobby(); 
-            } 
-            else { 
-                document.getElementById('inGameMenuBtn').style.display = 'block'; 
-                gameState = "PLAYING"; 
-                if(!audioCtx && gameSettings.sfxEnabled) audioCtx = new AudioContext(); 
-            }
+            if(id) { document.getElementById('inGameMenuBtn').style.display = 'none'; document.getElementById(id).style.display = 'flex'; gameState = "MENU"; if(id === 'playScreen') resetPlayScreen(); if(id === 'hostScreen') startHostingLobby(); } 
+            else { document.getElementById('inGameMenuBtn').style.display = 'block'; gameState = "PLAYING"; }
         }
 
-        // --- MULTIPLAYER NETWORKING ---
         let peer = null, myConnection = null, clients = {}; 
         function startHostingLobby() {
             gameMode = "HOST"; players.forEach(p => p.active = false); players[0].active = true; 
             players[0].setLoadout(document.getElementById("p1Chassis").value, document.getElementById("p1Weapon").value); 
+            players[0].customColor = document.getElementById("p1Color").value;
             Object.values(clients).forEach(c => { if(c.conn) c.conn.close(); }); clients = {};
-            for(let i=2; i<=4; i++) { document.getElementById(`lobby-p${i}`).innerText = `Player ${i}: Waiting...`; document.getElementById(`lobby-p${i}`).style.color = "#555"; }
             if(!peer) {
                 peer = new Peer(); peer.on('open', id => { document.getElementById('hostIdDisplay').value = id; });
                 peer.on('connection', conn => {
                     conn.on('open', () => {
-                        if (clients[conn.peer]) return; let pIdx = -1;
-                        for (let i = 1; i <= 3; i++) { if (!Object.values(clients).some(c => c.index === i)) { pIdx = i; break; } }
-                        if (gameState !== "MENU" || pIdx === -1) { conn.send({ type: "ERROR", msg: "Lobby Full or Match Started!" }); setTimeout(() => conn.close(), 500); return; }
-                        clients[conn.peer] = { index: pIdx, conn: conn, inputs: { forward: 0, turn: 0, swing: false, block: false, special: false } };
-                        document.getElementById(`lobby-p${pIdx+1}`).innerText = `Player ${pIdx+1}: Connected!`; document.getElementById(`lobby-p${pIdx+1}`).style.color = "#FFF";
-                        conn.on('data', data => { if (data.type === 'LOADOUT') { players[pIdx].setLoadout(data.cId, data.wId); players[pIdx].active = true; } if (data.type === 'INPUT') clients[conn.peer].inputs = data; });
-                        conn.on('close', () => { players[pIdx].active = false; document.getElementById(`lobby-p${pIdx+1}`).innerText = `Player ${pIdx+1}: Waiting...`; document.getElementById(`lobby-p${pIdx+1}`).style.color = "#555"; delete clients[conn.peer]; });
+                        let pIdx = -1; for (let i = 1; i <= 3; i++) { if (!Object.values(clients).some(c => c.index === i)) { pIdx = i; break; } }
+                        if (gameState !== "MENU" || pIdx === -1) { conn.close(); return; }
+                        clients[conn.peer] = { index: pIdx, conn: conn, inputs: { forward: 0, turn: 0, swing: false, block: false, special: false, horn: false } };
+                        conn.on('data', data => { if (data.type === 'LOADOUT') { players[pIdx].setLoadout(data.cId, data.wId); players[pIdx].customColor = data.color; players[pIdx].active = true; } if (data.type === 'INPUT') clients[conn.peer].inputs = data; });
+                        conn.on('close', () => { players[pIdx].active = false; delete clients[conn.peer]; });
                     });
                 });
             } else { document.getElementById('hostIdDisplay').value = peer.id; }
         }
-        function cancelHost() { Object.values(clients).forEach(c => { if(c.conn) c.conn.close(); }); clients = {}; for(let i=2; i<=4; i++) { document.getElementById(`lobby-p${i}`).innerText = `Player ${i}: Waiting...`; document.getElementById(`lobby-p${i}`).style.color = "#555"; } showScreen('playScreen'); setPlayPath('online'); }
+        function cancelHost() { Object.values(clients).forEach(c => { if(c.conn) c.conn.close(); }); clients = {}; showScreen('playScreen'); setPlayPath('online'); }
         
         function startMultiplayerHost() { 
-            currentRules = document.getElementById('rulesSelectOnline').value;
-            currentMapId = document.getElementById('mapSelectOnline').value;
-            assignTeamsAndColors(); buildMap();
-            players.forEach(p => p.reset()); projectiles = []; 
-            Object.values(clients).forEach(c => c.conn.send({ type: "START", rules: currentRules, mapId: currentMapId })); 
-            showScreen(null); 
+            currentRules = document.getElementById('rulesSelectOnline').value; currentMapId = document.getElementById('mapSelectOnline').value;
+            players.forEach(p => p.reset()); assignTeamsAndColors(); buildMap(); projectiles = []; powerups = [];
+            Object.values(clients).forEach(c => c.conn.send({ type: "START", rules: currentRules, mapId: currentMapId })); showScreen(null); 
         }
-
-        function rejoinLastGame() { const savedHost = safeStorageGet('forkliftLastHostId'); if (savedHost) { document.getElementById('joinIdInput').value = savedHost; joinOnlineGame(savedHost); } }
         
-        function joinOnlineGame(overrideId = null) {
-            const hostId = overrideId || document.getElementById('joinIdInput').value.trim(); if(!hostId) return;
-            safeStorageSet('forkliftLastHostId', hostId); document.getElementById('rejoinBtn').style.display = 'block';
+        function joinOnlineGame() {
+            const hostId = document.getElementById('joinIdInput').value.trim(); if(!hostId) return;
             if (myConnection) { myConnection.close(); myConnection = null; }
-            document.getElementById('joinStatus').innerText = "Connecting to Host..."; gameMode = "CLIENT";
-            const connectToHost = () => {
+            document.getElementById('joinStatus').innerText = "Connecting..."; gameMode = "CLIENT";
+            const connect = () => {
                 myConnection = peer.connect(hostId, { reliable: true });
-                myConnection.on('open', () => { 
-                    document.getElementById('joinStatus').innerText = "Connected! Waiting for Host..."; 
-                    myConnection.send({ type: 'LOADOUT', cId: document.getElementById("p1Chassis").value, wId: document.getElementById("p1Weapon").value }); 
-                });
+                myConnection.on('open', () => { document.getElementById('joinStatus').innerText = "Connected! Waiting for Host..."; myConnection.send({ type: 'LOADOUT', cId: document.getElementById("p1Chassis").value, wId: document.getElementById("p1Weapon").value, color: document.getElementById("p1Color").value }); });
                 myConnection.on('data', data => { 
-                    if (data.type === "START") { 
-                        currentRules = data.rules; currentMapId = data.mapId;
-                        assignTeamsAndColors(); buildMap(); projectiles = []; showScreen(null); 
-                    } else if (data.type === "STATE") { applyNetworkState(data.state, data.projs); } 
-                    else if (data.type === "ERROR") { document.getElementById('joinStatus').innerText = data.msg; } 
+                    if (data.type === "START") { currentRules = data.rules; currentMapId = data.mapId; buildMap(); projectiles = []; powerups = []; showScreen(null); } 
+                    else if (data.type === "STATE") { applyNetworkState(data.state, data.projs, data.items); } 
                 });
-                myConnection.on('close', () => { document.getElementById('joinStatus').innerText = "Host closed the connection."; if (gameState === "PLAYING") { gameState = "GAMEOVER"; document.getElementById("winnerText").innerText = "Host Disconnected!"; document.getElementById("winnerText").style.color = "#C83232"; document.getElementById("gameOverScreen").style.display = "flex"; document.getElementById("inGameMenuBtn").style.display = "none"; } });
+                myConnection.on('close', () => { if (gameState === "PLAYING") endGame("Host Disconnected!", "#C83232"); });
             };
-            if(!peer) { peer = new Peer(); peer.on('open', connectToHost); peer.on('error', err => { document.getElementById('joinStatus').innerText = "Network Error: " + err.type; }); } else { connectToHost(); }
+            if(!peer) { peer = new Peer(); peer.on('open', connect); } else { connect(); }
         }
 
         function startOfflineGame() {
-            gameMode = document.getElementById('offlineModeSelect').value;
-            currentRules = document.getElementById('rulesSelectOffline').value;
-            currentMapId = document.getElementById('mapSelectOffline').value;
-            
-            players.forEach(p => p.active = false); projectiles = [];
-            players[0].active = true; players[1].active = true;
-            
-            players[0].setLoadout(document.getElementById("p1Chassis").value, document.getElementById("p1Weapon").value);
-            players[1].setLoadout(document.getElementById("p2Chassis").value, document.getElementById("p2Weapon").value); 
-            
-            assignTeamsAndColors(); buildMap();
-            players.forEach(p => p.reset());
-            showScreen(null);
+            gameMode = document.getElementById('offlineModeSelect').value; currentRules = document.getElementById('rulesSelectOffline').value; currentMapId = document.getElementById('mapSelectOffline').value;
+            players.forEach(p => p.active = false); projectiles = []; powerups = []; players[0].active = true; players[1].active = true;
+            players[0].setLoadout(document.getElementById("p1Chassis").value, document.getElementById("p1Weapon").value); players[1].setLoadout(document.getElementById("p2Chassis").value, document.getElementById("p2Weapon").value); 
+            players[0].customColor = document.getElementById("p1Color").value; players[1].customColor = document.getElementById("p2Color").value;
+            players.forEach(p => p.reset()); assignTeamsAndColors(); buildMap(); showScreen(null);
         }
 
-        function quitToMenu() {
-            gameState = "MENU";
-            if (gameMode === "HOST") cancelHost();
-            if (gameMode === "CLIENT" && myConnection) { myConnection.close(); myConnection = null; }
-            showScreen('mainMenuScreen');
-        }
+        function quitToMenu() { gameState = "MENU"; if (gameMode === "HOST") cancelHost(); if (gameMode === "CLIENT" && myConnection) { myConnection.close(); myConnection = null; } showScreen('mainMenuScreen'); }
+        function endGame(n, c) { gameState = "GAMEOVER"; document.getElementById("winnerText").innerText = n; document.getElementById("winnerText").style.color = c; document.getElementById("gameOverScreen").style.display = "flex"; document.getElementById("inGameMenuBtn").style.display = "none"; }
+        function quickRejoin() { document.getElementById("gameOverScreen").style.display = "none"; if (gameMode === "HOST") showScreen('hostScreen'); else if (gameMode === "CLIENT") showScreen('joinScreen'); else startOfflineGame(); }
 
-        function endGame(winnerName, winnerColor) {
-            gameState = "GAMEOVER";
-            document.getElementById("winnerText").innerText = winnerName + " Wins!";
-            document.getElementById("winnerText").style.color = winnerColor;
-            document.getElementById("gameOverScreen").style.display = "flex";
-            document.getElementById("inGameMenuBtn").style.display = "none"; 
-        }
-
-        function quickRejoin() {
-            document.getElementById("gameOverScreen").style.display = "none";
-            if (gameMode === "HOST") showScreen('hostScreen');
-            else if (gameMode === "CLIENT") { showScreen('joinScreen'); rejoinLastGame(); } 
-            else startOfflineGame();
-        }
-
-        function applyNetworkState(stateArray, projsArray) {
-            for(let i=0; i<4; i++) { players[i].setState(stateArray[i]); }
-            if (projsArray) { projectiles = projsArray.map(p => new Projectile(p.x, p.y, 0, 0, 0, -1, p.color, p.team)); }
-            checkGameWinCondition();
+        function applyNetworkState(sArr, pArr, iArr) { 
+            for(let i=0; i<4; i++) players[i].setState(sArr[i]); 
+            if (pArr) projectiles = pArr.map(p => new Projectile(p.x, p.y, 0, 0, 0, -1, p.color, p.team, p.radius)); 
+            if (iArr) { powerups = iArr.map(i => new PowerUp(i.x, i.y, i.type)); powerups.forEach(p => p.active = true); }
+            checkGameWinCondition(); 
         }
 
         function checkGameWinCondition() {
+            if (currentRules === "CTF") {
+                if (score[1] >= 3) endGame("Team 1 Wins!", "#FFD700");
+                if (score[2] >= 3) endGame("Team 2 Wins!", "#C83232");
+                if (score[3] >= 3) endGame("Team 3 Wins!", "#3264C8");
+                if (score[4] >= 3) endGame("Team 4 Wins!", "#32C832");
+                return;
+            }
+
             let activeAlive = players.filter(p => p.active && p.health > 0);
             let totalActive = players.filter(p => p.active).length;
 
-            if (currentRules === "FFA") {
+            if (currentRules === "FFA" || currentRules === "JUG") {
                 if (totalActive > 1 && activeAlive.length <= 1) {
-                    if (activeAlive.length === 1) endGame(activeAlive[0].name, activeAlive[0].color);
-                    else endGame("Nobody", "#FFF"); 
+                    if (activeAlive.length === 1) endGame(activeAlive[0].name + " Wins!", activeAlive[0].color);
+                    else endGame("Draw", "#FFF"); 
                 }
             } else if (currentRules === "TDM") {
                 let firstTeam = activeAlive.length > 0 ? activeAlive[0].team : null;
-                let allSameTeam = activeAlive.every(p => p.team === firstTeam);
-                
-                if (totalActive > 1 && (activeAlive.length === 0 || allSameTeam)) {
-                    if (activeAlive.length > 0) endGame(firstTeam === 1 ? "Blue Team" : "Red Team", firstTeam === 1 ? "#3264C8" : "#C83232");
-                    else endGame("Draw", "#FFF");
+                if (totalActive > 1 && (activeAlive.length === 0 || activeAlive.every(p => p.team === firstTeam))) {
+                    if (activeAlive.length > 0) endGame("Team " + firstTeam + " Wins!", firstTeam === 1 ? "#3264C8" : "#C83232"); else endGame("Draw", "#FFF");
                 }
             }
         }
@@ -869,107 +878,83 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             if (gameState === "PLAYING") {
+                if (globalTimeStop > 0) globalTimeStop--;
+
                 if (gameMode === "LOCAL" || gameMode.startsWith("AI") || gameMode === "HOST") {
                     
+                    // Powerup Spawner
+                    if (Math.random() < 0.005 && powerups.length < 3) {
+                        let types = ['health', 'armor', 'battery'];
+                        powerups.push(new PowerUp(Math.random() * (canvas.width-100)+50, Math.random()*(canvas.height-100)+50, types[Math.floor(Math.random()*types.length)]));
+                    }
+
                     let p1Fwd = (keys[keyBinds.p1.up] ? 1 : 0) - (keys[keyBinds.p1.down] ? 1 : 0);
                     let p1Trn = (keys[keyBinds.p1.right] ? 1 : 0) - (keys[keyBinds.p1.left] ? 1 : 0);
-                    players[0].move(p1Fwd, p1Trn);
-                    if (keys[keyBinds.p1.swing]) players[0].swing();
-                    if (keys[keyBinds.p1.block]) players[0].block();
-                    if (keys[keyBinds.p1.special]) players[0].useSpecial();
+                    if (globalTimeStop <= 0 || timeStopOwner === 0) {
+                        players[0].move(p1Fwd, p1Trn);
+                        players[0].swing(keys[keyBinds.p1.swing]);
+                        if (keys[keyBinds.p1.block]) players[0].block();
+                        if (keys[keyBinds.p1.special]) players[0].useSpecial();
+                        if (keys[keyBinds.p1.horn]) players[0].useHorn();
+                    }
 
                     if (gameMode === "LOCAL") {
                         let p2Fwd = (keys[keyBinds.p2.up] ? 1 : 0) - (keys[keyBinds.p2.down] ? 1 : 0);
                         let p2Trn = (keys[keyBinds.p2.right] ? 1 : 0) - (keys[keyBinds.p2.left] ? 1 : 0);
-                        players[1].move(p2Fwd, p2Trn);
-                        if (keys[keyBinds.p2.swing]) players[1].swing();
-                        if (keys[keyBinds.p2.block]) players[1].block();
-                        if (keys[keyBinds.p2.special]) players[1].useSpecial();
+                        if (globalTimeStop <= 0 || timeStopOwner === 1) {
+                            players[1].move(p2Fwd, p2Trn);
+                            players[1].swing(keys[keyBinds.p2.swing]);
+                            if (keys[keyBinds.p2.block]) players[1].block();
+                            if (keys[keyBinds.p2.special]) players[1].useSpecial();
+                            if (keys[keyBinds.p2.horn]) players[1].useHorn();
+                        }
                     } 
-                    
                     else if (gameMode.startsWith("AI")) {
                         let ai = players[1]; let target = players[0];
-                        
-                        if (target.isCloaked && Math.random() > 0.1) {
-                            ai.move((Math.random() > 0.5 ? 0.5 : -0.5), (Math.random() > 0.5 ? 1 : -1));
-                        } else {
-                            let dx = target.x - ai.x; let dy = target.y - ai.y;
-                            let distance = Math.sqrt(dx * dx + dy * dy);
-                            let targetAngle = Math.atan2(dy, dx);
-                            let diff = targetAngle - ai.angle;
-                            
-                            while (diff > Math.PI) diff -= Math.PI * 2; while (diff < -Math.PI) diff += Math.PI * 2;
-                            
-                            let p2Trn = 0; let p2Fwd = 0;
-                            if (diff > 0.1) p2Trn = 1; else if (diff < -0.1) p2Trn = -1;
-                            
-                            let diffLevel = gameMode === "AI_EASY" ? 1 : (gameMode === "AI_MED" ? 2 : 3);
-                            const optimalDist = ai.weapon.length + (target.stats.w / 2) + (diffLevel === 1 ? -10 : 20);
-                            
-                            ai.aiTimer++;
-
-                            if (ai.blockCooldown > 0 && diffLevel > 1) { 
-                                p2Fwd = -1; 
-                            } else if (distance > optimalDist + 20) {
-                                p2Fwd = (diffLevel === 1 ? 0.5 : 0.85); 
-                            } else if (distance < optimalDist - 15) {
-                                p2Fwd = (diffLevel === 1 ? -0.3 : -0.8); 
-                            } else if (diffLevel > 1 && Math.random() < 0.02) {
-                                p2Fwd = (Math.random() > 0.5 ? 0.5 : -0.5); 
+                        if (globalTimeStop <= 0 || timeStopOwner === 1) {
+                            if (target.chassisId === 'ghost' && Math.random() > 0.1) {
+                                ai.move((Math.random() > 0.5 ? 0.5 : -0.5), (Math.random() > 0.5 ? 1 : -1));
+                            } else {
+                                let dx = target.x - ai.x; let dy = target.y - ai.y; let diff = Math.atan2(dy, dx) - ai.angle;
+                                while (diff > Math.PI) diff -= Math.PI * 2; while (diff < -Math.PI) diff += Math.PI * 2;
+                                let p2Trn = 0; if (diff > 0.1) p2Trn = 1; else if (diff < -0.1) p2Trn = -1;
+                                ai.move(0.5, p2Trn); if (Math.abs(diff) < 0.5 && Math.random() < 0.1) ai.swing(true); else ai.swing(false);
                             }
-                            
-                            if (distance < optimalDist + 30 && Math.abs(diff) < 0.5) {
-                                if (ai.aiTimer % (60 / diffLevel) === 0 && Math.random() < (0.3 * diffLevel)) {
-                                    ai.swing();
-                                }
-                            }
-
-                            if (target.isSwinging && target.swordAngle > 0 && target.swordAngle < 0.5 && ai.blockCooldown === 0) {
-                                if (!ai.hasRolledParry) {
-                                    ai.hasRolledParry = true; 
-                                    let parryChance = diffLevel === 1 ? 0.05 : (diffLevel === 2 ? 0.40 : 0.85);
-                                    if (distance < target.weapon.length + 60 && Math.random() < parryChance) {
-                                        ai.block(); 
-                                    }
-                                }
-                            } else if (!target.isSwinging) { ai.hasRolledParry = false; }
-                            
-                            if (ai.specialCooldown === 0 && distance < optimalDist + 100 && diffLevel > 1) {
-                                if (Math.random() < 0.05) ai.useSpecial();
-                            }
-
-                            ai.move(p2Fwd, p2Trn);
                         }
                     }
-                    
                     else if (gameMode === "HOST") {
                         Object.values(clients).forEach(c => {
                             let p = players[c.index];
-                            if(p.active && p.health > 0) {
-                                p.move(c.inputs.forward, c.inputs.turn);
-                                if (c.inputs.swing) p.swing();
-                                if (c.inputs.block) p.block();
-                                if (c.inputs.special) p.useSpecial();
+                            if(p.active && p.health > 0 && (globalTimeStop <= 0 || timeStopOwner === c.index)) {
+                                p.move(c.inputs.forward, c.inputs.turn); p.swing(c.inputs.swing);
+                                if (c.inputs.block) p.block(); if (c.inputs.special) p.useSpecial();
+                                if (c.inputs.horn) p.useHorn();
                             }
                         });
                     }
                     
-                    players.forEach(p => { if(p.active) p.updateAbilities(); });
+                    players.forEach(p => { if(p.active && (globalTimeStop <= 0 || timeStopOwner === p.index)) p.updateAbilities(); });
 
-                    projectiles.forEach(proj => {
-                        proj.update();
-                        players.forEach(p => {
-                            if (p.active && p.health > 0 && p.team !== proj.team && proj.active) {
-                                let dx = proj.x - p.x; let dy = proj.y - p.y;
-                                if (Math.sqrt(dx*dx + dy*dy) < (p.stats.w / 2) + 10) {
-                                    if (p.isBlocking) { playSound('block'); p.speed = 0; if(!p.isJuggernaut){ p.x += Math.cos(proj.angle) * 5; p.y += Math.sin(proj.angle) * 5; } } 
-                                    else { playSound('hit'); p.health -= proj.damage; p.speed = 0; if(!p.isJuggernaut){ p.x += Math.cos(proj.angle) * 20; p.y += Math.sin(proj.angle) * 20; } }
-                                    proj.active = false;
+                    if (globalTimeStop <= 0) {
+                        projectiles.forEach(proj => {
+                            proj.update();
+                            players.forEach(p => {
+                                if (p.active && p.health > 0 && p.team !== proj.team && proj.active) {
+                                    let dx = proj.x - p.x; let dy = proj.y - p.y;
+                                    if (Math.sqrt(dx*dx + dy*dy) < (p.stats.w / 2) + proj.radius + 4) {
+                                        if (proj.type === 'grapple') players[proj.ownerId].grappleTarget = {x: p.x, y: p.y};
+                                        if (p.hasArmor) { p.hasArmor = false; }
+                                        else if (p.isBlocking) { p.speed = 0; if(!p.isJuggernaut) { p.x += Math.cos(proj.angle) * 5; p.y += Math.sin(proj.angle) * 5; } } 
+                                        else { p.health -= proj.damage; p.speed = 0; if(!p.isJuggernaut) { p.x += Math.cos(proj.angle) * 20; p.y += Math.sin(proj.angle) * 20; } }
+                                        if (ctfPallet.holder === p.index) ctfPallet.holder = -1;
+                                        proj.active = false;
+                                    }
                                 }
-                            }
+                            });
                         });
-                    });
-                    projectiles = projectiles.filter(p => p.active);
+                        projectiles = projectiles.filter(p => p.active);
+                        powerups = powerups.filter(p => p.active);
+                    }
 
                     for (let i = 0; i < players.length; i++) {
                         for (let j = 0; j < players.length; j++) {
@@ -978,51 +963,52 @@
                     }
 
                     if (gameMode === "HOST") {
-                        let statePack = players.map(p => p.getState());
-                        let projsPack = projectiles.map(p => ({x: p.x, y: p.y, color: p.color, team: p.team}));
-                        Object.values(clients).forEach(c => {
-                            if (c.conn && c.conn.open) c.conn.send({ type: "STATE", state: statePack, projs: projsPack });
-                        });
+                        let statePack = players.map(p => p.getState()); 
+                        let projsPack = projectiles.map(p => ({x: p.x, y: p.y, color: p.color, team: p.team, radius: p.radius}));
+                        let itemsPack = powerups.map(p => ({x: p.x, y: p.y, type: p.type}));
+                        Object.values(clients).forEach(c => { if (c.conn && c.conn.open) c.conn.send({ type: "STATE", state: statePack, projs: projsPack, items: itemsPack }); });
                     }
 
                     checkGameWinCondition();
                 } 
-                
                 else if (gameMode === "CLIENT" && myConnection && myConnection.open) {
-                    myConnection.send({
-                        type: 'INPUT',
-                        forward: (keys[keyBinds.p1.up] ? 1 : 0) - (keys[keyBinds.p1.down] ? 1 : 0),
-                        turn: (keys[keyBinds.p1.right] ? 1 : 0) - (keys[keyBinds.p1.left] ? 1 : 0),
-                        swing: keys[keyBinds.p1.swing],
-                        block: keys[keyBinds.p1.block],
-                        special: keys[keyBinds.p1.special]
-                    });
+                    myConnection.send({ type: 'INPUT', forward: (keys[keyBinds.p1.up] ? 1 : 0) - (keys[keyBinds.p1.down] ? 1 : 0), turn: (keys[keyBinds.p1.right] ? 1 : 0) - (keys[keyBinds.p1.left] ? 1 : 0), swing: keys[keyBinds.p1.swing], block: keys[keyBinds.p1.block], special: keys[keyBinds.p1.special], horn: keys[keyBinds.p1.horn] });
                 }
             }
 
-            // Draw Map Details
+            // Draw Background & Effects
+            if (globalTimeStop > 0) { ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; ctx.fillRect(0, 0, canvas.width, canvas.height); }
             ctx.strokeStyle = "#555"; ctx.lineWidth = 2;
             for(let x=0; x<canvas.width; x+=100) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }
             for(let y=0; y<canvas.height; y+=100) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke(); }
 
+            // Draw Spawn zones for CTF
+            if (currentRules === "CTF") {
+                ctx.fillStyle = "rgba(255, 215, 0, 0.2)"; ctx.fillRect(0, 0, 200, 200); ctx.fillStyle = "#FFF"; ctx.fillText(`Score: ${score[1]}`, 10, 20);
+                ctx.fillStyle = "rgba(200, 50, 50, 0.2)"; ctx.fillRect(canvas.width-200, canvas.height-200, 200, 200); ctx.fillStyle = "#FFF"; ctx.fillText(`Score: ${score[2]}`, canvas.width-60, canvas.height-20);
+            }
+
             activePillars.forEach(p => {
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); 
-                ctx.fillStyle = "#2A2A2A"; ctx.fill(); 
-                ctx.lineWidth = 6; ctx.strokeStyle = "#FFFF00"; ctx.stroke();
-                
-                // Hazard Stripes
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fillStyle = "#2A2A2A"; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = "#FFFF00"; ctx.stroke();
                 ctx.save(); ctx.clip(); ctx.strokeStyle = "#000"; ctx.lineWidth = 10;
                 for(let i=-p.r; i<p.r*2; i+=20) { ctx.beginPath(); ctx.moveTo(p.x - p.r + i, p.y - p.r); ctx.lineTo(p.x - p.r + i - p.r*2, p.y + p.r); ctx.stroke(); }
                 ctx.restore();
             });
 
+            // Draw Pallet
+            if (ctfPallet.active) {
+                ctx.fillStyle = "#FFD700"; ctx.fillRect(ctfPallet.x - 15, ctfPallet.y - 15, 30, 30);
+                ctx.strokeStyle = "#B8860B"; ctx.lineWidth = 3; ctx.strokeRect(ctfPallet.x - 15, ctfPallet.y - 15, 30, 30);
+            }
+
+            powerups.forEach(p => p.draw());
             players.forEach(p => p.draw());
             projectiles.forEach(p => p.draw());
             
-            animationFrameId = requestAnimationFrame(gameLoop);
+            requestAnimationFrame(gameLoop);
         }
 
-        animationFrameId = requestAnimationFrame(gameLoop);
+        requestAnimationFrame(gameLoop);
     </script>
 </body>
 </html>
