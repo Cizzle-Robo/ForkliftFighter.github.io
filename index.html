@@ -68,34 +68,28 @@
             
             <div class="bottom-right-container">
                 <button class="small-menu-btn" onclick="showScreen('creditsScreen')">Credits</button>
-                <button class="small-menu-btn" style="color: #FFD700; border-color: #FFD700;" onclick="showScreen('patchNotesScreen')">v1.3.0</button>
+                <button class="small-menu-btn" style="color: #FFD700; border-color: #FFD700;" onclick="showScreen('patchNotesScreen')">v1.3.1</button>
             </div>
         </div>
 
         <div id="patchNotesScreen" class="screen-overlay">
             <h2 class="screen-title">Patch Notes</h2>
             <div class="menu-box" style="width: 80%; max-width: 600px; text-align: left; max-height: 60vh; overflow-y: auto; display: block;">
-                <h3 style="color: #FFD700; margin-top: 0;">v1.3.0 (Current) - Garage & Glory</h3>
+                <h3 style="color: #FFD700; margin-top: 0;">v1.3.1 (Current) - Balance Pass</h3>
+                <ul style="color: #CCC; line-height: 1.6; padding-left: 20px; margin-bottom: 0;">
+                    <li><strong>Balance Update:</strong> Heavy weapons deal more damage. Tick damage increased for Chainsaw and Blowtorch.</li>
+                    <li><strong>Cooldowns:</strong> Reduced cooldowns across the board (Dio's Time Stop is now usable more often).</li>
+                    <li><strong>Chassis Tweaks:</strong> Tank HP buffed. Speedster, Drifter, Gojo, and Sukuna received slight speed/acceleration buffs.</li>
+                </ul>
+                <hr style="border-color: #555; width: 100%; margin: 20px 0;">
+
+                <h3 style="color: #00FFFF; margin-top: 0;">v1.3.0 - Garage & Glory</h3>
                 <ul style="color: #CCC; line-height: 1.6; padding-left: 20px; margin-bottom: 0;">
                     <li><strong>New Chassis:</strong> The Drifter added. High speed, terrible traction, great for spin attacks!</li>
                     <li><strong>New Weapons:</strong> The Fork-Shield (heavy knockback/defense) and The Blowtorch (cone tick damage) added.</li>
                     <li><strong>Power-Ups:</strong> Health Kits, Armor Plating, and Overcharge Batteries now spawn dynamically in the arena.</li>
                     <li><strong>Paint Shop:</strong> Added custom color pickers in The Garage (Applies in FFA modes).</li>
                     <li><strong>Horns:</strong> Added working horns. Honk away! (Rebind in Settings).</li>
-                </ul>
-                <hr style="border-color: #555; width: 100%; margin: 20px 0;">
-
-                <h3 style="color: #00FFFF; margin-top: 0;">v1.2.0</h3>
-                <ul style="color: #CCC; line-height: 1.6; padding-left: 20px; margin-bottom: 0;">
-                    <li><strong>Credits Update:</strong> Official credits established.</li>
-                    <li><strong>Security Update:</strong> Secret characters properly secured in menus.</li>
-                </ul>
-                <hr style="border-color: #555; width: 100%; margin: 20px 0;">
-
-                <h3 style="color: #999; margin-top: 0;">v1.1.0</h3>
-                <ul style="color: #CCC; line-height: 1.6; padding-left: 20px; margin-bottom: 0;">
-                    <li><strong>Secret Roster:</strong> Added Gojo, Sukuna, Zoro, Dio, Ghost, and Admin.</li>
-                    <li><strong>Juggernaut Mode:</strong> 1v3 boss battle mode added.</li>
                 </ul>
             </div>
             <button class="menu-btn back-btn" onclick="showScreen('mainMenuScreen')">Back to Menu</button>
@@ -428,28 +422,29 @@
 
         const CHASSIS_DB = {
             standard:  { w: 40, h: 30, maxSpeed: 6.0, acc: 0.30, turn: 0.07, hp: 150 }, 
-            bulldozer: { w: 50, h: 40, maxSpeed: 3.5, acc: 0.15, turn: 0.04, hp: 200 }, 
-            speedster: { w: 32, h: 22, maxSpeed: 8.5, acc: 0.50, turn: 0.10, hp: 100 }, 
-            tank:      { w: 60, h: 45, maxSpeed: 2.5, acc: 0.10, turn: 0.03, hp: 300 }, 
-            drifter:   { w: 35, h: 25, maxSpeed: 9.0, acc: 0.20, turn: 0.04, hp: 120 }, 
-            admin:     { w: 40, h: 30, maxSpeed: 15.0, acc: 1.50, turn: 0.20, hp: 5000 },
-            gojo:      { w: 38, h: 28, maxSpeed: 7.5, acc: 0.40, turn: 0.12, hp: 250 }, 
-            sukuna:    { w: 42, h: 32, maxSpeed: 8.0, acc: 0.60, turn: 0.15, hp: 200 },
-            ghost:     { w: 40, h: 30, maxSpeed: 6.5, acc: 0.35, turn: 0.08, hp: 120 }
+            bulldozer: { w: 50, h: 40, maxSpeed: 3.5, acc: 0.15, turn: 0.04, hp: 250 }, 
+            speedster: { w: 32, h: 22, maxSpeed: 8.5, acc: 0.60, turn: 0.12, hp: 100 }, 
+            tank:      { w: 60, h: 45, maxSpeed: 2.5, acc: 0.10, turn: 0.03, hp: 400 }, 
+            drifter:   { w: 35, h: 25, maxSpeed: 9.0, acc: 0.25, turn: 0.04, hp: 120 }, 
+            admin:     { w: 40, h: 30, maxSpeed: 15.0, acc: 1.50, turn: 0.20, hp: 5000 }, 
+            gojo:      { w: 38, h: 28, maxSpeed: 8.0, acc: 0.45, turn: 0.12, hp: 300 }, 
+            sukuna:    { w: 42, h: 32, maxSpeed: 8.5, acc: 0.65, turn: 0.15, hp: 200 }, 
+            ghost:     { w: 40, h: 30, maxSpeed: 7.0, acc: 0.40, turn: 0.08, hp: 120 }  
         };
+        
         const WEAPON_DB = {
-            standard:      { type: 'melee', length: 70,  swingSpeed: 0.25, retractSpeed: 0.10, damage: 15, spCooldown: 600 }, 
-            greatsword:    { type: 'melee', length: 100, swingSpeed: 0.12, retractSpeed: 0.04, damage: 30, spCooldown: 480 }, 
-            rapier:        { type: 'melee', length: 45,  swingSpeed: 0.50, retractSpeed: 0.25, damage: 8,  spCooldown: 300 }, 
-            chainsaw:      { type: 'melee', length: 55,  swingSpeed: 0, retractSpeed: 0, damage: 2, spCooldown: 300 },
-            grapple:       { type: 'ranged', length: 30, fireRate: 60, projSpeed: 25, damage: 5, spCooldown: 300 },
-            boomerang:     { type: 'ranged', length: 30, fireRate: 60, projSpeed: 15, damage: 15, spCooldown: 300 },
-            shield:        { type: 'melee', length: 35,  swingSpeed: 0, retractSpeed: 0, damage: 5, spCooldown: 300 },
-            blowtorch:     { type: 'melee', length: 60,  swingSpeed: 0, retractSpeed: 0, damage: 1, spCooldown: 400 },
-            gojo_weapon:   { type: 'melee', length: 65,  swingSpeed: 0.30, retractSpeed: 0.15, damage: 18, spCooldown: 900 }, 
-            sukuna_weapon: { type: 'melee', length: 85,  swingSpeed: 0.40, retractSpeed: 0.20, damage: 22, spCooldown: 600 },
-            zoro_weapon:   { type: 'melee', length: 70,  swingSpeed: 0.25, retractSpeed: 0.10, damage: 18, spCooldown: 600 },
-            dio_weapon:    { type: 'melee', length: 60,  swingSpeed: 0.30, retractSpeed: 0.15, damage: 20, spCooldown: 1200 }
+            standard:      { type: 'melee', length: 70,  swingSpeed: 0.25, retractSpeed: 0.10, damage: 20, spCooldown: 480 }, 
+            greatsword:    { type: 'melee', length: 100, swingSpeed: 0.12, retractSpeed: 0.04, damage: 45, spCooldown: 400 }, 
+            rapier:        { type: 'melee', length: 45,  swingSpeed: 0.50, retractSpeed: 0.25, damage: 12, spCooldown: 240 }, 
+            chainsaw:      { type: 'melee', length: 55,  swingSpeed: 0, retractSpeed: 0, damage: 4, spCooldown: 300 }, 
+            grapple:       { type: 'ranged', length: 30, fireRate: 60, projSpeed: 25, damage: 10, spCooldown: 300 }, 
+            boomerang:     { type: 'ranged', length: 30, fireRate: 60, projSpeed: 15, damage: 25, spCooldown: 300 }, 
+            shield:        { type: 'melee', length: 35,  swingSpeed: 0, retractSpeed: 0, damage: 0, spCooldown: 300 }, 
+            blowtorch:     { type: 'melee', length: 60,  swingSpeed: 0, retractSpeed: 0, damage: 3, spCooldown: 300 }, 
+            gojo_weapon:   { type: 'melee', length: 65,  swingSpeed: 0.30, retractSpeed: 0.15, damage: 25, spCooldown: 600 }, 
+            sukuna_weapon: { type: 'melee', length: 85,  swingSpeed: 0.40, retractSpeed: 0.20, damage: 35, spCooldown: 450 }, 
+            zoro_weapon:   { type: 'melee', length: 70,  swingSpeed: 0.25, retractSpeed: 0.10, damage: 15, spCooldown: 450 }, 
+            dio_weapon:    { type: 'melee', length: 60,  swingSpeed: 0.30, retractSpeed: 0.15, damage: 25, spCooldown: 900 }  
         };
 
         class Projectile {
