@@ -68,40 +68,34 @@
             
             <div class="bottom-right-container">
                 <button class="small-menu-btn" onclick="showScreen('creditsScreen')">Credits</button>
-                <button class="small-menu-btn" style="color: #FFD700; border-color: #FFD700;" onclick="showScreen('patchNotesScreen')">v1.5.0</button>
+                <button class="small-menu-btn" style="color: #FFD700; border-color: #FFD700;" onclick="showScreen('patchNotesScreen')">v1.6.2</button>
             </div>
         </div>
 
         <div id="patchNotesScreen" class="screen-overlay">
             <h2 class="screen-title">Patch Notes</h2>
             <div class="menu-box" style="width: 80%; max-width: 600px; text-align: left; height: 60vh; overflow-y: auto; display: block; overflow-x: hidden; padding-right: 15px;">
-                <h3 style="color: #FFD700; margin-top: 0;">v1.5.0 (Current) - The OSHA Update</h3>
+                <h3 style="color: #FFD700; margin-top: 0;">v1.6.2 (Current) - Gun Game Hotfix</h3>
+                <ul style="color: #CCC; line-height: 1.6; padding-left: 20px; margin-bottom: 0;">
+                    <li><strong>Gun Game Fixed:</strong> Weapons now correctly cycle all the way to the final tier. Attacker's forklift no longer resets position when getting a kill!</li>
+                    <li><strong>Spawn Immunity:</strong> Added a 1-second invincibility phase (flashing) after respawning to prevent spawn camping.</li>
+                </ul>
+                
+                <hr style="border-color: #555; width: 100%; margin: 20px 0;">
+
+                <h3 style="color: #00FFFF; margin-top: 0;">v1.6.0 - The Arsenal Update</h3>
+                <ul style="color: #CCC; line-height: 1.6; padding-left: 20px; margin-bottom: 0;">
+                    <li><strong>New Weapons:</strong> Wrecking Ball, Nail Gun, Taser-Fork, and Jousting Lance added to the Garage!</li>
+                    <li><strong>New Modes:</strong> Gun Game (Escalation), VIP Escort, and Jousting Tournament added.</li>
+                </ul>
+                
+                <hr style="border-color: #555; width: 100%; margin: 20px 0;">
+
+                <h3 style="color: #AAA; margin-top: 0;">v1.5.0 - The OSHA Update</h3>
                 <ul style="color: #CCC; line-height: 1.6; padding-left: 20px; margin-bottom: 0;">
                     <li><strong>New Mode:</strong> Prime Delivery. Non-lethal combat. Knock packages out of enemy hands and deliver them.</li>
-                    <li><strong>New Modes:</strong> OSHA Inspector (Day & Night). Don't get caught breaking warehouse safety rules! Night shift requires headlights.</li>
-                    <li><strong>New Mode:</strong> Bumper Carts (Sumo). Extreme knockback, no walls. Don't fall off the High Dock!</li>
-                    <li><strong>New Maps:</strong> Delivery Route, Factory Floor, and The High Dock added.</li>
-                </ul>
-                
-                <hr style="border-color: #555; width: 100%; margin: 20px 0;">
-                
-                <h3 style="color: #00FFFF; margin-top: 0;">v1.4.0 - The Mega Party Update</h3>
-                <ul style="color: #CCC; line-height: 1.6; padding-left: 20px; margin-bottom: 0;">
-                    <li><strong>New Game Modes:</strong> King of the Loading Dock, Infection (Zombies), and Warehouse League (Soccer) added!</li>
-                </ul>
-
-                <hr style="border-color: #555; width: 100%; margin: 20px 0;">
-                
-                <h3 style="color: #AAA; margin-top: 0;">v1.3.5 - Return of the Admin</h3>
-                <ul style="color: #CCC; line-height: 1.6; padding-left: 20px; margin-bottom: 0;">
-                    <li><strong>Admin Gun Fixed:</strong> Re-added missing secret weapon and massive 360 blast.</li>
-                </ul>
-
-                <hr style="border-color: #555; width: 100%; margin: 20px 0;">
-                
-                <h3 style="color: #AAA; margin-top: 0;">v1.3.0 - The Armory</h3>
-                <ul style="color: #CCC; line-height: 1.6; padding-left: 20px; margin-bottom: 0;">
-                    <li><strong>New Weapons:</strong> Added Greatsword, Rapier, Cutlass, Chainsaw, Shield, Blowtorch, and Boomerang.</li>
+                    <li><strong>New Modes:</strong> OSHA Inspector (Day & Night). Don't get caught breaking warehouse safety rules!</li>
+                    <li><strong>New Mode:</strong> Bumper Carts (Sumo). Extreme knockback, no walls.</li>
                 </ul>
             </div>
             <button class="menu-btn back-btn" onclick="showScreen('mainMenuScreen')">Back to Menu</button>
@@ -149,6 +143,9 @@
                             <option value="OSHA_DAY">OSHA (Day Shift)</option>
                             <option value="OSHA_NIGHT">OSHA (Night Shift)</option>
                             <option value="BUMPER">Bumper Carts</option>
+                            <option value="GUN_GAME">Gun Game</option>
+                            <option value="VIP">VIP Escort</option>
+                            <option value="JOUST">Jousting Tournament</option>
                         </select>
                     </div>
                     <div class="menu-box" style="width: 250px; margin: 0;">
@@ -245,11 +242,19 @@
                         <option value="boomerang">Boomerang</option>
                         <option value="shield">The Fork-Shield</option>
                         <option value="blowtorch">The Blowtorch</option>
+                        <option value="wrecking_ball">Wrecking Ball</option>
+                        <option value="nail_gun">Nail Gun</option>
+                        <option value="taser_fork">Taser-Fork</option>
+                        <option value="jousting_lance">Jousting Lance</option>
                         <option class="opt-admin" value="admin_weapon" style="color: #FF00FF; font-weight: bold;" hidden disabled>Admin Gun</option>
                         <option class="opt-gojo" value="gojo_weapon" style="color: #6495ED; font-weight: bold;" hidden disabled>Limitless</option>
                         <option class="opt-sukuna" value="sukuna_weapon" style="color: #DC143C; font-weight: bold;" hidden disabled>Cleaver</option>
                         <option class="opt-zoro" value="zoro_weapon" style="color: #32CD32; font-weight: bold;" hidden disabled>Three Swords</option>
                         <option class="opt-dio" value="dio_weapon" style="color: #FFD700; font-weight: bold;" hidden disabled>The World</option>
+                        <option class="opt-thor" value="mjolnir" style="color: #ADD8E6; font-weight: bold;" hidden disabled>Mjolnir</option>
+                        <option class="opt-scorpion" value="kunai" style="color: #FFFF00; font-weight: bold;" hidden disabled>The Kunai</option>
+                        <option class="opt-ichigo" value="zangetsu" style="color: #FF4500; font-weight: bold; background: #000;" hidden disabled>Zangetsu</option>
+                        <option class="opt-jedi" value="lightsaber" style="color: #00FF00; font-weight: bold;" hidden disabled>Lightsaber</option>
                     </select>
                 </div>
                 <div class="loadout-box" style="border-color: #C83232;">
@@ -278,11 +283,19 @@
                         <option value="boomerang">Boomerang</option>
                         <option value="shield">The Fork-Shield</option>
                         <option value="blowtorch">The Blowtorch</option>
+                        <option value="wrecking_ball">Wrecking Ball</option>
+                        <option value="nail_gun">Nail Gun</option>
+                        <option value="taser_fork">Taser-Fork</option>
+                        <option value="jousting_lance">Jousting Lance</option>
                         <option class="opt-admin" value="admin_weapon" style="color: #FF00FF; font-weight: bold;" hidden disabled>Admin Gun</option>
                         <option class="opt-gojo" value="gojo_weapon" style="color: #6495ED; font-weight: bold;" hidden disabled>Limitless</option>
                         <option class="opt-sukuna" value="sukuna_weapon" style="color: #DC143C; font-weight: bold;" hidden disabled>Cleaver</option>
                         <option class="opt-zoro" value="zoro_weapon" style="color: #32CD32; font-weight: bold;" hidden disabled>Three Swords</option>
                         <option class="opt-dio" value="dio_weapon" style="color: #FFD700; font-weight: bold;" hidden disabled>The World</option>
+                        <option class="opt-thor" value="mjolnir" style="color: #ADD8E6; font-weight: bold;" hidden disabled>Mjolnir</option>
+                        <option class="opt-scorpion" value="kunai" style="color: #FFFF00; font-weight: bold;" hidden disabled>The Kunai</option>
+                        <option class="opt-ichigo" value="zangetsu" style="color: #FF4500; font-weight: bold; background: #000;" hidden disabled>Zangetsu</option>
+                        <option class="opt-jedi" value="lightsaber" style="color: #00FF00; font-weight: bold;" hidden disabled>Lightsaber</option>
                     </select>
                 </div>
             </div>
@@ -309,6 +322,9 @@
                             <option value="OSHA_DAY">OSHA (Day Shift)</option>
                             <option value="OSHA_NIGHT">OSHA (Night Shift)</option>
                             <option value="BUMPER">Bumper Carts</option>
+                            <option value="GUN_GAME">Gun Game</option>
+                            <option value="VIP">VIP Escort</option>
+                            <option value="JOUST">Jousting Tournament</option>
                         </select>
                     </div>
                     <div style="flex: 1;">
@@ -368,6 +384,8 @@
         let primePackages = [];
         let primeDeliveryZone = { x: 0, y: 0, w: 150, h: 100 };
         let osha = { x: 0, y: 0, vx: 3, vy: 3, active: false };
+
+        const GUN_GAME_WEAPONS = ['standard', 'rapier', 'chainsaw', 'cutlass', 'jousting_lance', 'wrecking_ball', 'nail_gun', 'boomerang', 'greatsword', 'blowtorch'];
 
         const MAP_DB = {
             open: [],
@@ -463,7 +481,7 @@
         };
 
         window.addEventListener('load', () => {
-            ['Admin', 'Gojo', 'Sukuna', 'Zoro', 'Dio', 'Ghost'].forEach(secret => {
+            ['Admin', 'Gojo', 'Sukuna', 'Zoro', 'Dio', 'Ghost', 'Thor', 'Scorpion', 'Ichigo', 'Jedi'].forEach(secret => {
                 if (safeStorageGet(`forklift${secret}Unlocked`) === 'true') {
                     document.querySelectorAll(`.opt-${secret.toLowerCase()}`).forEach(el => { el.hidden = false; el.disabled = false; });
                 }
@@ -489,6 +507,10 @@
             else if (val === "ZORO") unlock("Zoro", "NOTHING HAPPENED.", "#32CD32");
             else if (val === "DIO") unlock("Dio", "ZA WARUDO!", "#FFD700");
             else if (val === "GHOST") unlock("Ghost", "SPOOKY.", "#AAAAAA");
+            else if (val === "WORTHY") unlock("Thor", "YOU ARE WORTHY.", "#ADD8E6");
+            else if (val === "SCORPION") unlock("Scorpion", "GET OVER HERE!", "#FFFF00");
+            else if (val === "BANKAI") unlock("Ichigo", "GETSUGA TENSHOU!", "#FF4500");
+            else if (val === "FORCE") unlock("Jedi", "MAY THE FORCE BE WITH YOU.", "#00FF00");
         }
         
         function updateSetting(k, v) { gameSettings[k] = v; }
@@ -527,11 +549,19 @@
             boomerang:     { type: 'ranged', length: 30, fireRate: 60, projSpeed: 15, damage: 25, spCooldown: 300 }, 
             shield:        { type: 'melee', length: 35,  swingSpeed: 0, retractSpeed: 0, damage: 5, spCooldown: 300 }, 
             blowtorch:     { type: 'melee', length: 60,  swingSpeed: 0, retractSpeed: 0, damage: 8, spCooldown: 300 }, 
+            wrecking_ball: { type: 'melee', length: 55,  swingSpeed: 0.20, retractSpeed: 0.10, damage: 15, spCooldown: 300 },
+            nail_gun:      { type: 'ranged', length: 30, fireRate: 15, projSpeed: 20, damage: 5, spCooldown: 300 },
+            taser_fork:    { type: 'melee', length: 65,  swingSpeed: 0.25, retractSpeed: 0.10, damage: 2, spCooldown: 300 },
+            jousting_lance:{ type: 'melee', length: 110, swingSpeed: 0, retractSpeed: 0, damage: 5, spCooldown: 300 },
             admin_weapon:  { type: 'ranged', length: 45, fireRate: 5, projSpeed: 30, damage: 75, spCooldown: 120 }, 
             gojo_weapon:   { type: 'melee', length: 65,  swingSpeed: 0.30, retractSpeed: 0.15, damage: 25, spCooldown: 600 }, 
             sukuna_weapon: { type: 'melee', length: 85,  swingSpeed: 0.40, retractSpeed: 0.20, damage: 35, spCooldown: 450 }, 
             zoro_weapon:   { type: 'melee', length: 70,  swingSpeed: 0.25, retractSpeed: 0.10, damage: 15, spCooldown: 450 }, 
-            dio_weapon:    { type: 'melee', length: 60,  swingSpeed: 0.30, retractSpeed: 0.15, damage: 25, spCooldown: 900 }  
+            dio_weapon:    { type: 'melee', length: 60,  swingSpeed: 0.30, retractSpeed: 0.15, damage: 25, spCooldown: 900 },
+            mjolnir:       { type: 'ranged', length: 30, fireRate: 60, projSpeed: 18, damage: 30, spCooldown: 600 },
+            kunai:         { type: 'ranged', length: 30, fireRate: 60, projSpeed: 25, damage: 15, spCooldown: 400 },
+            zangetsu:      { type: 'melee', length: 80,  swingSpeed: 0.30, retractSpeed: 0.15, damage: 20, spCooldown: 500 },
+            lightsaber:    { type: 'melee', length: 60,  swingSpeed: 0.40, retractSpeed: 0.20, damage: 25, spCooldown: 300 }
         };
 
         class Projectile {
@@ -539,6 +569,9 @@
                 this.x = x; this.y = y; this.angle = angle; this.speed = speed; this.damage = damage; 
                 this.ownerId = ownerId; this.color = color; this.team = teamId; this.active = true;
                 this.radius = radius; this.type = type; this.life = 0;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.bounced = false; this.phase = 'out';
             }
             update() { 
                 this.life++;
@@ -550,17 +583,45 @@
                             this.angle = Math.atan2(dy, dx);
                             if (Math.sqrt(dx*dx + dy*dy) < 30) this.active = false;
                         } else { this.active = false; }
+                        this.vx = Math.cos(this.angle) * this.speed; this.vy = Math.sin(this.angle) * this.speed;
+                    }
+                } else if (this.type === 'mjolnir') {
+                    if (this.life < 20) { }
+                    else if (this.life === 20) { this.phase = 'strike'; this.vx = 0; this.vy = 0; this.radius = 60; }
+                    else if (this.life === 35) { this.phase = 'return'; this.radius = 15; }
+                    else if (this.phase === 'return') {
+                        let owner = players[this.ownerId];
+                        if (owner && owner.active) {
+                            let dx = owner.x - this.x; let dy = owner.y - this.y;
+                            this.angle = Math.atan2(dy, dx);
+                            this.vx = Math.cos(this.angle) * 25; this.vy = Math.sin(this.angle) * 25;
+                            if (Math.sqrt(dx*dx + dy*dy) < 30) this.active = false;
+                        } else this.active = false;
                     }
                 }
                 
-                this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; 
-                if (this.x < -100 || this.x > canvas.width + 100 || this.y < -100 || this.y > canvas.height + 100) this.active = false; 
+                this.x += this.vx; this.y += this.vy; 
+
+                if (this.type === 'nail') {
+                    if (this.x < 0 || this.x > canvas.width) { if (!this.bounced) { this.vx *= -1; this.bounced = true; this.angle = Math.atan2(this.vy, this.vx); } else this.active = false; }
+                    if (this.y < 0 || this.y > canvas.height) { if (!this.bounced) { this.vy *= -1; this.bounced = true; this.angle = Math.atan2(this.vy, this.vx); } else this.active = false; }
+                } else {
+                    if (this.x < -100 || this.x > canvas.width + 100 || this.y < -100 || this.y > canvas.height + 100) this.active = false; 
+                }
                 
                 for(let p of activePillars) {
                     let dx = this.x - p.x; let dy = this.y - p.y;
                     if (Math.sqrt(dx*dx + dy*dy) < p.r + this.radius) { 
                         if (this.type === 'grapple') players[this.ownerId].grappleTarget = {x: p.x, y: p.y};
-                        this.active = false; break; 
+                        if (this.type === 'nail' && !this.bounced) {
+                            let nx = dx / Math.sqrt(dx*dx + dy*dy); let ny = dy / Math.sqrt(dx*dx + dy*dy);
+                            let dot = this.vx * nx + this.vy * ny;
+                            this.vx -= 2 * dot * nx; this.vy -= 2 * dot * ny;
+                            this.bounced = true; this.angle = Math.atan2(this.vy, this.vx);
+                        } else if (this.type !== 'mjolnir' && this.type !== 'getsuga') {
+                            this.active = false; 
+                        }
+                        break; 
                     }
                 }
             }
@@ -569,6 +630,22 @@
                     ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle);
                     ctx.beginPath(); ctx.arc(0, 0, this.radius, -Math.PI/2, Math.PI/2); ctx.strokeStyle = this.color; ctx.lineWidth = 12; ctx.stroke();
                     ctx.beginPath(); ctx.arc(0, 0, this.radius - 8, -Math.PI/2.5, Math.PI/2.5); ctx.strokeStyle = "#FFF"; ctx.lineWidth = 4; ctx.stroke(); ctx.restore();
+                } else if (this.type === 'getsuga') {
+                    ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle);
+                    ctx.beginPath(); ctx.arc(0, 0, this.radius, -Math.PI/1.5, Math.PI/1.5); ctx.strokeStyle = this.color; ctx.lineWidth = 10; ctx.stroke();
+                    ctx.restore();
+                } else if (this.type === 'mjolnir') {
+                    ctx.fillStyle = "#A9A9A9"; ctx.fillRect(this.x - this.radius, this.y - this.radius, this.radius*2, this.radius*2);
+                    if (this.phase === 'strike') {
+                        ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2); ctx.fillStyle = "rgba(0, 255, 255, 0.4)"; ctx.fill();
+                    }
+                } else if (this.type === 'nail') {
+                    ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle);
+                    ctx.fillStyle = "#CCC"; ctx.fillRect(-10, -2, 20, 4); ctx.restore();
+                } else if (this.type === 'kunai') {
+                    ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle);
+                    ctx.fillStyle = "#FFFF00"; ctx.beginPath(); ctx.moveTo(10, 0); ctx.lineTo(-10, -5); ctx.lineTo(-10, 5); ctx.fill();
+                    ctx.beginPath(); ctx.arc(-15, 0, 5, 0, Math.PI*2); ctx.strokeStyle = "#FFF"; ctx.stroke(); ctx.restore();
                 } else {
                     ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fillStyle = this.color; ctx.fill(); 
                 }
@@ -581,26 +658,32 @@
                 this.index = index; this.name = name; this.team = index + 1; this.color = "#FFF"; this.customColor = "#FFF"; 
                 this.active = false; this.swordTip = { x: 0, y: 0 }; this.setLoadout("standard", "standard"); 
             }
-            setLoadout(chassisId, weaponId) { 
+            setLoadout(chassisId, weaponId, keepState = false) { 
                 this.chassisId = chassisId; this.weaponId = weaponId; 
                 this.stats = JSON.parse(JSON.stringify(CHASSIS_DB[this.chassisId] || CHASSIS_DB["standard"])); 
                 this.weapon = WEAPON_DB[this.weaponId] || WEAPON_DB["standard"]; 
-                this.reset(); 
+                if (!keepState) this.reset(); 
             }
-            reset() {
+            respawn() {
                 const spawns = [ { x: canvas.width * 0.1, y: canvas.height * 0.2, a: 0 }, { x: canvas.width * 0.9, y: canvas.height * 0.8, a: Math.PI }, { x: canvas.width * 0.9, y: canvas.height * 0.2, a: Math.PI/2 }, { x: canvas.width * 0.1, y: canvas.height * 0.8, a: -Math.PI/2 } ];
                 let spawn = spawns[this.index] || spawns[0];
-                this.x = spawn.x; this.y = spawn.y; this.angle = spawn.a; this.health = this.stats.hp; this.speed = 0;
-                this.swordAngle = 0; this.swordTargetAngle = 2.0; this.isSwinging = false; this.hasHitThisSwing = false; 
-                this.isBlocking = false; this.blockTimer = 0; this.blockCooldown = 0; this.fireCooldown = 0;
-                this.specialCooldown = 0; this.specialActiveTimer = 0; this.grappleTarget = null;
-                this.isJuggernaut = false; this.hasArmor = false; this.batteryTimer = 0;
-                this.hornTimer = 0; this.hornCooldown = 0; this.isInfected = false;
-                this.hasPackage = false; this.stunTimer = 0;
+                this.x = spawn.x; this.y = spawn.y; this.angle = spawn.a;
+                this.health = this.stats.hp; this.speed = 0;
+                this.swordAngle = 0; this.isSwinging = false; this.isBlocking = false;
+                this.fireCooldown = 0; this.specialCooldown = 0; this.stunTimer = 0; this.shockTimer = 0;
+                this.immunityTimer = 60; // 1 second of immunity
                 this.updatePositions();
+            }
+            reset() {
+                this.immunityTimer = 0;
+                this.hasPackage = false; this.stunTimer = 0; this.shockTimer = 0; 
+                this.grappleTarget = null; this.hasArmor = false; this.batteryTimer = 0;
+                this.hornTimer = 0; this.hornCooldown = 0; 
+                this.respawn();
             }
             move(forward, turn) {
                 if (this.stunTimer > 0) { this.stunTimer--; return; }
+                if (this.shockTimer > 0) { turn *= -1; forward *= -1; this.shockTimer--; }
 
                 if (this.grappleTarget) {
                     let dx = this.grappleTarget.x - this.x; let dy = this.grappleTarget.y - this.y;
@@ -610,7 +693,10 @@
                     return;
                 }
 
-                this.angle += turn * this.stats.turn;
+                let turnSpeed = this.stats.turn;
+                if (currentRules === "JOUST") turnSpeed *= 0.3;
+                this.angle += turn * turnSpeed;
+
                 if (forward !== 0) this.speed += forward * this.stats.acc; else this.speed *= 0.92; 
                 
                 let activeMaxSpeed = this.stats.maxSpeed;
@@ -629,6 +715,7 @@
                 } else {
                     if (this.x < -20 || this.x > canvas.width + 20 || this.y < -20 || this.y > canvas.height + 20) {
                         this.health = 0; this.speed = 0;
+                        if (currentRules === "GUN_GAME") this.respawn();
                     }
                 }
 
@@ -692,10 +779,18 @@
             }
             swing(isHeld) { 
                 if (currentRules === "SOCCER" || this.isInfected || this.stunTimer > 0) return;
-                if (this.weapon.type === 'ranged') {
+                
+                if (this.weaponId === 'wrecking_ball') {
+                    this.isSwinging = isHeld; 
+                } else if (this.weaponId === 'zangetsu') {
+                    if (!this.isSwinging && this.swordAngle <= 0 && !this.isBlocking && isHeld) {
+                        this.isSwinging = true; this.hasHitThisSwing = false; this.swordTargetAngle = 2.0;
+                        projectiles.push(new Projectile(this.swordTip.x, this.swordTip.y, this.angle, 18, 25, this.index, "#FF4500", this.team, 25, 'getsuga'));
+                    }
+                } else if (this.weapon.type === 'ranged') {
                     if (this.fireCooldown <= 0 && !this.isBlocking && isHeld) {
                         this.fireCooldown = this.weapon.fireRate;
-                        let type = this.weaponId === 'boomerang' ? 'boomerang' : 'normal';
+                        let type = this.weaponId === 'boomerang' ? 'boomerang' : (this.weaponId === 'mjolnir' ? 'mjolnir' : (this.weaponId === 'nail_gun' ? 'nail' : (this.weaponId === 'kunai' ? 'kunai' : 'normal')));
                         projectiles.push(new Projectile(this.swordTip.x, this.swordTip.y, this.angle, this.weapon.projSpeed, this.weapon.damage, this.index, this.color, this.team, 6, type));
                     }
                 } else if (this.weaponId === 'chainsaw' || this.weaponId === 'blowtorch' || this.weaponId === 'shield') {
@@ -743,9 +838,12 @@
                 if (this.batteryTimer > 0) { this.batteryTimer--; this.specialCooldown = 0; }
                 if (this.hornTimer > 0) this.hornTimer--;
                 if (this.hornCooldown > 0) this.hornCooldown--;
+                if (this.immunityTimer > 0) this.immunityTimer--;
                 
                 if (this.weaponId === 'chainsaw' || this.weaponId === 'blowtorch' || this.weaponId === 'shield') {
                     if (this.isSwinging) { this.swordAngle = (Math.random() * 0.1) - 0.05; if (this.fireCooldown <= 0) { this.hasHitThisSwing = false; this.fireCooldown = 10; } } else { this.swordAngle = 0; }
+                } else if (this.weaponId === 'wrecking_ball') {
+                    this.swordAngle += this.isSwinging ? 0.3 : 0.05;
                 } else {
                     if (this.isSwinging) { this.swordAngle += this.weapon.swingSpeed; if (this.swordAngle >= this.swordTargetAngle) { this.isSwinging = false; this.swordTargetAngle = 2.0; if(this.weaponId === 'greatsword') this.swordAngle = 0; } } else if (this.swordAngle > 0) this.swordAngle -= this.weapon.retractSpeed; else this.swordAngle = 0;
                 }
@@ -765,6 +863,7 @@
                 ctx.save();
                 
                 if (this.chassisId === 'ghost') ctx.globalAlpha = 0.25;
+                if (this.immunityTimer > 0 && (this.immunityTimer % 10 < 5)) ctx.globalAlpha = 0.5;
 
                 ctx.translate(this.x, this.y); ctx.rotate(this.angle);
                 
@@ -776,11 +875,11 @@
                 if (this.hasPackage) { ctx.fillStyle = "#8B4513"; ctx.fillRect(-15, -15, 30, 30); ctx.strokeStyle = "#D2B48C"; ctx.strokeRect(-15, -15, 30, 30); }
                 
                 if (this.hasArmor) { ctx.beginPath(); ctx.arc(0, 0, this.stats.w/2 + 10, 0, Math.PI*2); ctx.strokeStyle = "rgba(170, 170, 170, 0.8)"; ctx.lineWidth = 5; ctx.stroke(); }
-                if (this.isBlocking) { ctx.beginPath(); ctx.arc(0, 0, this.stats.w/2 + 15, -Math.PI/2, Math.PI/2); ctx.strokeStyle = "#00FFFF"; ctx.lineWidth = 4; ctx.stroke(); } 
+                if (this.isBlocking) { ctx.beginPath(); ctx.arc(0, 0, this.stats.w/2 + 15, -Math.PI/2, Math.PI/2); ctx.strokeStyle = this.weaponId === 'lightsaber' ? "#00FF00" : "#00FFFF"; ctx.lineWidth = 4; ctx.stroke(); } 
                 ctx.restore();
                 
                 const drawSword = (angOffset) => {
-                    const totalAng = this.angle + this.swordAngle - (this.weapon.type === 'ranged' || this.weaponId === 'shield' || this.weaponId === 'blowtorch' ? 0 : 0.8) + angOffset;
+                    const totalAng = this.angle + this.swordAngle - (this.weapon.type === 'ranged' || this.weaponId === 'shield' || this.weaponId === 'blowtorch' || this.weaponId === 'wrecking_ball' ? 0 : 0.8) + angOffset;
                     const sX = this.x + Math.cos(this.angle) * (this.stats.w / 2); const sY = this.y + Math.sin(this.angle) * (this.stats.w / 2);
                     
                     if (this.weaponId === 'shield') {
@@ -789,19 +888,27 @@
                         const eX = sX + Math.cos(totalAng) * (this.weapon.length / 2); const eY = sY + Math.sin(totalAng) * (this.weapon.length / 2);
                         ctx.beginPath(); ctx.moveTo(sX, sY); ctx.lineTo(eX, eY); ctx.lineWidth = 6; ctx.strokeStyle = "#969696"; ctx.stroke();
                         if (this.isSwinging) { ctx.beginPath(); ctx.moveTo(eX, eY); ctx.arc(eX, eY, this.weapon.length, totalAng - 0.4, totalAng + 0.4); ctx.fillStyle = 'rgba(255, 100, 0, 0.7)'; ctx.fill(); }
+                    } else if (this.weaponId === 'wrecking_ball') {
+                        const eX = sX + Math.cos(totalAng) * this.weapon.length; const eY = sY + Math.sin(totalAng) * this.weapon.length;
+                        ctx.beginPath(); ctx.moveTo(sX, sY); ctx.lineTo(eX, eY); ctx.lineWidth = 3; ctx.strokeStyle = "#AAA"; ctx.stroke();
+                        ctx.beginPath(); ctx.arc(eX, eY, 12, 0, Math.PI*2); ctx.fillStyle = "#555"; ctx.fill();
+                    } else if (this.weaponId === 'lightsaber') {
+                        const eX = sX + Math.cos(totalAng) * this.weapon.length; const eY = sY + Math.sin(totalAng) * this.weapon.length;
+                        ctx.beginPath(); ctx.moveTo(sX, sY); ctx.lineTo(eX, eY); ctx.lineWidth = 6; ctx.strokeStyle = "#00FF00"; ctx.stroke();
+                        ctx.beginPath(); ctx.moveTo(sX, sY); ctx.lineTo(eX, eY); ctx.lineWidth = 2; ctx.strokeStyle = "#FFF"; ctx.stroke();
                     } else {
                         const eX = sX + Math.cos(totalAng) * this.weapon.length; const eY = sY + Math.sin(totalAng) * this.weapon.length;
                         ctx.beginPath(); ctx.moveTo(sX, sY); ctx.lineTo(eX, eY); ctx.lineWidth = 6; ctx.strokeStyle = this.isSwinging ? "#FFFFFF" : "#969696"; ctx.stroke();
                     }
                 };
 
-                if (currentRules !== "SOCCER" && !this.isInfected) {
+                if (currentRules !== "SOCCER" && !this.isInfected && this.immunityTimer <= 0) {
                     if (this.weaponId === 'zoro_weapon') { drawSword(0); drawSword(-0.4); drawSword(0.4); } else { drawSword(0); }
                 }
                 
                 if (this.chassisId !== 'ghost') { ctx.fillStyle = "#FFF"; ctx.font = "12px Arial"; ctx.textAlign = "center"; ctx.fillText(this.name, this.x, this.y - (this.isJuggernaut? 60 : 45)); }
                 if (this.hornTimer > 0) { ctx.fillStyle = "#FFD700"; ctx.font = "bold 16px Arial"; ctx.fillText("HONK!", this.x, this.y - (this.isJuggernaut? 80 : 65)); }
-                if (this.stunTimer > 0) { ctx.fillStyle = "#FF0000"; ctx.font = "bold 30px Arial"; ctx.fillText("!", this.x, this.y - 20); }
+                if (this.stunTimer > 0 || this.shockTimer > 0) { ctx.fillStyle = "#FF0000"; ctx.font = "bold 30px Arial"; ctx.fillText("!", this.x, this.y - 20); }
 
                 ctx.fillStyle = "#C80000"; ctx.fillRect(this.x - 25, this.y - 35, 50, 5); ctx.fillStyle = "#00C800"; ctx.fillRect(this.x - 25, this.y - 35, 50 * (Math.max(0, this.health) / this.stats.hp), 5);
                 
@@ -810,11 +917,11 @@
                     let fillRatio = (this.batteryTimer > 0) ? 1 : 1 - (this.specialCooldown / this.weapon.spCooldown); ctx.fillRect(this.x - 25, this.y - 28, 50 * fillRatio, 3);
                 }
             }
-            getState() { return { active: this.active, x: this.x, y: this.y, angle: this.angle, health: this.health, swordAngle: this.swordAngle, isSwinging: this.isSwinging, isBlocking: this.isBlocking, cId: this.chassisId, wId: this.weaponId, jug: this.isJuggernaut, arm: this.hasArmor, horn: (this.hornTimer > 0), bat: this.batteryTimer, inf: this.isInfected, hpk: this.hasPackage, stn: this.stunTimer }; }
+            getState() { return { active: this.active, x: this.x, y: this.y, angle: this.angle, health: this.health, swordAngle: this.swordAngle, isSwinging: this.isSwinging, isBlocking: this.isBlocking, cId: this.chassisId, wId: this.weaponId, jug: this.isJuggernaut, arm: this.hasArmor, horn: (this.hornTimer > 0), bat: this.batteryTimer, inf: this.isInfected, hpk: this.hasPackage, stn: this.stunTimer, shk: this.shockTimer, ggi: this.gunGameIndex, vip: this.isVIP, imm: this.immunityTimer }; }
             setState(d) { 
                 this.active = d.active; if (!this.active) return;
-                if (this.chassisId !== d.cId || this.weaponId !== d.wId) this.setLoadout(d.cId, d.wId);
-                this.x = d.x; this.y = d.y; this.angle = d.angle; this.health = d.health; this.swordAngle = d.swordAngle; this.isSwinging = d.isSwinging; this.isBlocking = d.isBlocking; this.isJuggernaut = d.jug; this.hasArmor = d.arm; this.batteryTimer = d.bat; if(d.horn) this.hornTimer = 2; this.isInfected = d.inf; this.hasPackage = d.hpk; this.stunTimer = d.stn;
+                if (this.chassisId !== d.cId || this.weaponId !== d.wId) this.setLoadout(d.cId, d.wId, true);
+                this.x = d.x; this.y = d.y; this.angle = d.angle; this.health = d.health; this.swordAngle = d.swordAngle; this.isSwinging = d.isSwinging; this.isBlocking = d.isBlocking; this.isJuggernaut = d.jug; this.hasArmor = d.arm; this.batteryTimer = d.bat; if(d.horn) this.hornTimer = 2; this.isInfected = d.inf; this.hasPackage = d.hpk; this.stunTimer = d.stn; this.shockTimer = d.shk; this.gunGameIndex = d.ggi; this.isVIP = d.vip; this.immunityTimer = d.imm;
                 this.updatePositions();
             }
         }
@@ -822,7 +929,16 @@
         let players = [ new Forklift(0, "Player 1"), new Forklift(1, "Player 2"), new Forklift(2, "Player 3"), new Forklift(3, "Player 4") ];
 
         function assignTeamsAndColors() {
-            if (currentRules === "TDM" || currentRules === "JUG" || currentRules === "SOCCER") {
+            players.forEach(p => { p.isVIP = false; p.gunGameIndex = 0; p.isInfected = false; p.isJuggernaut = false; });
+
+            if (currentRules === "VIP") {
+                players[0].team = 1; players[2].team = 1; players[1].team = 2; players[3].team = 2;
+                players[0].isVIP = true; players[1].isVIP = true;
+                players[0].color = "#FFD700"; players[1].color = "#FFD700"; 
+                players[2].color = "#3264C8"; players[3].color = "#C83232";
+                players[0].setLoadout('tank', 'shield', true); players[1].setLoadout('tank', 'shield', true);
+                players[0].health = players[0].stats.hp; players[1].health = players[1].stats.hp;
+            } else if (currentRules === "TDM" || currentRules === "JUG" || currentRules === "SOCCER") {
                 players[0].team = 1; players[2].team = 1; players[1].team = 2; players[3].team = 2;
                 players[0].color = "#3264C8"; players[2].color = "#00FFFF"; players[1].color = "#C83232"; players[3].color = "#FF8000";
             } else {
@@ -851,6 +967,8 @@
                         else { p.team = i+1; }
                     });
                 }
+            } else if (currentRules === "GUN_GAME") {
+                players.forEach(p => { p.gunGameIndex = 0; p.setLoadout('standard', GUN_GAME_WEAPONS[0], true); p.health = p.stats.hp; });
             }
         }
 
@@ -859,19 +977,22 @@
 
         function checkMeleeCollision(attacker, defender) {
             if (attacker.weapon.type !== 'melee' || currentRules === "SOCCER" || attacker.isInfected) return;
-            if (attacker.team === defender.team && currentRules !== "FFA" && currentRules !== "CTF" && currentRules !== "KOTH" && currentRules !== "PRIME" && currentRules !== "BUMPER") return; 
-            
+            if (attacker.team === defender.team && currentRules !== "FFA" && currentRules !== "CTF" && currentRules !== "KOTH" && currentRules !== "PRIME" && currentRules !== "BUMPER" && currentRules !== "GUN_GAME" && currentRules !== "JOUST") return; 
+            if (defender.immunityTimer > 0) return;
+
             if (attacker.isSwinging && !attacker.hasHitThisSwing) {
-                const sOffset = attacker.stats.w / 2; const bX = attacker.x + Math.cos(attacker.angle) * sOffset; const bY = attacker.y + Math.sin(attacker.angle) * sOffset;
-                
+                let sOffset = attacker.stats.w / 2; let bX = attacker.x + Math.cos(attacker.angle) * sOffset; let bY = attacker.y + Math.sin(attacker.angle) * sOffset;
+                if (attacker.weaponId === 'wrecking_ball') { sOffset = 0; bX = attacker.x; bY = attacker.y; }
+
                 const checkHit = (angOffset) => {
-                    const totalAng = attacker.angle + attacker.swordAngle - (attacker.weaponId === 'shield' || attacker.weaponId === 'blowtorch' ? 0 : 0.8) + angOffset;
+                    const totalAng = attacker.angle + attacker.swordAngle - (attacker.weaponId === 'shield' || attacker.weaponId === 'blowtorch' || attacker.weaponId === 'wrecking_ball' ? 0 : 0.8) + angOffset;
                     let tipX = bX + Math.cos(totalAng) * attacker.weapon.length; let tipY = bY + Math.sin(totalAng) * attacker.weapon.length;
                     const defRadius = (defender.stats.w / 2) + (defender.isJuggernaut ? 20 : 15); 
                     
-                    if (attacker.weaponId === 'blowtorch' || attacker.weaponId === 'shield') {
+                    if (attacker.weaponId === 'blowtorch' || attacker.weaponId === 'shield' || attacker.weaponId === 'wrecking_ball') {
                         let dx = defender.x - bX; let dy = defender.y - bY; let dist = Math.sqrt(dx*dx + dy*dy);
                         if (dist < attacker.weapon.length + defRadius) {
+                            if (attacker.weaponId === 'wrecking_ball') return true; 
                             let angleToDef = Math.atan2(dy, dx); let diff = angleToDef - totalAng;
                             while (diff > Math.PI) diff -= Math.PI * 2; while (diff < -Math.PI) diff += Math.PI * 2;
                             if (Math.abs(diff) < 0.5) return true;
@@ -891,7 +1012,7 @@
                 if (hit) { 
                     attacker.hasHitThisSwing = true;
                     if (defender.hasArmor) { defender.hasArmor = false; attacker.speed = 0; if (!attacker.isJuggernaut) { attacker.x -= Math.cos(attacker.angle) * 15; attacker.y -= Math.sin(attacker.angle) * 15; } }
-                    else if (defender.isBlocking) { attacker.speed = 0; if (!attacker.isJuggernaut) { attacker.x -= Math.cos(attacker.angle) * 25; attacker.y -= Math.sin(attacker.angle) * 25; } } 
+                    else if (defender.isBlocking && attacker.weaponId !== 'wrecking_ball') { attacker.speed = 0; if (!attacker.isJuggernaut) { attacker.x -= Math.cos(attacker.angle) * 25; attacker.y -= Math.sin(attacker.angle) * 25; } } 
                     else { 
                         if (currentRules === "PRIME") {
                             if (defender.hasPackage) { defender.hasPackage = false; primePackages.push({x: defender.x, y: defender.y, active: true}); }
@@ -899,13 +1020,25 @@
                         } else if (currentRules === "BUMPER") {
                             defender.speed = 0; if (!defender.isJuggernaut) { defender.x += Math.cos(attacker.angle) * 90; defender.y += Math.sin(attacker.angle) * 90; }
                         } else {
-                            defender.health -= attacker.weapon.damage; defender.speed = 0; 
+                            let dmg = attacker.weapon.damage;
+                            if (attacker.weaponId === 'jousting_lance') dmg += Math.floor(Math.abs(attacker.speed) * 4);
+                            if (attacker.weaponId === 'taser_fork') defender.shockTimer = 180;
+                            
+                            defender.health -= dmg; defender.speed = 0; 
                             let knockback = attacker.weaponId === 'shield' ? 60 : 30;
                             if (!defender.isJuggernaut) { defender.x += Math.cos(attacker.angle) * knockback; defender.y += Math.sin(attacker.angle) * knockback; }
                             if (ctfPallet.holder === defender.index) ctfPallet.holder = -1;
-                            if (defender.health <= 0 && defender.isJuggernaut && currentRules === "JUG") {
-                                attacker.isJuggernaut = true; attacker.stats.hp = 1000; attacker.health = 1000; attacker.team = 99; attacker.color = "#FF00FF"; attacker.stats.maxSpeed *= 0.8;
-                                defender.isJuggernaut = false; defender.team = 1; defender.color = "#3264C8"; defender.health = 0; 
+                            
+                            if (defender.health <= 0) {
+                                if (currentRules === "GUN_GAME") {
+                                    attacker.gunGameIndex++;
+                                    if (attacker.gunGameIndex < GUN_GAME_WEAPONS.length) attacker.setLoadout(attacker.chassisId, GUN_GAME_WEAPONS[attacker.gunGameIndex], true);
+                                }
+                                if (defender.isJuggernaut && currentRules === "JUG") {
+                                    attacker.isJuggernaut = true; attacker.stats.hp = 1000; attacker.health = 1000; attacker.team = 99; attacker.color = "#FF00FF"; attacker.stats.maxSpeed *= 0.8;
+                                    defender.isJuggernaut = false; defender.team = 1; defender.color = "#3264C8"; defender.health = 0; 
+                                }
+                                defender.respawn();
                             }
                         }
                     }
@@ -1014,6 +1147,9 @@
             } else if (currentRules === "PRIME") {
                 for(let i=1; i<=4; i++) { if (score[i] >= 5) endGame(`Team ${i} Wins!`, "#FFD700"); }
                 return;
+            } else if (currentRules === "GUN_GAME") {
+                let winner = players.find(p => p.active && p.gunGameIndex >= GUN_GAME_WEAPONS.length);
+                if (winner) return endGame(winner.name + " Wins!", winner.color);
             }
 
             let activeAlive = players.filter(p => p.active && p.health > 0);
@@ -1025,7 +1161,12 @@
                     if (survivors.length === 0) endGame("Zombies Win!", "#00FF00");
                     else if (activeAlive.length === 1 && !activeAlive[0].isInfected) endGame(activeAlive[0].name + " Wins!", "#FFF");
                 }
-            } else if (currentRules === "FFA" || currentRules === "JUG" || currentRules.startsWith("OSHA") || currentRules === "BUMPER") {
+            } else if (currentRules === "VIP") {
+                let t1VIP = players.find(p => p.active && p.team === 1 && p.isVIP);
+                let t2VIP = players.find(p => p.active && p.team === 2 && p.isVIP);
+                if (t1VIP && t1VIP.health <= 0) return endGame("Team 2 Wins!", "#C83232");
+                if (t2VIP && t2VIP.health <= 0) return endGame("Team 1 Wins!", "#3264C8");
+            } else if (currentRules === "FFA" || currentRules === "JUG" || currentRules.startsWith("OSHA") || currentRules === "BUMPER" || currentRules === "JOUST") {
                 if (totalActive > 1 && activeAlive.length <= 1) {
                     if (activeAlive.length === 1) endGame(activeAlive[0].name + " Wins!", activeAlive[0].color);
                     else endGame("Draw", "#FFF"); 
@@ -1063,7 +1204,7 @@
                     if (currentRules === "INFECT") {
                         for (let i = 0; i < players.length; i++) {
                             for (let j = 0; j < players.length; j++) {
-                                if (i !== j && players[i].active && players[j].active && players[i].health > 0 && players[j].health > 0) {
+                                if (i !== j && players[i].active && players[j].active && players[i].health > 0 && players[j].health > 0 && players[j].immunityTimer <= 0) {
                                     if (players[i].isInfected && !players[j].isInfected) {
                                         let dx = players[i].x - players[j].x; let dy = players[i].y - players[j].y;
                                         if (Math.sqrt(dx*dx + dy*dy) < (players[i].stats.w/2) + (players[j].stats.w/2) + 10) {
@@ -1149,10 +1290,14 @@
                         projectiles.forEach(proj => {
                             proj.update();
                             players.forEach(p => {
-                                if (p.active && p.health > 0 && p.team !== proj.team && proj.active) {
+                                if (p.active && p.health > 0 && p.immunityTimer <= 0 && p.team !== proj.team && proj.active) {
                                     let dx = proj.x - p.x; let dy = proj.y - p.y;
                                     if (Math.sqrt(dx*dx + dy*dy) < (p.stats.w / 2) + proj.radius + 4) {
+                                        if (p.weaponId === 'lightsaber' && p.isBlocking) {
+                                            proj.team = p.team; proj.ownerId = p.index; proj.vx *= -1; proj.vy *= -1; proj.angle += Math.PI; return;
+                                        }
                                         if (proj.type === 'grapple') players[proj.ownerId].grappleTarget = {x: p.x, y: p.y};
+                                        if (proj.type === 'kunai') { p.grappleTarget = {x: players[proj.ownerId].x, y: players[proj.ownerId].y}; p.stunTimer = 60; }
                                         if (p.hasArmor) { p.hasArmor = false; }
                                         else if (p.isBlocking) { p.speed = 0; if(!p.isJuggernaut) { p.x += Math.cos(proj.angle) * 5; p.y += Math.sin(proj.angle) * 5; } } 
                                         else { 
@@ -1165,8 +1310,19 @@
                                                 p.health -= proj.damage; p.speed = 0; if(!p.isJuggernaut) { p.x += Math.cos(proj.angle) * 20; p.y += Math.sin(proj.angle) * 20; } 
                                             }
                                         }
+                                        
+                                        if (p.health <= 0) {
+                                            if (currentRules === "GUN_GAME") {
+                                                let attacker = players[proj.ownerId];
+                                                if (attacker) { 
+                                                    attacker.gunGameIndex++; 
+                                                    if (attacker.gunGameIndex < GUN_GAME_WEAPONS.length) attacker.setLoadout(attacker.chassisId, GUN_GAME_WEAPONS[attacker.gunGameIndex], true); 
+                                                }
+                                            }
+                                            p.respawn();
+                                        }
                                         if (ctfPallet.holder === p.index) ctfPallet.holder = -1;
-                                        proj.active = false;
+                                        if (proj.type !== 'getsuga' && proj.type !== 'mjolnir') proj.active = false;
                                     }
                                 }
                             });
@@ -1184,7 +1340,7 @@
 
                     if (gameMode === "HOST") {
                         let statePack = players.map(p => p.getState()); 
-                        let projsPack = projectiles.map(p => ({x: p.x, y: p.y, color: p.color, team: p.team, radius: p.radius, type: p.type}));
+                        let projsPack = projectiles.map(p => ({x: p.x, y: p.y, color: p.color, team: p.team, radius: p.radius, type: p.type, angle: p.angle, phase: p.phase}));
                         let itemsPack = powerups.map(p => ({x: p.x, y: p.y, type: p.type}));
                         let cratePack = gameCrate.active ? {x: gameCrate.x, y: gameCrate.y} : null;
                         let oshaPack = osha.active ? {x: osha.x, y: osha.y} : null;
@@ -1225,6 +1381,12 @@
                         ctx.strokeStyle = "#D2B48C"; ctx.lineWidth = 2; ctx.strokeRect(pkg.x - 15, pkg.y - 15, 30, 30);
                     }
                 });
+            } else if (currentRules === "GUN_GAME") {
+                ctx.fillStyle = "#FFF"; ctx.font = "bold 20px Arial"; ctx.fillText("Gun Game", canvas.width/2, 30);
+            } else if (currentRules === "VIP") {
+                ctx.fillStyle = "#FFD700"; ctx.font = "bold 20px Arial"; ctx.fillText("Protect the VIP", canvas.width/2, 30);
+            } else if (currentRules === "JOUST") {
+                ctx.fillStyle = "#FFF"; ctx.font = "bold 20px Arial"; ctx.fillText("Jousting Tournament", canvas.width/2, 30);
             }
 
             activePillars.forEach(p => {
